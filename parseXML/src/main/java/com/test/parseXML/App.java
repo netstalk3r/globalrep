@@ -18,6 +18,10 @@ public class App {
 	private static String usr = "anagorny";
 	private static String pwd = "anagorny";
 
+	/**
+	 * this comment needs to check commit and push
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		UsernamePasswordCredentials creds = new UsernamePasswordCredentials(usr, pwd);
 		HttpClient client = new HttpClient();
