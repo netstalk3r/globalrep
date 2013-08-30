@@ -1,48 +1,120 @@
 package com.test.parseXML;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.Scanner;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.xml.sax.SAXException;
+
+import com.test.parseXML.http.Request;
+import com.test.parseXML.report.Report;
+import com.test.parseXML.util.ReportWriter;
+import com.test.parseXML.util.SAXUtil;
 
 public class App {
 
-	private static final String REQUEST = "https://www3.v1host.com/Tideworks/VersionOne/rest-1.v1/Data/Task?sel=Parent.Number,Parent.Name,Parent.Owners.Name,Team.Name,Name,Owners.Name&where=Owners.Nickname='mseriche','aarnauto','atetyush','ATimofeev','DVolkov','OKrupenya','OlegZ','SergiiI';Team.Name='MS%20Gate','MS%20Vanguard';Timebox.Name='MS1308';Parent.Status.Name='Completed','Ready%20For%20QA';Status.Name='','In%20Progress','Impeded'";
-	private static String usr = "anagorny";
-	private static String pwd = "anagorny";
+	public static Properties setting;
+	private static Scanner scanIn;
+	private Request req;
+	private Report rep;
+	private SAXUtil parser;
+	private ReportWriter repWr;
 
-	/**
-	 * this comment needs to check commit and push
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		UsernamePasswordCredentials creds = new UsernamePasswordCredentials(usr, pwd);
-		HttpClient client = new HttpClient();
-		GetMethod method = new GetMethod(REQUEST);
-		client.getState().setCredentials(AuthScope.ANY, creds);
+	private static final Integer EXIT = 4;
+
+	static {
 		try {
-			int statusCode = client.executeMethod(method);
-			if (statusCode == HttpStatus.SC_OK) {
-				new SAXUtil(method.getResponseBodyAsStream()).parse();
-			} else {
-				System.err.println("Request fail. Status code: " + statusCode);
-			}
-		} catch (HttpException e) {
+			setting = new Properties();
+			setting.load(new FileInputStream("src\\main\\resources\\settings.properties"));
+			scanIn = new Scanner(System.in);
+		} catch (Exception e) {
+			System.err.println("File properties not found!!!");
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
+			System.exit(0);
 		}
 	}
 
+	public App() {
+		req = new Request();
+		rep = new Report();
+		parser = new SAXUtil(rep);
+		repWr = new ReportWriter();
+	}
+
+	/**
+	 * this comment needs to check commit and push
+	 * 
+	 * @param args
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
+	public static void main(String[] args) throws IOException {
+		App app = new App();
+		while (true) {
+			System.out.println("1 - make request.");
+			System.out.println("2 - view reult.");
+			System.out.println("3 - write result to file.");
+			System.out.println("4 - exit.");
+			System.out.print(">");
+			String res = scanIn.nextLine();
+			try {
+				Integer par = Integer.parseInt(res);
+				if (par.equals(EXIT)) {
+					break;
+				}
+				app.action(par);
+			} catch (NumberFormatException e) {
+				System.err.println("Wrong argument = " + res);
+				System.out.print(">");
+				scanIn.nextLine();
+			} catch (IOException e) {
+				System.err.println("Problem with request or write to file:");
+				e.printStackTrace();
+				System.out.print(">");
+				scanIn.nextLine();
+			}
+		}
+	}
+
+	public void action(Integer par) throws IOException {
+		switch (par) {
+		case 1:// make request and write result to report
+			try {
+				InputStream resp = req.send();
+				if (resp != null) {
+					parser.parse(resp);
+				}
+			} catch (SAXException e) {
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			}
+			break;
+		case 2:// view result;
+			viewReport();
+			break;
+		case 3:// write to file
+			writeToFile();
+			break;
+		}
+	}
+
+	public void writeToFile() throws IOException {
+		repWr.writeReport(rep);
+	}
+
+	public void viewReport() {
+		if (rep.isEmpty()) {
+			System.out.println("Report is empty.");
+			return;
+		}
+		for (String line : rep.getLines()) {
+			System.out.println(line);
+		}
+	}
 }
