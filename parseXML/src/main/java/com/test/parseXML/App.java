@@ -88,6 +88,8 @@ public class App {
 				InputStream resp = req.send();
 				if (resp != null) {
 					parser.parse(resp);
+				} else {
+					System.err.println("Problem with request, response is null; status code is " + req.getStatusCode());
 				}
 			} catch (SAXException e) {
 				e.printStackTrace();

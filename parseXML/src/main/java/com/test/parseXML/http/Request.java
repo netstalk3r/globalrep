@@ -13,6 +13,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import com.test.parseXML.App;
 
 public class Request {
+	
+	private Integer statusCode;
 
 	private UsernamePasswordCredentials creds;
 	private HttpClient client;
@@ -27,7 +29,11 @@ public class Request {
 	}
 
 	public InputStream send() throws HttpException, IOException {
-		int statusCode = client.executeMethod(method);
+		statusCode = client.executeMethod(method);
 		return (statusCode == HttpStatus.SC_OK) ? method.getResponseBodyAsStream() : null;
+	}
+	
+	public Integer getStatusCode() {
+		return statusCode;
 	}
 }
