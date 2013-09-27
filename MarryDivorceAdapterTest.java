@@ -17,10 +17,10 @@ public class MarryDivorceAdapterTest
     // *** START divorceEquipment ***
 
     @Test(expected = NullPointerException.class)
-    public void divorceEquipment_husbandIsNull_throwException()
+    public void divorceEquipment_spouseIsNull_throwException()
     {
         // given
-        DbEquipment spouseCtrChs = null;
+        DbEquipment spouseCtr = null;
         DbEquipment wifeChs = new DbEquipment();
 
         // do
@@ -30,19 +30,19 @@ public class MarryDivorceAdapterTest
     public void divorceEquipment_WifeIsNull_throwException()
     {
         // given
-        DbEquipment spouseCtrChs = new DbEquipment();
+        DbEquipment spouseCtr = new DbEquipment();
         DbEquipment wifeChs = null;
 
         // do
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void divorceEquipment_husbandHasInvalidEqType_throwException()
+    public void divorceEquipment_spouseHasInvalidEqType_throwException()
     {
         // given
-        DbEquipment spouseCtrChs = new DbEquipment();
+        DbEquipment spouseCtr = new DbEquipment();
         DbEquipment wifeChs = new DbEquipment();
-        spouseCtrChs.setSztpClass("Invalid");
+        spouseCtr.setSztpClass("Invalid");
         wifeChs.setSztpClass(EquipmentType.CTR.name());
 
         // do
@@ -52,9 +52,9 @@ public class MarryDivorceAdapterTest
     public void divorceEquipment_wifeHasInvalidEqType_throwException()
     {
         // given
-        DbEquipment spouseCtrChs = new DbEquipment();
+        DbEquipment spouseCtr = new DbEquipment();
         DbEquipment wifeChs = new DbEquipment();
-        spouseCtrChs.setSztpClass(EquipmentType.CTR.name());
+        spouseCtr.setSztpClass(EquipmentType.CTR.name());
         wifeChs.setSztpClass("Invalid");
 
         // do
@@ -64,11 +64,11 @@ public class MarryDivorceAdapterTest
     public void divorceEquipment_divorceCtrAndChs_divorcedSuccessfully()
     {
         // given
-        DbEquipment spouseCtrChs = new DbEquipment();
+        DbEquipment spouseCtr = new DbEquipment();
         DbEquipment wifeChs = new DbEquipment();
-        spouseCtrChs.setNbr(ctrNbr);
-        spouseCtrChs.setSztpClass(EquipmentType.CTR.name());
-        spouseCtrChs.setChsNbr(chsNbr);
+        spouseCtr.setNbr(ctrNbr);
+        spouseCtr.setSztpClass(EquipmentType.CTR.name());
+        spouseCtr.setChsNbr(chsNbr);
         wifeChs.setNbr(chsNbr);
         wifeChs.setSztpClass(EquipmentType.CHS.name());
         wifeChs.setCtrNbr(ctrNbr);
@@ -76,7 +76,7 @@ public class MarryDivorceAdapterTest
         // do
 
         // verify
-        assertNull(spouseCtrChs.getChsNbr());
+        assertNull(spouseCtr.getChsNbr());
         assertNull(wifeChs.getCtrNbr());
 
     }
@@ -85,11 +85,11 @@ public class MarryDivorceAdapterTest
     public void divorceEquipment_divorceCtrAndAcc_divorcedSuccessfully()
     {
         // given
-        DbEquipment spouseCtrAcc = new DbEquipment();
+        DbEquipment spouseCtr = new DbEquipment();
         DbEquipment wifeAcc = new DbEquipment();
-        spouseCtrAcc.setNbr(ctrNbr);
-        spouseCtrAcc.setSztpClass(EquipmentType.CTR.name());
-        spouseCtrAcc.setAccNbr(accNbr);
+        spouseCtr.setNbr(ctrNbr);
+        spouseCtr.setSztpClass(EquipmentType.CTR.name());
+        spouseCtr.setAccNbr(accNbr);
         wifeAcc.setNbr(accNbr);
         wifeAcc.setSztpClass(EquipmentType.ACC.name());
         wifeAcc.setCtrNbr(ctrNbr);
@@ -97,7 +97,7 @@ public class MarryDivorceAdapterTest
         // do
 
         // verify
-        assertNull(spouseCtrAcc.getAccNbr());
+        assertNull(spouseCtr.getAccNbr());
         assertNull(wifeAcc.getCtrNbr());
     }
 
@@ -105,11 +105,11 @@ public class MarryDivorceAdapterTest
     public void divorceEquipment_divorceChsAndAcc_divorcedSuccessfully()
     {
         // given
-        DbEquipment spouseChsAcc = new DbEquipment();
+        DbEquipment spouseChs = new DbEquipment();
         DbEquipment wifeAcc = new DbEquipment();
-        spouseChsAcc.setNbr(chsNbr);
-        spouseChsAcc.setSztpClass(EquipmentType.CHS.name());
-        spouseChsAcc.setAccNbr(accNbr);
+        spouseChs.setNbr(chsNbr);
+        spouseChs.setSztpClass(EquipmentType.CHS.name());
+        spouseChs.setAccNbr(accNbr);
         wifeAcc.setNbr(accNbr);
         wifeAcc.setSztpClass(EquipmentType.ACC.name());
         wifeAcc.setChsNbr(chsNbr);
@@ -117,7 +117,7 @@ public class MarryDivorceAdapterTest
         // do
 
         // verify
-        assertNull(spouseChsAcc.getAccNbr());
+        assertNull(spouseChs.getAccNbr());
         assertNull(wifeAcc.getCtrNbr());
     }
 
@@ -125,11 +125,11 @@ public class MarryDivorceAdapterTest
     public void divorceEquipment_divorceCtrAndCtr_divorcedSuccessfully()
     {
         // given
-        DbEquipment spouseCtrCtr = new DbEquipment();
+        DbEquipment spouseCtr = new DbEquipment();
         DbEquipment wifeCtr = new DbEquipment();
-        spouseCtrCtr.setNbr(ctrNbr);
-        spouseCtrCtr.setSztpClass(EquipmentType.CTR.name());
-        spouseCtrCtr.setAccNbr(ctrNbr);
+        spouseCtr.setNbr(ctrNbr);
+        spouseCtr.setSztpClass(EquipmentType.CTR.name());
+        spouseCtr.setAccNbr(ctrNbr);
         wifeCtr.setNbr(ctrNbr);
         wifeCtr.setSztpClass(EquipmentType.CTR.name());
         wifeCtr.setChsNbr(ctrNbr);
@@ -137,7 +137,7 @@ public class MarryDivorceAdapterTest
         // do
 
         // verify
-        assertNull(spouseCtrCtr.getCtrNbr());
+        assertNull(spouseCtr.getCtrNbr());
         assertNull(wifeCtr.getCtrNbr());
     }
 
@@ -145,17 +145,17 @@ public class MarryDivorceAdapterTest
     public void divorceEquipment_divorceEquipmentsThatAlreadyDivorced_divorcedSuccessfully()
     {
         // given
-        DbEquipment spouseCtrChs = new DbEquipment();
+        DbEquipment spouseCtr = new DbEquipment();
         DbEquipment wifeChs = new DbEquipment();
-        spouseCtrChs.setNbr(ctrNbr);
-        spouseCtrChs.setSztpClass(EquipmentType.CTR.name());
+        spouseCtr.setNbr(ctrNbr);
+        spouseCtr.setSztpClass(EquipmentType.CTR.name());
         wifeChs.setNbr(chsNbr);
         wifeChs.setSztpClass(EquipmentType.CHS.name());
 
         // do
 
         // verify
-        assertNull(spouseCtrChs.getCtrNbr());
+        assertNull(spouseCtr.getCtrNbr());
         assertNull(wifeChs.getCtrNbr());
     }
 
@@ -163,10 +163,10 @@ public class MarryDivorceAdapterTest
 
     // *** START marryEquipment ***
     @Test(expected = NullPointerException.class)
-    public void marryEquipment_husbandIsNull_throwException()
+    public void marryEquipment_spouseIsNull_throwException()
     {
         // given
-        DbEquipment spouseCtrChs = null;
+        DbEquipment spouseCtr = null;
         DbEquipment wifeChs = new DbEquipment();
 
         // do
@@ -176,19 +176,19 @@ public class MarryDivorceAdapterTest
     public void marryEquipment_WifeIsNull_throwException()
     {
         // given
-        DbEquipment spouseCtrChs = new DbEquipment();
+        DbEquipment spouseCtr = new DbEquipment();
         DbEquipment wifeChs = null;
 
         // do
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void marryEquipment_husbandHasInvalidEqType_throwException()
+    public void marryEquipment_spouseHasInvalidEqType_throwException()
     {
         // given
-        DbEquipment spouseCtrChs = new DbEquipment();
+        DbEquipment spouseCtr = new DbEquipment();
         DbEquipment wifeChs = new DbEquipment();
-        spouseCtrChs.setSztpClass("Invalid");
+        spouseCtr.setSztpClass("Invalid");
         wifeChs.setSztpClass(EquipmentType.CTR.name());
 
         // do
@@ -198,9 +198,9 @@ public class MarryDivorceAdapterTest
     public void marryEquipment_wifeHasInvalidEqType_throwException()
     {
         // given
-        DbEquipment spouseCtrChs = new DbEquipment();
+        DbEquipment spouseCtr = new DbEquipment();
         DbEquipment wifeChs = new DbEquipment();
-        spouseCtrChs.setSztpClass(EquipmentType.CTR.name());
+        spouseCtr.setSztpClass(EquipmentType.CTR.name());
         wifeChs.setSztpClass("Invalid");
 
         // do
@@ -210,17 +210,17 @@ public class MarryDivorceAdapterTest
     public void marryEquipment_marryCtrAndChs_marrySuccessfully()
     {
         // given
-        DbEquipment spouseCtrChs = new DbEquipment();
+        DbEquipment spouseCtr = new DbEquipment();
         DbEquipment wifeChs = new DbEquipment();
-        spouseCtrChs.setNbr(ctrNbr);
-        spouseCtrChs.setSztpClass(EquipmentType.CTR.name());
+        spouseCtr.setNbr(ctrNbr);
+        spouseCtr.setSztpClass(EquipmentType.CTR.name());
         wifeChs.setNbr(chsNbr);
         wifeChs.setSztpClass(EquipmentType.CHS.name());
 
         // do
 
         // verify
-        assertEquals(chsNbr,spouseCtrChs.getChsNbr());
+        assertEquals(chsNbr,spouseCtr.getChsNbr());
         assertEquals(ctrNbr,wifeChs.getCtrNbr());
     }
 
@@ -228,17 +228,17 @@ public class MarryDivorceAdapterTest
     public void marryEquipment_marryCtrAndAcc_marrySuccessfully()
     {
         // given
-        DbEquipment spouseCtrAcc = new DbEquipment();
+        DbEquipment spouseCtr = new DbEquipment();
         DbEquipment wifeAcc = new DbEquipment();
-        spouseCtrAcc.setNbr(ctrNbr);
-        spouseCtrAcc.setSztpClass(EquipmentType.CTR.name());
+        spouseCtr.setNbr(ctrNbr);
+        spouseCtr.setSztpClass(EquipmentType.CTR.name());
         wifeAcc.setNbr(accNbr);
         wifeAcc.setSztpClass(EquipmentType.ACC.name());
 
         // do
 
         // verify
-        assertEquals(accNbr,spouseCtrAcc.getAccNbr());
+        assertEquals(accNbr,spouseCtr.getAccNbr());
         assertEquals(ctrNbr,wifeAcc.getCtrNbr());
     }
 
@@ -246,17 +246,17 @@ public class MarryDivorceAdapterTest
     public void marryEquipment_marryChsAndAcc_marrySuccessfully()
     {
         // given
-        DbEquipment spouseChsAcc = new DbEquipment();
+        DbEquipment spouseChs = new DbEquipment();
         DbEquipment wifeAcc = new DbEquipment();
-        spouseChsAcc.setNbr(chsNbr);
-        spouseChsAcc.setSztpClass(EquipmentType.CHS.name());
+        spouseChs.setNbr(chsNbr);
+        spouseChs.setSztpClass(EquipmentType.CHS.name());
         wifeAcc.setNbr(accNbr);
         wifeAcc.setSztpClass(EquipmentType.ACC.name());
 
         // do
 
         // verify
-        assertEquals(accNbr,spouseChsAcc.getAccNbr());
+        assertEquals(accNbr,spouseChs.getAccNbr());
         assertEquals(chsNbr,wifeAcc.getChsNbr());
     }
 
@@ -264,17 +264,17 @@ public class MarryDivorceAdapterTest
     public void marryEquipment_marryCtrAndCtr_marrySuccessfully()
     {
         // given
-        DbEquipment spouseCtrCtr = new DbEquipment();
+        DbEquipment spouseCtr = new DbEquipment();
         DbEquipment wifeCtr = new DbEquipment();
-        spouseCtrCtr.setNbr(ctrNbr);
-        spouseCtrCtr.setSztpClass(EquipmentType.CTR.name());
+        spouseCtr.setNbr(ctrNbr);
+        spouseCtr.setSztpClass(EquipmentType.CTR.name());
         wifeCtr.setNbr(ctrNbr);
         wifeCtr.setSztpClass(EquipmentType.CTR.name());
 
         // do
 
         // verify
-        assertEquals(accNbr,spouseCtrCtr.getCtrNbr());
+        assertEquals(accNbr,spouseCtr.getCtrNbr());
         assertEquals(chsNbr,wifeCtr.getCtrNbr());
     }
 
