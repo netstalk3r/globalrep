@@ -18,7 +18,7 @@ public class V1SAXReportParser extends V1ReportParser {
 	private SAXUtil saxUtil;
 	private ReportWriter repWriter;
 	
-	private String reportLine = "\nBLI ID: %s;\n BLI Name: %s;\n Owner: %s;\n Dscription: %s";
+	private String reportLine = "\nBLI ID: %s;\n BLI Name: %s;\n Owner: %s;\n Description: %s";
 	
 	public V1SAXReportParser(ReportWriter reportWriter) throws IOException {
 		super();
