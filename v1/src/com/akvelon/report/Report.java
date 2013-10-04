@@ -1,5 +1,8 @@
 package com.akvelon.report;
 
+/**
+ * Class for report
+ */
 public class Report {
 
 	private String bliID;

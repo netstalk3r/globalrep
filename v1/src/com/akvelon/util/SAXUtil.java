@@ -15,6 +15,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.akvelon.report.Report;
 
+/**
+ * Class parser XML response 
+ */
 public class SAXUtil extends DefaultHandler {
 
 	private InputStream inputStream;

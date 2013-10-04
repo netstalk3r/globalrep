@@ -7,10 +7,14 @@ import com.akvelon.test.CMDOptionReader;
 import com.akvelon.test.FileOptionsReader;
 import com.akvelon.writer.reports.ReportWriter;
 
+/**
+ * This class was made abstract because this logic is common for all report
+ * checkers
+ */
 public abstract class ReportChecker {
 
 	protected ReportWriter repWriter;
-	
+
 	public void checkSingleReport(String reportsStorage) throws Exception {
 		FileOptionsReader optionsReader = new FileOptionsReader(reportsStorage);
 		Map<String, String> options = optionsReader.readOptions();
@@ -34,13 +38,14 @@ public abstract class ReportChecker {
 	}
 
 	private void write() {
-		if (repWriter == null) return;
+		if (repWriter == null)
+			return;
 		try {
 			repWriter.writeReport();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	protected abstract void checkReport(String reportName) throws Exception;
 }

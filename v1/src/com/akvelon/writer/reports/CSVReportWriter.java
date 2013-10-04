@@ -14,6 +14,9 @@ import java.util.List;
 
 import com.akvelon.report.Report;
 
+/**
+ * Implementing {@link ReportWriter} to write csv report
+ */
 public class CSVReportWriter implements ReportWriter {
 
 	private String fileName;

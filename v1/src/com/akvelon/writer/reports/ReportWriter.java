@@ -5,6 +5,9 @@ import java.util.List;
 
 import com.akvelon.report.Report;
 
+/**
+ * Interface for writing reporst 
+ */
 public interface ReportWriter {
 	
 	static final String ENCODING = "UTF-8";

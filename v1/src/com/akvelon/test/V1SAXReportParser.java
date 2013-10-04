@@ -10,21 +10,23 @@ import org.xml.sax.SAXException;
 
 import com.akvelon.report.Report;
 import com.akvelon.util.SAXUtil;
-import com.akvelon.writer.reports.CSVReportWriter;
 import com.akvelon.writer.reports.ReportWriter;
 
+/**
+ * Extends {@link V1ReportParser} to override parsing XML response
+ */
 public class V1SAXReportParser extends V1ReportParser {
 
 	private SAXUtil saxUtil;
 	private ReportWriter repWriter;
-	
+
 	private String reportLine = "\nBLI ID: %s;\n BLI Name: %s;\n Owner: %s;\n Description: %s";
-	
+
 	public V1SAXReportParser(ReportWriter reportWriter) throws IOException {
 		super();
 		this.repWriter = reportWriter;
 	}
-	
+
 	@Override
 	public String readXmlData(String reportName) {
 		String result = new String();
@@ -47,5 +49,5 @@ public class V1SAXReportParser extends V1ReportParser {
 		}
 		return result;
 	}
-	
+
 }

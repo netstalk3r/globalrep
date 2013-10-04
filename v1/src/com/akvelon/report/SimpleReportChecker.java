@@ -2,8 +2,11 @@ package com.akvelon.report;
 
 import com.akvelon.test.V1ReportParser;
 
+/**
+ * Simple report checker with out writing report to file
+ */
 public class SimpleReportChecker extends ReportChecker {
-	
+
 	protected void checkReport(String reportName) throws Exception {
 		V1ReportParser reportParser = new V1ReportParser();
 		System.out.println("Checking " + reportName);
