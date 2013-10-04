@@ -13,7 +13,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 public class V1ReportParser {
-	private V1ReportUrlBuilder reportUrlBuilder = null;
+	protected V1ReportUrlBuilder reportUrlBuilder = null;
 	
 	public V1ReportParser () throws IOException {
 		this.reportUrlBuilder = new V1ReportUrlBuilder();

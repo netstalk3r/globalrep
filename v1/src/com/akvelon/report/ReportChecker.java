@@ -1,40 +1,46 @@
-package com.akvelon.test;
+package com.akvelon.report;
 
+import java.io.IOException;
 import java.util.Map;
 
-public class ReportChecker {
+import com.akvelon.test.CMDOptionReader;
+import com.akvelon.test.FileOptionsReader;
+import com.akvelon.writer.reports.ReportWriter;
 
+public abstract class ReportChecker {
+
+	protected ReportWriter repWriter;
+	
 	public void checkSingleReport(String reportsStorage) throws Exception {
 		FileOptionsReader optionsReader = new FileOptionsReader(reportsStorage);
 		Map<String, String> options = optionsReader.readOptions();
 		CMDOptionReader optionReader = new CMDOptionReader("exit");
 		String choice = optionReader.readOption(options);
-		
+
 		checkReport(options.get(choice));
+		write();
 	}
-	
+
 	public void checkBatchReport(String reportsStorage) throws Exception {
 		System.out.println("Check report from folder: " + reportsStorage);
-		
+
 		FileOptionsReader optionsReader = new FileOptionsReader(reportsStorage);
 		Map<String, String> options = optionsReader.readOptions();
 
 		for (String choice : options.keySet()) {
 			checkReport(options.get(choice));
 		}
+		write();
 	}
-	
-	private void checkReport(String reportName) throws Exception {
-		V1ReportParser reportParser = new V1ReportParser();
-		System.out.println("Checking " + reportName);
-		boolean isValid = reportParser.isReportValid(reportName);
-		if (!isValid) {
-			System.out.println("Report failed.");
-			String content = reportParser.readXmlData(reportName);
-			System.out.println(content);
-			System.out.println("URL: " + reportParser.getReportUrlBuilder().buildReportUrl(reportName));
-		} else {
-			System.out.println("Passed.");
+
+	private void write() {
+		if (repWriter == null) return;
+		try {
+			repWriter.writeReport();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
+	
+	protected abstract void checkReport(String reportName) throws Exception;
 }
