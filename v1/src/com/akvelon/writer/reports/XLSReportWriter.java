@@ -3,9 +3,6 @@ package com.akvelon.writer.reports;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -19,14 +16,9 @@ import org.apache.poi.ss.usermodel.Row;
 
 import com.akvelon.report.Report;
 
-public class XMLReportWriter implements ReportWriter {
-
-	private String fileName;
-	private SimpleDateFormat formatter;
+public class XLSReportWriter extends ReportWriter {
 
 	private HSSFWorkbook workbook;
-
-	private List<List<Report>> reports;
 
 	private String EXTENSION = ".xls";
 	
@@ -34,11 +26,9 @@ public class XMLReportWriter implements ReportWriter {
 
 	private int rowNum = 0;
 
-	public XMLReportWriter() {
-		formatter = new SimpleDateFormat(DATE_FORMAT);
-		fileName = formatter.format(new Date());
+	public XLSReportWriter() {
+		super();
 		workbook = new HSSFWorkbook();
-		reports = new ArrayList<List<Report>>();
 		style = workbook.createCellStyle();
 		style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
 		style.setFillPattern(CellStyle.SOLID_FOREGROUND);
@@ -62,11 +52,6 @@ public class XMLReportWriter implements ReportWriter {
 		FileOutputStream out = new FileOutputStream(new File(fileName + EXTENSION));
 		workbook.write(out);
 		out.close();
-	}
-
-	@Override
-	public void addReports(List<Report> reports) {
-		this.reports.add(reports);
 	}
 
 	private void createReportRow(HSSFSheet sheet, Report report) {

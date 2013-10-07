@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.akvelon.report.Report;
@@ -17,22 +14,16 @@ import com.akvelon.report.Report;
 /**
  * Implementing {@link ReportWriter} to write csv report
  */
-public class CSVReportWriter implements ReportWriter {
+public class CSVReportWriter extends ReportWriter {
 
-	private String fileName;
 	private Writer writer;
-	private SimpleDateFormat formatter;
 
 	private String EXTENSION = ".csv";
 
 	private String line = "%s,%s,%s,%s\n";
 
-	private List<List<Report>> reports;
-
 	public CSVReportWriter() {
-		formatter = new SimpleDateFormat(DATE_FORMAT);
-		fileName = formatter.format(new Date());
-		reports = new ArrayList<List<Report>>();
+		super();
 	}
 
 	private void openFile() throws UnsupportedEncodingException, FileNotFoundException {
@@ -66,11 +57,6 @@ public class CSVReportWriter implements ReportWriter {
 
 	private void closeFile() throws IOException {
 		writer.close();
-	}
-
-	@Override
-	public void addReports(List<Report> reports) {
-		this.reports.add(reports);
 	}
 
 }

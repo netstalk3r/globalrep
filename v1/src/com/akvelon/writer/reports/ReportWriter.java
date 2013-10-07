@@ -1,6 +1,9 @@
 package com.akvelon.writer.reports;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.akvelon.report.Report;
@@ -8,15 +11,28 @@ import com.akvelon.report.Report;
 /**
  * Interface for writing reporst 
  */
-public interface ReportWriter {
+public abstract class ReportWriter {
 	
-	static final String ENCODING = "UTF-8";
-	static final String DATE_FORMAT = "dd.MM.yyyy HH-mm";
-	static final String HEAD = "BLI ID,BLI NAME,OWNER,DESCRIPTION";
+	protected List<List<Report>> reports;
 	
-	void writeReport() throws IOException;
+	protected SimpleDateFormat formatter;
+	protected String fileName;
 	
-	void addReports(List<Report> reports);
+	protected static final String ENCODING = "UTF-8";
+	protected static final String DATE_FORMAT = "dd.MM.yyyy HH-mm";
+	protected static final String HEAD = "BLI ID,BLI NAME,OWNER,DESCRIPTION";
+	
+	public ReportWriter() {
+		formatter = new SimpleDateFormat(DATE_FORMAT);
+		fileName = formatter.format(new Date());
+		reports = new ArrayList<List<Report>>();
+	}
+	
+	public abstract void writeReport() throws IOException;
+	
+	public void addReports(List<Report> reports) {
+		this.reports.add(reports);
+	}
 	
 }
 	

@@ -3,7 +3,7 @@ package com.akvelon.report;
 import com.akvelon.test.V1ReportParser;
 import com.akvelon.test.V1SAXReportParser;
 import com.akvelon.writer.reports.CSVReportWriter;
-import com.akvelon.writer.reports.XMLReportWriter;
+import com.akvelon.writer.reports.XLSReportWriter;
 
 /**
  * Report checker with writing to file
@@ -12,7 +12,7 @@ public class ParsedReplyReportChecker extends ReportChecker {
 	
 	public ParsedReplyReportChecker() {
 		super();
-		repWriter = new XMLReportWriter();
+		repWriter = new XLSReportWriter();
 //		repWriter = new CSVReportWriter();
 	}
 	
