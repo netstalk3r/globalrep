@@ -34,5 +34,8 @@ public abstract class ReportWriter {
 		this.reports.add(reports);
 	}
 	
+	public List<List<Report>> getReports() {
+		return reports;
+	}
 }
 	

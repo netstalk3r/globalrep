@@ -1,10 +1,13 @@
 package com.akvelon.report;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 
+import com.akvelon.mail.EmailSender;
 import com.akvelon.test.CMDOptionReader;
 import com.akvelon.test.FileOptionsReader;
+import com.akvelon.util.ReportUtil;
 import com.akvelon.writer.reports.ReportWriter;
 
 /**
@@ -14,6 +17,17 @@ import com.akvelon.writer.reports.ReportWriter;
 public abstract class ReportChecker {
 
 	protected ReportWriter repWriter;
+	protected EmailSender emailSender;
+
+	public ReportChecker() {
+		try {
+			emailSender = new EmailSender();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void checkSingleReport(String reportsStorage) throws Exception {
 		FileOptionsReader optionsReader = new FileOptionsReader(reportsStorage);
@@ -41,6 +55,7 @@ public abstract class ReportChecker {
 		if (repWriter == null)
 			return;
 		try {
+			emailSender.sendNotifications(ReportUtil.sortReportsByOwner(repWriter.getReports()));
 			repWriter.writeReport();
 		} catch (IOException e) {
 			e.printStackTrace();
