@@ -12,7 +12,7 @@ public interface ReportWriter {
 	
 	static final String ENCODING = "UTF-8";
 	static final String DATE_FORMAT = "dd.MM.yyyy HH-mm";
-	static final String HEAD = "BLI ID,BLI NAME,OWNER,DESCRIPTION\n";
+	static final String HEAD = "BLI ID,BLI NAME,OWNER,DESCRIPTION";
 	
 	void writeReport() throws IOException;
 	

@@ -47,7 +47,7 @@ public class CSVReportWriter implements ReportWriter {
 		}
 		try {
 			openFile();
-			writer.write(HEAD);
+			writer.write(HEAD + "\n");
 			for (List<Report> reps : reports) {
 				for (Report rep : reps) {
 					writer.write(String.format(line, rep.getBliID(), rep.getBliName(), rep.getOwnerTaskName(), rep.getReportName()));
