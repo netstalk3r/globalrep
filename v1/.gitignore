@@ -4,4 +4,5 @@
 .classpath
 .project
 **/*.csv
+**/*.xls
 **/*.jar
