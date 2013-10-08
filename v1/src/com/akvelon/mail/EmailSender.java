@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -31,19 +30,18 @@ public class EmailSender {
 	private static final String MAIL_FILE_CONFIG = "mail_conf.properties";
 
 	private String reportLine = "BLI ID: %s;\n BLI Name: %s;\n Description: %s\n\n";
-	
+
 	public EmailSender() throws FileNotFoundException, IOException {
 		props.load(new BufferedInputStream(new FileInputStream(new File(MAIL_FILE_CONFIG))));
 	}
 
-	public void sendNotifications(Map<String, List<Report>> reports) {
+	public void sendNotifications(List<List<Report>> reports) {
 		StringBuilder message = new StringBuilder();
-		for (String owner : reports.keySet()) {
-			List<Report> reps = reports.get(owner);
+		for (List<Report> reps : reports) {
 			for (Report rep : reps) {
 				message.append(String.format(reportLine, rep.getBliID(), rep.getBliName(), rep.getReportName()));
 			}
-			sendMessage(createEmail(owner), message.toString());
+			sendMessage(createEmail(reps.get(0).getOwnerTaskName()), message.toString());
 		}
 	}
 

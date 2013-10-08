@@ -9,7 +9,7 @@ import com.akvelon.report.Report;
 
 public class ReportUtil {
 
-	public static Map<String, List<Report>> sortReportsByOwner(List<List<Report>> reports) {
+	public static List<List<Report>> sortReportsByOwner(List<List<Report>> reports) {
 		Map<String, List<Report>> res = new HashMap<String, List<Report>>();
 		for (List<Report> reps : reports) {
 			for (Report rep : reps) {
@@ -22,6 +22,6 @@ public class ReportUtil {
 				}
 			}
 		}
-		return res;
+		return new ArrayList<List<Report>>(res.values());
 	}
 }
