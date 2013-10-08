@@ -27,11 +27,12 @@ public class EmailSender {
 
 	private static final String DOMEN = "@akvelon.com";
 
-	private static final String MAIL_FILE_CONFIG = "mail_conf.properties";
+	private static final String MAIL_FILE_CONFIG = "src/mail_conf.properties";
 
 	private String reportLine = "BLI ID: %s;\n BLI Name: %s;\n Description: %s\n\n";
 
 	public EmailSender() throws FileNotFoundException, IOException {
+		props = new Properties();
 		props.load(new BufferedInputStream(new FileInputStream(new File(MAIL_FILE_CONFIG))));
 	}
 
@@ -41,7 +42,7 @@ public class EmailSender {
 			for (Report rep : reps) {
 				message.append(String.format(reportLine, rep.getBliID(), rep.getBliName(), rep.getReportName()));
 			}
-			sendMessage(createEmail(reps.get(0).getOwnerTaskName()), message.toString());
+			sendMessage(createEmail(reps.get(0).getTaskOwner()), message.toString());
 		}
 	}
 

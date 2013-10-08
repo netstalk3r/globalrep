@@ -55,7 +55,7 @@ public abstract class ReportChecker {
 		if (repWriter == null)
 			return;
 		try {
-			emailSender.sendNotifications(ReportUtil.sortReportsByOwner(repWriter.getReports()));
+			//emailSender.sendNotifications(ReportUtil.sortReportsByOwner(repWriter.getReports()));
 			repWriter.writeReport();
 		} catch (IOException e) {
 			e.printStackTrace();

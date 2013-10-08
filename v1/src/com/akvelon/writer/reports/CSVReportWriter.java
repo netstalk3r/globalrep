@@ -20,7 +20,7 @@ public class CSVReportWriter extends ReportWriter {
 
 	private String EXTENSION = ".csv";
 
-	private String line = "%s,%s,%s,%s\n";
+	private String line = "%s,%s,%s,%s,%s\n";
 
 	public CSVReportWriter() {
 		super();
@@ -41,7 +41,8 @@ public class CSVReportWriter extends ReportWriter {
 			writer.write(HEAD + "\n");
 			for (List<Report> reps : reports) {
 				for (Report rep : reps) {
-					writer.write(String.format(line, rep.getBliID(), rep.getBliName(), rep.getOwnerTaskName(), rep.getReportName()));
+					writer.write(String.format(line, rep.getBliID(), rep.getBliName(), rep.getBliOwner(), rep.getTaskOwner(),
+							rep.getReportName()));
 				}
 			}
 		} catch (UnsupportedEncodingException e) {

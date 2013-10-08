@@ -17,15 +17,15 @@ public class ReportUtilTest {
 
 		// given
 		Report repM1 = new Report();
-		repM1.setOwnerTaskName("Maria");
+		repM1.setTaskOwner("Maria");
 		Report repM2 = new Report();
-		repM2.setOwnerTaskName("Maria");
+		repM2.setTaskOwner("Maria");
 		Report repA1 = new Report();
-		repA1.setOwnerTaskName("Anton");
+		repA1.setTaskOwner("Anton");
 		Report repA2 = new Report();
-		repA2.setOwnerTaskName("Anton");
+		repA2.setTaskOwner("Anton");
 		Report repO1 = new Report();
-		repO1.setOwnerTaskName("Oleg");
+		repO1.setTaskOwner("Oleg");
 		List<Report> listTasks1 = Arrays.asList(repM1, repA1, repO1);
 		List<Report> listTasks2 = Arrays.asList(repM2, repA2);
 

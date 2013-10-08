@@ -59,7 +59,8 @@ public class XLSReportWriter extends ReportWriter {
 		Row row = sheet.createRow(rowNum++);
 		row.createCell(cellNum++).setCellValue(report.getBliID());
 		row.createCell(cellNum++).setCellValue(report.getBliName());
-		row.createCell(cellNum++).setCellValue(report.getOwnerTaskName());
+		row.createCell(cellNum++).setCellValue(report.getBliOwner());
+		row.createCell(cellNum++).setCellValue(report.getTaskOwner());
 		row.createCell(cellNum++).setCellValue(report.getReportName());
 		cellNum = 0;
 	}

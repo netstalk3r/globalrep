@@ -29,7 +29,8 @@ public class SAXUtil extends DefaultHandler {
 	
 	private Boolean nbr = Boolean.FALSE;
 	private Boolean name = Boolean.FALSE;
-	private Boolean owner = Boolean.FALSE;
+	private Boolean bliOwner = Boolean.FALSE;
+	private Boolean taskOwner = Boolean.FALSE;
 
 	public SAXUtil(String taskName) {
 		this.reportName = taskName;
@@ -59,8 +60,12 @@ public class SAXUtil extends DefaultHandler {
 			name = Boolean.TRUE;
 			return;
 		}
+		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Owners.Name")) {
+			bliOwner = Boolean.TRUE;
+			return;
+		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Owners.Name")) {
-			owner = Boolean.TRUE;
+			taskOwner = Boolean.TRUE;
 			return;
 		}
 	}
@@ -77,9 +82,14 @@ public class SAXUtil extends DefaultHandler {
 			name = Boolean.FALSE;
 			return;
 		}
-		if (owner) {
-			report.setOwnerTaskName(new String(ch, start, length));
-			owner = Boolean.FALSE;
+		if (bliOwner) {
+			report.setBliOwner(new String(ch, start, length));
+			bliOwner = Boolean.FALSE;
+			return;
+		}
+		if (taskOwner) {
+			report.setTaskOwner(new String(ch, start, length));
+			taskOwner = Boolean.FALSE;
 			return;
 		}
 	}
