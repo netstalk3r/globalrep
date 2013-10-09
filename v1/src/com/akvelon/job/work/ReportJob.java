@@ -1,14 +1,19 @@
 package com.akvelon.job.work;
 
 import org.apache.log4j.Logger;
+import org.quartz.Job;
 import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 import com.akvelon.report.ParsedReplyReportChecker;
 import com.akvelon.report.ReportChecker;
 
-public class JobExecutor {
+public class ReportJob implements Job {
 
-	public void execute(JobExecutionContext context, Logger log) {
+	private static final Logger log = Logger.getLogger(ReportJob.class);
+	
+	@Override
+	public void execute(JobExecutionContext context) throws JobExecutionException {
 		ReportChecker checker = new ParsedReplyReportChecker();
 		try {
 			log.info("Job started - " + context.getJobDetail().getKey().toString());
@@ -19,5 +24,5 @@ public class JobExecutor {
 			e.printStackTrace();
 		}
 	}
-	
+
 }
