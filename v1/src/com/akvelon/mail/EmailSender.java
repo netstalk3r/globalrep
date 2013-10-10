@@ -23,13 +23,14 @@ public class EmailSender {
 	private Properties props;
 	private Session session;
 
-	private String subject = "Invent subject";
+	private String subject = "TWVG > V1 status";
 
 	private static final String DOMEN = "@akvelon.com";
 
 	private static final String MAIL_FILE_CONFIG = "src/mail_conf.properties";
 
 	private String reportLine = "BLI ID: %s;\n BLI Name: %s;\n Description: %s\n\n";
+	private String testReportLine = "BLI ID: %s;<br/> BLI Name: %s;<br/> BLI Owner: %s;<br/> Task Owner: %s;<br/> Description: %s;<br/><br/>";
 
 	public EmailSender() throws FileNotFoundException, IOException {
 		props = new Properties();
@@ -44,6 +45,18 @@ public class EmailSender {
 			}
 			sendMessage(createEmail(reps.get(0).getTaskOwner()), message.toString());
 		}
+	}
+
+	public void sendTestNotifications(List<List<Report>> reports) {
+		StringBuilder message = new StringBuilder();
+		for (List<Report> reps : reports) {
+			for (Report rep : reps) {
+				message.append(String.format(testReportLine, rep.getBliID(), rep.getBliName(), rep.getBliOwner(), rep.getTaskOwner(),
+						rep.getReportName()));
+			}
+		}
+		System.out.println(message.toString());
+		sendMessage("maria.serichenko@akvelon.com", message.toString());
 	}
 
 	private String createEmail(String owner) {
@@ -67,7 +80,7 @@ public class EmailSender {
 			msg.setFrom(new InternetAddress(props.getProperty("mail.user")));
 			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 			msg.setSubject(subject);
-			msg.setText(text);
+			msg.setContent(text, "text/html; charset=UTF8");
 
 			Transport.send(msg);
 		} catch (MessagingException e) {
