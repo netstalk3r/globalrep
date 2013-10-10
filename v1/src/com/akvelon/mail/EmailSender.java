@@ -23,7 +23,7 @@ public class EmailSender {
 	private Properties props;
 	private Session session;
 
-	private String subject = "Invent subject";
+	private String subject = "TWVG > V1 status";
 
 	private static final String DOMEN = "@akvelon.com";
 
