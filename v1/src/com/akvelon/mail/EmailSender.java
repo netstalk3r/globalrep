@@ -43,6 +43,7 @@ public class EmailSender {
 				message.append(String.format(reportLine, rep.getBliID(), rep.getBliName(), rep.getReportName()));
 			}
 			sendMessage(createEmail(reps.get(0).getTaskOwner()), message.toString());
+			message.setLength(0);
 		}
 	}
 
