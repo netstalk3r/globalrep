@@ -29,7 +29,7 @@ public class EmailSender {
 
 	private static final String MAIL_FILE_CONFIG = "src/mail_conf.properties";
 
-	private String reportLine = "BLI ID: %s;<br/> BLI Name: %s;<br/> Description: %s<br/><br/>";
+	private String reportLine = "BLI ID: %s;<br/> BLI Name: %s;<br/> Description: %s;<br/><br/>";
 
 	public EmailSender() throws FileNotFoundException, IOException {
 		props = new Properties();
