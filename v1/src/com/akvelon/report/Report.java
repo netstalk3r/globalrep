@@ -8,6 +8,7 @@ public class Report {
 	private String bliID;
 	private String bliName;
 	private String bliOwner;
+	private String taskName;
 	private String taskOwner;
 	private String reportName;
 
@@ -15,11 +16,12 @@ public class Report {
 		super();
 	}
 
-	public Report(String bliID, String bliName, String bliOwner, String taskOwner, String reportName) {
+	public Report(String bliID, String bliName, String bliOwner, String taskName, String taskOwner, String reportName) {
 		super();
 		this.bliID = bliID;
 		this.bliName = bliName;
 		this.bliOwner = bliOwner;
+		this.taskName = taskName;
 		this.taskOwner = taskOwner;
 		this.reportName = reportName;
 	}
@@ -46,6 +48,14 @@ public class Report {
 
 	public void setBliOwner(String bliOwner) {
 		this.bliOwner = bliOwner;
+	}
+
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
 	}
 
 	public String getTaskOwner() {

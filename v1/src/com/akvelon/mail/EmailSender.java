@@ -16,6 +16,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.akvelon.report.Report;
 
 public class EmailSender {
@@ -29,7 +31,8 @@ public class EmailSender {
 
 	private static final String MAIL_FILE_CONFIG = "src/mail_conf.properties";
 
-	private String reportLine = "BLI ID: %s;<br/> BLI Name: %s;<br/> Description: %s;<br/><br/>";
+	private String noReport = "<h2>No issues were found</h2>";
+	private String reportLine = "BLI ID: %s;<br/> BLI Name: %s;<br/> BLI Owner: %s;<br/> Task Name: %s;<br/> Task Owner: %s;<br/> Description: %s;<br/>";
 
 	public EmailSender() throws FileNotFoundException, IOException {
 		props = new Properties();
@@ -37,21 +40,29 @@ public class EmailSender {
 	}
 
 	public void sendNotifications(List<List<Report>> reports) {
+		if (reports.isEmpty()) {
+			sendMessage("maria.serichenko@akvelon.com", null, noReport);
+			return;
+		}
+		StringBuilder wholeRep = new StringBuilder();
 		StringBuilder message = new StringBuilder();
 		for (List<Report> reps : reports) {
 			for (Report rep : reps) {
-				message.append(String.format(reportLine, rep.getBliID(), rep.getBliName(), rep.getReportName()));
+				message.append(String.format(reportLine, rep.getBliID(), rep.getBliName(), rep.getTaskName(), rep.getTaskOwner(),
+						rep.getReportName()));
 			}
-			sendMessage(createEmail(reps.get(0).getTaskOwner()), message.toString());
+			sendMessage(createEmail(reps.get(0).getTaskOwner()), null, message.toString());
+			wholeRep.append(message);
 			message.setLength(0);
 		}
+		sendMessage("maria.serichenko@akvelon.com", null, wholeRep.toString());
 	}
 
 	private String createEmail(String owner) {
 		return owner.trim().replace("\\s+", ".").toLowerCase() + DOMEN;
 	}
 
-	private void sendMessage(String to, String text) {
+	private void sendMessage(String to, String cc, String text) {
 		Properties properties = new Properties();
 		properties.put("mail.transport.protocol", props.getProperty("mail.transport.protocol"));
 		properties.put("mail.smtp.host", props.getProperty("mail.smtp.host"));
@@ -67,7 +78,10 @@ public class EmailSender {
 			Message msg = new MimeMessage(session);
 			msg.setFrom(new InternetAddress(props.getProperty("mail.user")));
 			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-			msg.setSubject(subject);
+			if (cc != null) {
+				msg.setRecipients(Message.RecipientType.CC, InternetAddress.parse(cc));
+			}
+			msg.setSubject(StringUtils.isBlank(props.getProperty("mail.subject")) ? props.getProperty("mail.subject") : subject);
 			msg.setContent(text, "text/html; charset=UTF8");
 
 			Transport.send(msg);

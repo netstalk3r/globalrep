@@ -60,9 +60,9 @@ public class XLSReportWriter extends ReportWriter {
 		row.createCell(cellNum++).setCellValue(report.getBliID());
 		row.createCell(cellNum++).setCellValue(report.getBliName());
 		row.createCell(cellNum++).setCellValue(report.getBliOwner());
+		row.createCell(cellNum++).setCellValue(report.getTaskName());
 		row.createCell(cellNum++).setCellValue(report.getTaskOwner());
 		row.createCell(cellNum++).setCellValue(report.getReportName());
-		cellNum = 0;
 	}
 
 	private void createReportHead(HSSFSheet sheet) {
