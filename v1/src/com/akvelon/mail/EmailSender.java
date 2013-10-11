@@ -72,7 +72,7 @@ public class EmailSender {
 			}
 		}
 		System.out.println(message.toString());
-		sendMessage("maria.serichenko@akvelon.com", null, message.toString());
+		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", message.toString());
 	}
 
 	private String createEmail(String owner) {
@@ -95,7 +95,7 @@ public class EmailSender {
 			Message msg = new MimeMessage(session);
 			msg.setFrom(new InternetAddress(props.getProperty("mail.user")));
 			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-			if (cc != null) {
+			if (!StringUtils.isBlank(cc)) {
 				msg.setRecipients(Message.RecipientType.CC, InternetAddress.parse(cc));
 			}
 			msg.setSubject(StringUtils.isBlank(props.getProperty("mail.subject")) ? props.getProperty("mail.subject") : subject);
