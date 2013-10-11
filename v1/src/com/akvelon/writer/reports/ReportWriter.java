@@ -20,7 +20,7 @@ public abstract class ReportWriter {
 	
 	protected static final String ENCODING = "UTF-8";
 	protected static final String DATE_FORMAT = "dd.MM.yyyy HH-mm";
-	protected static final String HEAD = "BLI ID,BLI NAME,BLI OWNER,TASK OWNER,DESCRIPTION";
+	protected static final String HEAD = "BLI ID,BLI NAME,BLI OWNER,TASK NAME,TASK OWNER,DESCRIPTION";
 	
 	public ReportWriter() {
 		formatter = new SimpleDateFormat(DATE_FORMAT);

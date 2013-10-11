@@ -36,7 +36,7 @@ public abstract class ReportChecker {
 		String choice = optionReader.readOption(options);
 
 		checkReport(options.get(choice));
-		write();
+		writeAndSend();
 	}
 
 	public void checkBatchReport(String reportsStorage) throws Exception {
@@ -48,17 +48,17 @@ public abstract class ReportChecker {
 		for (String choice : options.keySet()) {
 			checkReport(options.get(choice));
 		}
-		write();
+		writeAndSend();
 	}
 
-	private void write() {
+	private void writeAndSend() {
 		if (repWriter == null)
 			return;
+		// emailSender.sendNotifications(ReportUtil.sortReportsByOwner(repWriter.getReports()));
+		emailSender.sendTestNotifications(ReportUtil.sortReportsByOwner(repWriter.getReports()));
 		if (repWriter.getReports().isEmpty())
 			return;
 		try {
-			// emailSender.sendNotifications(ReportUtil.sortReportsByOwner(repWriter.getReports()));
-			emailSender.sendTestNotifications(ReportUtil.sortReportsByOwner(repWriter.getReports()));
 			repWriter.writeReport();
 		} catch (IOException e) {
 			e.printStackTrace();
