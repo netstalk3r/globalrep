@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.akvelon.mail.EmailSender;
 import com.akvelon.test.CMDOptionReader;
 import com.akvelon.test.FileOptionsReader;
@@ -16,6 +18,8 @@ import com.akvelon.writer.reports.ReportWriter;
  */
 public abstract class ReportChecker {
 
+	private static final Logger log = Logger.getLogger(ReportChecker.class);
+	
 	protected ReportWriter repWriter;
 	protected EmailSender emailSender;
 
@@ -40,7 +44,7 @@ public abstract class ReportChecker {
 	}
 
 	public void checkBatchReport(String reportsStorage) throws Exception {
-		System.out.println("Check report from folder: " + reportsStorage);
+		log.info("Check report from folder: " + reportsStorage);
 
 		FileOptionsReader optionsReader = new FileOptionsReader(reportsStorage);
 		Map<String, String> options = optionsReader.readOptions();

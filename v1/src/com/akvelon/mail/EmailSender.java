@@ -17,11 +17,14 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.akvelon.report.Report;
 
 public class EmailSender {
 
+	private static final Logger log = Logger.getLogger(EmailSender.class);
+	
 	private Properties props;
 	private Session session;
 
@@ -71,7 +74,7 @@ public class EmailSender {
 						rep.getTaskOwner(), rep.getReportName()));
 			}
 		}
-		System.out.println(message.toString());
+		log.info(message.toString());
 		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", message.toString());
 	}
 

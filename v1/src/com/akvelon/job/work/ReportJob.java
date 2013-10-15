@@ -20,7 +20,7 @@ public class ReportJob implements Job {
 			checker.checkBatchReport("./src/reports/daily/");
 			log.info("Job finished - " + context.getJobDetail().getKey().toString());
 		} catch (Exception e) {
-			System.out.println("failed to read report properties.");
+			log.error("failed to read report properties.");
 			e.printStackTrace();
 		}
 	}
