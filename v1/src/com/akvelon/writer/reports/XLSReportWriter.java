@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -15,9 +16,12 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 
 import com.akvelon.report.Report;
+import com.akvelon.test.CMDOptionReader;
 
 public class XLSReportWriter extends ReportWriter {
 
+	private static final Logger log = Logger.getLogger(XLSReportWriter.class);
+	
 	private HSSFWorkbook workbook;
 
 	private String EXTENSION = ".xls";
@@ -37,7 +41,7 @@ public class XLSReportWriter extends ReportWriter {
 	@Override
 	public void writeReport() throws IOException {
 		if (reports.isEmpty()) {
-			System.out.println("No reports to write");
+			log.info("No reports to write");
 			return;
 		}
 		for (List<Report> reps : reports) {

@@ -5,7 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 public class CMDOptionReader {
+	
+	private static final Logger log = Logger.getLogger(CMDOptionReader.class);
+	
 	private String exitCommand = "";
 	
 	public CMDOptionReader(String exitCommand) {
@@ -17,15 +22,15 @@ public class CMDOptionReader {
 		String answer = "";
 		
 		do {
-			System.out.println("Select option: ");
-			System.out.println(exitCommand + " - to exit");
+			log.info("Select option: ");
+			log.info(exitCommand + " - to exit");
 			for (String option : options.keySet()) {
-				System.out.println(option + " - " + options.get(option));
+				log.info(option + " - " + options.get(option));
 			}
 			try {
 		         answer = br.readLine();
 		      } catch (IOException ioe) {
-		         System.out.println("IO error trying to read your name!");
+		    	  log.info("IO error trying to read your name!");
 		      }
 		} while (!options.keySet().contains(answer) && !exitCommand.equals(answer));
 		

@@ -9,12 +9,16 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.akvelon.report.Report;
 
 /**
  * Implementing {@link ReportWriter} to write csv report
  */
 public class CSVReportWriter extends ReportWriter {
+	
+	private static final Logger log = Logger.getLogger(CSVReportWriter.class);
 
 	private Writer writer;
 
@@ -33,7 +37,7 @@ public class CSVReportWriter extends ReportWriter {
 	@Override
 	public void writeReport() throws IOException {
 		if (reports.isEmpty()) {
-			System.out.println("No reports to write");
+			log.info("No reports to write");
 			return;
 		}
 		try {
