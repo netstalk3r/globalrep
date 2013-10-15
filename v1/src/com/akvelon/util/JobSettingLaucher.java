@@ -70,35 +70,52 @@ public class JobSettingLaucher {
 	private static List<String> validateProps() {
 		List<String> errors = new ArrayList<String>();
 		String incorrect = "Incorect ";
-
-		mornHours = removeZeroIfStartsWithZero(timeProps.getProperty("morning.hour"));
-		evenHours = removeZeroIfStartsWithZero(timeProps.getProperty("evening.hour"));
-
-		mornMin = removeZeroIfStartsWithZero(timeProps.getProperty("morning.minutes"));
-		evenMin = removeZeroIfStartsWithZero(timeProps.getProperty("evening.minutes"));
+		
+		String jobTime = timeProps.getProperty("job.time.start");
+		
+		String[] times = jobTime.split(",");
+		if (times.length == 2) {
+			
+			String[] monTime = times[0].split(":");
+			String[] evnTime = times[1].split(":");
+			
+			if (monTime.length == 2 && evnTime.length == 2) {
+				mornHours = removeZeroIfStartsWithZero(monTime[0]);
+				mornMin = removeZeroIfStartsWithZero(monTime[1]);
+				
+				evenHours = removeZeroIfStartsWithZero(evnTime[0]);
+				evenMin = removeZeroIfStartsWithZero(evnTime[1]);
+				
+			} else {
+				errors.add(incorrect + "job.time.start");
+			}
+			
+		} else {
+			errors.add(incorrect + "job.time.start");
+		}
 
 		if (!mornHours.matches(HOURS_PATTERN)) {
-			errors.add(incorrect + "morning.hour");
+			errors.add(incorrect + "first.hour");
 		}
 		if (!evenHours.matches(HOURS_PATTERN)) {
-			errors.add(incorrect + "evening.hour");
+			errors.add(incorrect + "second.hour");
 		}
 		if (!mornMin.matches(MINUTES_PATTERN)) {
-			errors.add(incorrect + "morning.minutes");
+			errors.add(incorrect + "first.minutes");
 		}
 		if (!evenMin.matches(MINUTES_PATTERN)) {
-			errors.add(incorrect + "evening.minutes");
+			errors.add(incorrect + "second.minutes");
 		}
 
-		String[] dayss = timeProps.getProperty("week.days").split("-");
+		String[] dayss = timeProps.getProperty("job.week.days").split("-");
 		if (dayss.length == 2) {
 			if (!dayss[0].matches(DAYS_PATTERN) || !dayss[1].matches(DAYS_PATTERN)) {
-				errors.add(incorrect + "week.days");
+				errors.add(incorrect + "job.week.days");
 			} else {
-				days = timeProps.getProperty("week.days");
+				days = timeProps.getProperty("job.week.days");
 			}
 		} else {
-			errors.add(incorrect + "week.days");
+			errors.add(incorrect + "job.week.days");
 		}
 
 		return errors;
