@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<style>
+		th,td {
+			border: 2px solid black;
+		}
+		th {
+			padding: 4px;
+			text-align: center;
+		}
+		table {
+			margin:0 auto;
+			border: 2px solid black;
+			border-collapse: collapse;
+		}
+		</style>
+	</head>
+	<body>
+		<h1 align="center">V1 status<h1>
+		<div align="center" style="font-family:arial;font-size:0.5em;">
+			
+			#foreach ($reps in $reports)
+			
+			<br/>
+			<p align="left" style="margin-left:20%;">$reps[0].reportName</p>
+			<table cellpadding="0" cellspacing="0">
+				<thead>
+					<tr>
+						<th>BLI ID</th>
+						<th>BLI NAME</th>
+						<th>BLI OWNER</th>
+						<th>TASK NAME</th>
+						<th>TASK OWNER</th>
+					</tr>
+				</thead>
+				<tbody>
+				
+					#foreach ($rep in $reps)
+				
+					<tr>
+						<td>$rep.bliID</td>
+						<td>$rep.bliName</td>
+						<td>$rep.bliOwner</td>
+						<td>$rep.taskName</td>
+						<td>$rep.taskOwner</td>
+					</tr>
+					
+					#end
+					
+				</tbody>
+			</table>
+			
+			#end
+			
+		</div>
+	</body>	
+</html>

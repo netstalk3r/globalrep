@@ -4,6 +4,7 @@
 /.settings
 .classpath
 .project
+velocity.log
 **/*.csv
 **/*.xls
 **/*.jar

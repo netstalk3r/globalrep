@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.akvelon.report.Report;
+import com.akvelon.util.TemplateConverter;
 
 public class EmailSender {
 
@@ -27,6 +28,8 @@ public class EmailSender {
 	
 	private Properties props;
 	private Session session;
+	
+	private TemplateConverter templateConv;
 
 	private String subject = "TWVG > V1 status";
 
@@ -41,6 +44,7 @@ public class EmailSender {
 	public EmailSender() throws FileNotFoundException, IOException {
 		props = new Properties();
 		props.load(new BufferedInputStream(new FileInputStream(new File(MAIL_FILE_CONFIG))));
+		templateConv = new TemplateConverter();
 	}
 
 	public void sendNotifications(List<List<Report>> reports) {
@@ -67,15 +71,16 @@ public class EmailSender {
 			sendMessage("maria.serichenko@akvelon.com", null, noReport);
 			return;
 		}
-		StringBuilder message = new StringBuilder();
-		for (List<Report> reps : reports) {
-			for (Report rep : reps) {
-				message.append(String.format(testReportLine, rep.getBliID(), rep.getBliName(), rep.getBliOwner(), rep.getTaskName(),
-						rep.getTaskOwner(), rep.getReportName()));
-			}
-		}
-		log.info(message.toString());
-		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", message.toString());
+		log.debug(templateConv.convertToHTML(reports));
+//		StringBuilder message = new StringBuilder();
+//		for (List<Report> reps : reports) {
+//			for (Report rep : reps) {
+//				message.append(String.format(testReportLine, rep.getBliID(), rep.getBliName(), rep.getBliOwner(), rep.getTaskName(),
+//						rep.getTaskOwner(), rep.getReportName()));
+//			}
+//		}
+//		log.info(message.toString());
+//		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", message.toString());
 	}
 
 	private String createEmail(String owner) {
