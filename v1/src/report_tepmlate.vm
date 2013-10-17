@@ -23,7 +23,7 @@
 	</head>
 	<body align="center">
 		<h1>V1 status<h1>
-		<p>$date.format('H:m, EEEEEE, MMMM d yyyy', $curDate)</p>
+		<p>$date.format('H:m, EEEEEE, d MMMM yyyy', $curDate)</p>
 		<div>
 			
 			#foreach ($reps in $reports)
