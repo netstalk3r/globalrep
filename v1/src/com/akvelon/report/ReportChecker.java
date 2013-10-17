@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 
 import com.akvelon.mail.EmailSender;
@@ -60,9 +61,9 @@ public abstract class ReportChecker {
 			return;
 //		 emailSender.sendNotifications(ReportUtil.sortReportsByBliOwner(repWriter.getReports()));
 		emailSender.sendTestNotificationsByRepType(repWriter.getReports());
-		emailSender.sendTestNotificationsByBliOwner(ReportUtil.sortReportsByBliOwner(repWriter.getReports()));
+		emailSender.sendTestNotificationsByBliOwner(repWriter.getReports());
 //		emailSender.sendTestNotifications(ReportUtil.sortReportsByBliOwner(repWriter.getReports()));
-		if (repWriter.getReports().isEmpty())
+		if (CollectionUtils.isEmpty(repWriter.getReports()))
 			return;
 		try {
 			repWriter.writeReport();

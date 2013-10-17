@@ -16,19 +16,21 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.akvelon.report.Report;
+import com.akvelon.util.ReportUtil;
 import com.akvelon.util.TemplateConverter;
 
 public class EmailSender {
 
 	private static final Logger log = Logger.getLogger(EmailSender.class);
-	
+
 	private Properties props;
 	private Session session;
-	
+
 	private TemplateConverter templateConv;
 
 	private String subject = "TWVG > V1 status";
@@ -48,7 +50,7 @@ public class EmailSender {
 	}
 
 	public void sendNotifications(List<List<Report>> reports) {
-		if (reports.isEmpty()) {
+		if (CollectionUtils.isEmpty(reports)) {
 			sendMessage("maria.serichenko@akvelon.com", null, noReport);
 			return;
 		}
@@ -66,17 +68,18 @@ public class EmailSender {
 		sendMessage("maria.serichenko@akvelon.com", null, wholeRep.toString());
 	}
 
-	public void sendTestNotificationsByBliOwner(List<List<Report>> reports){
-		if (reports.isEmpty()) {
+	public void sendTestNotificationsByBliOwner(List<List<Report>> reports) {
+		if (CollectionUtils.isEmpty(reports)) {
 			sendMessage("maria.serichenko@akvelon.com", null, noReport);
 			return;
 		}
 		log.debug(templateConv.convertToHTMLByBliOwner(reports));
-		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByBliOwner(reports));
+		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com",
+				templateConv.convertToHTMLByBliOwner(ReportUtil.sortReportsByBliOwner(reports)));
 	}
-	
+
 	public void sendTestNotificationsByRepType(List<List<Report>> reports) {
-		if (reports.isEmpty()) {
+		if (CollectionUtils.isEmpty(reports)) {
 			sendMessage("maria.serichenko@akvelon.com", null, noReport);
 			return;
 		}
