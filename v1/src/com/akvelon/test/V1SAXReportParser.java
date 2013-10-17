@@ -20,7 +20,7 @@ public class V1SAXReportParser extends V1ReportParser {
 	private SAXUtil saxUtil;
 	private ReportWriter repWriter;
 
-	private String reportLine = "\nBLI ID: %s;\n BLI Name: %s;\n BLI Owner: %s;\n Task Owner: %s;\n Description: %s";
+	private String reportLine = "\nBLI ID: %s;\n BLI Name: %s;\n BLI Owner: %s;\n Task Name: %s;\n Task Owner: %s;\n Description: %s";
 
 	public V1SAXReportParser(ReportWriter reportWriter) throws IOException {
 		super();
@@ -37,8 +37,8 @@ public class V1SAXReportParser extends V1ReportParser {
 			repWriter.addReports(reports);
 			StringBuilder sb = new StringBuilder();
 			for (Report rep : reports) {
-				sb.append(String.format(reportLine, rep.getBliID(), rep.getBliName(), rep.getBliOwner(), rep.getTaskOwner(),
-						rep.getReportName()));
+				sb.append(String.format(reportLine, rep.getBliID(), rep.getBliName(), rep.getBliOwner(), rep.getTaskName(),
+						rep.getTaskOwner(), rep.getReportName()));
 			}
 			result = sb.toString();
 		} catch (IOException e) {

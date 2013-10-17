@@ -29,15 +29,15 @@
 			#foreach ($reps in $reports)
 			
 			<br/>
-			<h4>$reps[0].reportName</h4>
+			<h4>$reps[0].bliOwner</h4>
 			<table cellpadding="0" cellspacing="0" width="90%">
 				<thead>
 					<tr>
 						<th width="6%">BLI ID</th>
-						<th width="55%">BLI NAME</th>
-						<th width="12%">BLI OWNER</th>
-						<th width="15%">TASK NAME</th>
+						<th width="50%">BLI NAME</th>
+						<th width="13%">TASK NAME</th>
 						<th width="12%">TASK OWNER</th>
+						<th width="19%">DESCRIPTION</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -47,9 +47,9 @@
 					<tr>
 						<td>$rep.bliID</td>
 						<td>$rep.bliName</td>
-						<td>$rep.bliOwner</td>
 						<td>$rep.taskName</td>
 						<td>$rep.taskOwner</td>
+						<td>$rep.reportName</td>
 					</tr>
 					
 					#end

@@ -66,21 +66,22 @@ public class EmailSender {
 		sendMessage("maria.serichenko@akvelon.com", null, wholeRep.toString());
 	}
 
-	public void sendTestNotifications(List<List<Report>> reports) {
+	public void sendTestNotificationsByBliOwner(List<List<Report>> reports){
 		if (reports.isEmpty()) {
 			sendMessage("maria.serichenko@akvelon.com", null, noReport);
 			return;
 		}
-		log.debug(templateConv.convertToHTML(reports));
-//		StringBuilder message = new StringBuilder();
-//		for (List<Report> reps : reports) {
-//			for (Report rep : reps) {
-//				message.append(String.format(testReportLine, rep.getBliID(), rep.getBliName(), rep.getBliOwner(), rep.getTaskName(),
-//						rep.getTaskOwner(), rep.getReportName()));
-//			}
-//		}
-//		log.info(message.toString());
-//		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", message.toString());
+		log.debug(templateConv.convertToHTMLByBliOwner(reports));
+		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByBliOwner(reports));
+	}
+	
+	public void sendTestNotificationsByRepType(List<List<Report>> reports) {
+		if (reports.isEmpty()) {
+			sendMessage("maria.serichenko@akvelon.com", null, noReport);
+			return;
+		}
+		log.debug(templateConv.convertToHTMLByRepType(reports));
+		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByRepType(reports));
 	}
 
 	private String createEmail(String owner) {
