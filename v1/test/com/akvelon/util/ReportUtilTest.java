@@ -13,19 +13,19 @@ import com.akvelon.report.Report;
 public class ReportUtilTest {
 
 	@Test
-	public void testSortReportsByOwner() {
+	public void testSortReportsByTaskOwner() {
 
 		// given
 		Report repM1 = new Report();
-		repM1.setBliOwner("Maria");
+		repM1.setTaskOwner("Maria");
 		Report repM2 = new Report();
-		repM2.setBliOwner("Maria");
+		repM2.setTaskOwner("Maria");
 		Report repA1 = new Report();
-		repA1.setBliOwner("Anton");
+		repA1.setTaskOwner("Anton");
 		Report repA2 = new Report();
-		repA2.setBliOwner("Anton");
+		repA2.setTaskOwner("Anton");
 		Report repO1 = new Report();
-		repO1.setBliOwner("Oleg");
+		repO1.setTaskOwner("Oleg");
 		List<Report> listTasks1 = Arrays.asList(repM1, repA1, repO1);
 		List<Report> listTasks2 = Arrays.asList(repM2, repA2);
 
@@ -34,7 +34,7 @@ public class ReportUtilTest {
 		reports.add(listTasks2);
 
 		// do
-		List<List<Report>> result = ReportUtil.sortReportsByBliOwner(reports);
+		List<List<Report>> result = ReportUtil.sortReportsByTaskOwner(reports);
 		
 		// verify
 		assertNotNull(result);

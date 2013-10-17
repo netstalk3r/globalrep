@@ -60,8 +60,8 @@ public abstract class ReportChecker {
 		if (repWriter == null)
 			return;
 //		 emailSender.sendNotifications(ReportUtil.sortReportsByBliOwner(repWriter.getReports()));
-		emailSender.sendTestNotificationsByRepType(repWriter.getReports());
-		emailSender.sendTestNotificationsByBliOwner(repWriter.getReports());
+//		emailSender.sendTestNotificationsByRepType(repWriter.getReports());
+		emailSender.sendTestNotificationsByTaskOwner(repWriter.getReports());
 //		emailSender.sendTestNotifications(ReportUtil.sortReportsByBliOwner(repWriter.getReports()));
 		if (CollectionUtils.isEmpty(repWriter.getReports()))
 			return;

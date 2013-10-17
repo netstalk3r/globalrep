@@ -22,13 +22,13 @@
 		</style>
 	</head>
 	<body align="center">
-		<h1>V1 status<h1>
-		<p>$date.format('H:m, EEEEEE, d MMMM yyyy', $curDate)</p>
+		<h1>V1 status</h1>
+		<p>$date.format('HH:mm, EEEEEE, d MMMM yyyy', $curDate)</p>
 		<div>
+			<h3>Reports by Report Type</h3>
 			
 			#foreach ($reps in $reports)
 			
-			<br/>
 			<h4>$reps[0].reportName</h4>
 			<table cellpadding="0" cellspacing="0" width="90%">
 				<thead>
@@ -50,6 +50,40 @@
 						<td>$rep.bliOwner</td>
 						<td>$rep.taskName</td>
 						<td>$rep.taskOwner</td>
+					</tr>
+					
+					#end
+					
+				</tbody>
+			</table>
+			
+			#end
+			
+			<h5>Reports by Task Owner</h5>
+			
+			#foreach ($reps in $repsByOwner)
+			
+			<h4>$reps[0].taskOwner</h4>
+			<table cellpadding="0" cellspacing="0" width="90%">
+				<thead>
+					<tr>
+						<th width="6%">BLI ID</th>
+						<th width="48%">BLI NAME</th>
+						<th width="12%">BLI OWNER</th>
+						<th width="14%">TASK NAME</th>
+						<th width="20%">DESCRIPTION</th>
+					</tr>
+				</thead>
+				<tbody>
+				
+					#foreach ($rep in $reps)
+				
+					<tr>
+						<td>$rep.bliID</td>
+						<td>$rep.bliName</td>
+						<td>$rep.bliOwner</td>
+						<td>$rep.taskName</td>
+						<td>$rep.reportName</td>
 					</tr>
 					
 					#end

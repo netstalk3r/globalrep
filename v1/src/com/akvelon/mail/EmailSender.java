@@ -68,14 +68,14 @@ public class EmailSender {
 		sendMessage("maria.serichenko@akvelon.com", null, wholeRep.toString());
 	}
 
-	public void sendTestNotificationsByBliOwner(List<List<Report>> reports) {
+	public void sendTestNotificationsByTaskOwner(List<List<Report>> reports) {
 		if (CollectionUtils.isEmpty(reports)) {
 			sendMessage("maria.serichenko@akvelon.com", null, noReport);
 			return;
 		}
-		log.debug(templateConv.convertToHTMLByBliOwner(reports));
-		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com",
-				templateConv.convertToHTMLByBliOwner(ReportUtil.sortReportsByBliOwner(reports)));
+		templateConv.convertToHTMLByTaskOwner(ReportUtil.sortReportsByTaskOwner(reports));
+		/*sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com",
+				templateConv.convertToHTMLByBliOwner(ReportUtil.sortReportsByTaskOwner(reports)));*/
 	}
 
 	public void sendTestNotificationsByRepType(List<List<Report>> reports) {
@@ -83,7 +83,7 @@ public class EmailSender {
 			sendMessage("maria.serichenko@akvelon.com", null, noReport);
 			return;
 		}
-		log.debug(templateConv.convertToHTMLByRepType(reports));
+		templateConv.convertToHTMLByRepType(reports);
 		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByRepType(reports));
 	}
 
