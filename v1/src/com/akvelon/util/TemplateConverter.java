@@ -15,9 +15,10 @@ import com.akvelon.report.Report;
 public class TemplateConverter {
 
 	private static final Logger log = Logger.getLogger(TemplateConverter.class);
-	
+
 	private static final String REP_TEMPLATE = "src/report_tepmlate.vm";
 	private static final String BLI_OWNER_TEMPLATE = "src/bli_owner_tepmlate.vm";
+	private static final String NO_REP_TEMPLATE = "src/no_reports.vm";
 
 	private VelocityEngine velocityEng;
 	private Template template;
@@ -29,24 +30,26 @@ public class TemplateConverter {
 	}
 
 	public String convertToHTMLByRepType(List<List<Report>> reports) {
-		return convert(REP_TEMPLATE,reports,ReportUtil.sortReportsByTaskOwner(reports));
+		return convert(REP_TEMPLATE, reports, ReportUtil.sortReportsByTaskOwner(reports));
 	}
-	
+
 	public String convertToHTMLByTaskOwner(List<List<Report>> reports) {
-		return convert(BLI_OWNER_TEMPLATE,ReportUtil.sortReportsByTaskOwner(reports),null);
+		return convert(BLI_OWNER_TEMPLATE, ReportUtil.sortReportsByTaskOwner(reports), null);
 	}
-	
+
+	public String convertToHTMLNoRepotrs() {
+		return convert(NO_REP_TEMPLATE, null, null);
+	}
+
 	private String convert(String templ, List<List<Report>> repsByType, List<List<Report>> repsByOwner) {
 		template = velocityEng.getTemplate(templ);
 		context = new VelocityContext();
-		
+
 		context.put("reports", repsByType);
-		if (repsByOwner != null) {
-			context.put("repsByOwner", repsByOwner);
-		}
-		context.put("date",  new DateTool());
+		context.put("repsByOwner", repsByOwner);
+		context.put("date", new DateTool());
 		context.put("curDate", new Date());
-		
+
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
 		log.debug(writer.toString());

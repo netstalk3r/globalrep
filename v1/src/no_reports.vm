@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<style>
+		body {
+			font-family:calibri;
+			font-size:12px;
+			margin: 0px;
+		}
+		th,td {
+			border: 2px solid black;
+		}
+		th {
+			padding: 4px;
+			text-align: center;
+		}
+		table {
+			margin:0 auto;
+			border: 2px solid black;
+			border-collapse: collapse;
+		}
+		</style>
+	</head>
+	<body align="center">
+		<h1>V1 status</h1>
+		<p>$date.format('HH:mm, EEEEEE, d MMMM yyyy', $curDate)</p>
+		<div>
+			
+			<p>No reports available</p>
+			
+		</div>
+	</body>	
+</html>
