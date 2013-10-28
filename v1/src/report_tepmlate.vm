@@ -59,7 +59,7 @@
 			
 			#end
 			
-			<h5>Reports by Task Owner</h5>
+			<h3>Reports by Task Owner</h3>
 			
 			#foreach ($reps in $repsByOwner)
 			
