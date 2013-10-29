@@ -5,6 +5,6 @@ package com.akvelon.util;
  */
 public enum AssetType {
 
-	Task, Test, Story;
+	Task, Test, Story, Defect;
 	
 }

@@ -62,6 +62,7 @@ public class SAXUtil extends DefaultHandler {
 		}
 		if (assetType != null) {
 			switch (assetType) {
+			case Defect:
 			case Story:
 				storyElement(qName, attributes);
 				return;
