@@ -48,8 +48,16 @@
 						<td>$rep.bliID</td>
 						<td>$rep.bliName</td>
 						<td>$rep.bliOwner</td>
-						<td>$rep.taskName</td>
-						<td>$rep.taskOwner</td>
+						<td>
+							#if($rep.taskName)
+								$rep.taskName
+							#end
+						</td>
+						<td>
+							#if($rep.taskOwner)
+								$rep.taskOwner
+							#end
+						</td>
 					</tr>
 					
 					#end

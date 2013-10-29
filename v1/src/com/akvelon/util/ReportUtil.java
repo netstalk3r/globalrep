@@ -21,12 +21,14 @@ public class ReportUtil {
 		Map<String, List<Report>> res = new HashMap<String, List<Report>>();
 		for (List<Report> reps : reports) {
 			for (Report rep : reps) {
-				if (!res.keySet().contains(rep.getTaskOwner())) {
-					List<Report> listRep = new ArrayList<Report>();
-					listRep.add(rep);
-					res.put(rep.getTaskOwner(), listRep);
-				} else {
-					res.get(rep.getTaskOwner()).add(rep);
+				if (rep.getTaskOwner() != null) {
+					if (!res.keySet().contains(rep.getTaskOwner())) {
+						List<Report> listRep = new ArrayList<Report>();
+						listRep.add(rep);
+						res.put(rep.getTaskOwner(), listRep);
+					} else {
+						res.get(rep.getTaskOwner()).add(rep);
+					}
 				}
 			}
 		}

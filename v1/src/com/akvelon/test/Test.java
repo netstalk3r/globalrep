@@ -21,8 +21,8 @@ public class Test {
 		try {
 //			Class.forName("com.akvelon.util.JobSettingLaucher");
 //			scheduler.runJob();
-//			checker.checkBatchReport("./src/reports/daily/");
-			checker.checkSingleReport("./src/reports/daily/");
+			checker.checkBatchReport("./src/reports/daily/");
+//			checker.checkSingleReport("./src/reports/daily/");
 		} catch (Exception e) {
 			System.out.println("failed to read report properties.");
 			e.printStackTrace();

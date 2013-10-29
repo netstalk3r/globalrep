@@ -32,6 +32,9 @@ public class SAXUtil extends DefaultHandler {
 	private Boolean bliOwner = Boolean.FALSE;
 	private Boolean taskName = Boolean.FALSE;
 	private Boolean taskOwner = Boolean.FALSE;
+	private Boolean assType = Boolean.FALSE;
+	
+	private AssetType assetType = null;
 
 	public SAXUtil(String taskName) {
 		this.reportName = taskName;
@@ -53,30 +56,31 @@ public class SAXUtil extends DefaultHandler {
 			report.setReportName(reportName.split("\\.")[0].replace("_", " "));
 			return;
 		}
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Number")) {
-			nbr = Boolean.TRUE;
+		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("AssetType")) {
+			assType = Boolean.TRUE;
 			return;
 		}
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Name")) {
-			name = Boolean.TRUE;
-			return;
-		}
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Owners.Name")) {
-			bliOwner = Boolean.TRUE;
-			return;
-		}
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Name")) {
-			taskName = Boolean.TRUE;
-			return;
-		}
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Owners.Name")) {
-			taskOwner = Boolean.TRUE;
-			return;
+		if (assetType != null) {
+			switch (assetType) {
+			case Story:
+				storyElement(qName, attributes);
+				return;
+			case Task:
+			case Test:
+			default:
+				taskElement(qName, attributes);
+				return;
+			}
 		}
 	}
 
 	@Override
 	public void characters(char ch[], int start, int length) throws SAXException {
+		if (assType) {
+			assetType = AssetType.valueOf(new String(ch, start, length));
+			assType = Boolean.FALSE;
+			return;
+		}
 		if (nbr) {
 			report.setBliID(new String(ch, start, length));
 			nbr = Boolean.FALSE;
@@ -108,6 +112,44 @@ public class SAXUtil extends DefaultHandler {
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (qName.equalsIgnoreCase("Asset")) {
 			reports.add(report);
+		}
+	}
+	
+	private void storyElement(String qName, Attributes attributes) {
+		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Number")) {
+			nbr = Boolean.TRUE;
+			return;
+		}
+		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Name")) {
+			name = Boolean.TRUE;
+			return;
+		}
+		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Owners.Name")) {
+			bliOwner = Boolean.TRUE;
+			return;
+		}
+	}
+	
+	private void taskElement(String qName, Attributes attributes) {
+		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Number")) {
+			nbr = Boolean.TRUE;
+			return;
+		}
+		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Name")) {
+			name = Boolean.TRUE;
+			return;
+		}
+		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Owners.Name")) {
+			bliOwner = Boolean.TRUE;
+			return;
+		}
+		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Name")) {
+			taskName = Boolean.TRUE;
+			return;
+		}
+		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Owners.Name")) {
+			taskOwner = Boolean.TRUE;
+			return;
 		}
 	}
 }
