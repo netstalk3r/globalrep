@@ -3,6 +3,7 @@ package com.akvelon.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,7 +35,11 @@ public class SAXUtil extends DefaultHandler {
 	private Boolean taskOwner = Boolean.FALSE;
 	private Boolean assType = Boolean.FALSE;
 	
+	private Boolean isTaskName = Boolean.FALSE;
+	
 	private AssetType assetType = null;
+	
+	private ReportType repType = null;
 
 	public SAXUtil(String taskName) {
 		this.reportName = taskName;
@@ -54,6 +59,7 @@ public class SAXUtil extends DefaultHandler {
 		if (qName.equalsIgnoreCase("Asset")) {
 			report = new Report();
 			report.setReportName(reportName.split("\\.")[0].replace("_", " "));
+			repType = ReportType.valueOf(reportName.split("\\.")[0]);
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("AssetType")) {
@@ -65,14 +71,23 @@ public class SAXUtil extends DefaultHandler {
 			case Defect:
 			case Story:
 				storyElement(qName, attributes);
-				return;
+				break;
 			case Task:
 			case Test:
 			default:
 				taskElement(qName, attributes);
-				return;
+				break;
 			}
 		}
+		if (repType != null) {
+			switch (repType) {
+			case check_bli_with_default_task:
+			default:
+				isTaskName = Boolean.TRUE;
+				break;
+			}
+		}
+		
 	}
 
 	@Override
@@ -106,6 +121,9 @@ public class SAXUtil extends DefaultHandler {
 			report.setTaskOwner(new String(ch, start, length));
 			taskOwner = Boolean.FALSE;
 			return;
+		}
+		if (isTaskName) {
+			getTaskName(report, new String(ch, start, length));
 		}
 	}
 
@@ -151,6 +169,13 @@ public class SAXUtil extends DefaultHandler {
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Owners.Name")) {
 			taskOwner = Boolean.TRUE;
 			return;
+		}
+	}
+	
+	private void getTaskName(Report rep, String taskName) {
+		if (Arrays.asList("(Dev) Peer Review", "(Dev) Investigate Solution", "(Dev) Implement Solution").contains(taskName)) {
+			rep.setTaskName(taskName);
+
 		}
 	}
 }
