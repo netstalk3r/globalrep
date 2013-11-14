@@ -16,7 +16,6 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 
 import com.akvelon.report.Report;
-import com.akvelon.test.CMDOptionReader;
 
 public class XLSReportWriter extends ReportWriter {
 

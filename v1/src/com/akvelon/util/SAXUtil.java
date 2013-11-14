@@ -3,7 +3,6 @@ package com.akvelon.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -28,19 +27,15 @@ public class SAXUtil extends DefaultHandler {
 	
 	private String reportName;
 	
-	private Boolean nbr = Boolean.FALSE;
-	private Boolean name = Boolean.FALSE;
-	private Boolean bliOwner = Boolean.FALSE;
-	private Boolean taskName = Boolean.FALSE;
-	private Boolean taskOwner = Boolean.FALSE;
-	private Boolean assType = Boolean.FALSE;
-	
-	private Boolean isTaskName = Boolean.FALSE;
+	private Boolean nbr = false;
+	private Boolean name = false;
+	private Boolean bliOwner = false;
+	private Boolean taskName = false;
+	private Boolean taskOwner = false;
+	private Boolean assType = false;
 	
 	private AssetType assetType = null;
 	
-	private ReportType repType = null;
-
 	public SAXUtil(String taskName) {
 		this.reportName = taskName;
 		reports = new ArrayList<Report>();
@@ -59,11 +54,10 @@ public class SAXUtil extends DefaultHandler {
 		if (qName.equalsIgnoreCase("Asset")) {
 			report = new Report();
 			report.setReportName(reportName.split("\\.")[0].replace("_", " "));
-			repType = ReportType.valueOf(reportName.split("\\.")[0]);
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("AssetType")) {
-			assType = Boolean.TRUE;
+			assType = true;
 			return;
 		}
 		if (assetType != null) {
@@ -79,51 +73,39 @@ public class SAXUtil extends DefaultHandler {
 				break;
 			}
 		}
-		if (repType != null) {
-			switch (repType) {
-			case check_bli_with_default_task:
-			default:
-				isTaskName = Boolean.TRUE;
-				break;
-			}
-		}
-		
 	}
 
 	@Override
 	public void characters(char ch[], int start, int length) throws SAXException {
 		if (assType) {
 			assetType = AssetType.valueOf(new String(ch, start, length));
-			assType = Boolean.FALSE;
+			assType = false;
 			return;
 		}
 		if (nbr) {
 			report.setBliID(new String(ch, start, length));
-			nbr = Boolean.FALSE;
+			nbr = false;
 			return;
 		}
 		if (name) {
 			report.setBliName(new String(ch, start, length));
-			name = Boolean.FALSE;
+			name = false;
 			return;
 		}
 		if (bliOwner) {
 			report.setBliOwner(new String(ch, start, length));
-			bliOwner = Boolean.FALSE;
+			bliOwner = false;
 			return;
 		}
 		if (taskName) {
 			report.setTaskName(new String(ch, start, length));
-			taskName = Boolean.FALSE;
+			taskName = false;
 			return;
 		}
 		if (taskOwner) {
 			report.setTaskOwner(new String(ch, start, length));
-			taskOwner = Boolean.FALSE;
+			taskOwner = false;
 			return;
-		}
-		if (isTaskName) {
-			getTaskName(report, new String(ch, start, length));
 		}
 	}
 
@@ -136,46 +118,39 @@ public class SAXUtil extends DefaultHandler {
 	
 	private void storyElement(String qName, Attributes attributes) {
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Number")) {
-			nbr = Boolean.TRUE;
+			nbr = true;
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Name")) {
-			name = Boolean.TRUE;
+			name = true;
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Owners.Name")) {
-			bliOwner = Boolean.TRUE;
+			bliOwner = true;
 			return;
 		}
 	}
 	
 	private void taskElement(String qName, Attributes attributes) {
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Number")) {
-			nbr = Boolean.TRUE;
+			nbr = true;
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Name")) {
-			name = Boolean.TRUE;
+			name = true;
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Owners.Name")) {
-			bliOwner = Boolean.TRUE;
+			bliOwner = true;
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Name")) {
-			taskName = Boolean.TRUE;
+			taskName = true;
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Owners.Name")) {
-			taskOwner = Boolean.TRUE;
+			taskOwner = true;
 			return;
-		}
-	}
-	
-	private void getTaskName(Report rep, String taskName) {
-		if (Arrays.asList("(Dev) Peer Review", "(Dev) Investigate Solution", "(Dev) Implement Solution").contains(taskName)) {
-			rep.setTaskName(taskName);
-
 		}
 	}
 }

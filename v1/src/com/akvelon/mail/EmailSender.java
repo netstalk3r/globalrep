@@ -53,10 +53,10 @@ public class EmailSender {
 
 	public void sendTestNotificationsByRepType(List<List<Report>> reports) {
 		if (CollectionUtils.isEmpty(reports)) {
-			sendMessage("anton.nagorny@akvelon.com", null, templateConv.convertToHTMLNoRepotrs());
+			sendMessage("maria.serichenko@akvelon.com", null, templateConv.convertToHTMLNoRepotrs());
 			return;
 		}
-		sendMessage("anton.nagorny@akvelon.com", null, templateConv.convertToHTMLByRepType(reports));
+		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByRepType(reports));
 	}
 
 /*	private String createEmail(String owner) {

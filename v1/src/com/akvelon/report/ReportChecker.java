@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import com.akvelon.mail.EmailSender;
 import com.akvelon.test.CMDOptionReader;
 import com.akvelon.test.FileOptionsReader;
-import com.akvelon.util.ReportUtil;
 import com.akvelon.writer.reports.ReportWriter;
 
 /**
@@ -59,7 +58,6 @@ public abstract class ReportChecker {
 	private void writeAndSend() {
 		if (repWriter == null)
 			return;
-//		 emailSender.sendNotifications(ReportUtil.sortReportsByBliOwner(repWriter.getReports()));
 		emailSender.sendTestNotificationsByRepType(repWriter.getReports());
 //		emailSender.sendTestNotificationsByTaskOwner(repWriter.getReports());
 		if (CollectionUtils.isEmpty(repWriter.getReports()))
