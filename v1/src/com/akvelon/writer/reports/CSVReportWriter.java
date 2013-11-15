@@ -10,6 +10,7 @@ import java.io.Writer;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import com.akvelon.report.Report;
 
@@ -26,8 +27,8 @@ public class CSVReportWriter extends ReportWriter {
 
 	private String line = "%s,%s,%s,%s,%s,%s\n";
 
-	public CSVReportWriter() {
-		super();
+	public CSVReportWriter(HSSFWorkbook workbook) {
+		super(workbook);
 	}
 
 	private void openFile() throws UnsupportedEncodingException, FileNotFoundException {

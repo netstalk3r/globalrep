@@ -1,16 +1,20 @@
 package com.akvelon.report;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import com.akvelon.mail.EmailSender;
 import com.akvelon.test.CMDOptionReader;
 import com.akvelon.test.FileOptionsReader;
 import com.akvelon.writer.reports.ReportWriter;
+import com.akvelon.writer.reports.XLSHourReportWriter;
 
 /**
  * This class was made abstract because this logic is common for all report
@@ -21,9 +25,13 @@ public abstract class ReportChecker {
 	private static final Logger log = Logger.getLogger(ReportChecker.class);
 	
 	protected ReportWriter repWriter;
+	protected ReportWriter hRepWriter;
 	protected EmailSender emailSender;
+	
+	protected HSSFWorkbook workbook;
 
 	public ReportChecker() {
+		workbook = new HSSFWorkbook();
 		try {
 			emailSender = new EmailSender();
 		} catch (FileNotFoundException e) {
@@ -52,6 +60,10 @@ public abstract class ReportChecker {
 		for (String choice : options.keySet()) {
 			checkReport(options.get(choice));
 		}
+		
+		HourReportChecker hRepChecker = new HourReportChecker();
+		hRepWriter = new XLSHourReportWriter(workbook);
+		hRepChecker.checkReportHours("./src/reports/hours/");
 		writeAndSend();
 	}
 
@@ -67,12 +79,19 @@ public abstract class ReportChecker {
 	private void writeAndSend() {
 		if (repWriter == null)
 			return;
-		emailSender.sendTestNotificationsByRepType(repWriter.getReports());
+		if (hRepWriter != null) {
+			// TODO add send with this type report
+		}
+//		emailSender.sendTestNotificationsByRepType(repWriter.getReports());
 //		emailSender.sendTestNotificationsByTaskOwner(repWriter.getReports());
 		if (CollectionUtils.isEmpty(repWriter.getReports()))
 			return;
 		try {
 			repWriter.writeReport();
+			hRepWriter.writeReport();
+			FileOutputStream out = new FileOutputStream(new File(repWriter.getFileName()));
+			workbook.write(out);
+			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

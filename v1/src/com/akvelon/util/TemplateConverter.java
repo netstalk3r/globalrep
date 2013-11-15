@@ -10,6 +10,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.generic.DateTool;
 
+import com.akvelon.report.HourReport;
 import com.akvelon.report.Report;
 
 public class TemplateConverter {
@@ -30,23 +31,28 @@ public class TemplateConverter {
 	}
 
 	public String convertToHTMLByRepType(List<List<Report>> reports) {
-		return convert(REP_TEMPLATE, reports, ReportUtil.sortReportsByTaskOwner(reports));
+		return convert(REP_TEMPLATE, reports, ReportUtil.sortReportsByTaskOwner(reports), null);
 	}
 
 	public String convertToHTMLByTaskOwner(List<List<Report>> reports) {
-		return convert(BLI_OWNER_TEMPLATE, ReportUtil.sortReportsByTaskOwner(reports), null);
+		return convert(BLI_OWNER_TEMPLATE, ReportUtil.sortReportsByTaskOwner(reports), null, null);
+	}
+
+	public String convertToHTMLByRepTypeAndHourReps(List<List<Report>> reports, List<HourReport> hReports) {
+		return convert(REP_TEMPLATE, reports, ReportUtil.sortReportsByTaskOwner(reports), hReports);
 	}
 
 	public String convertToHTMLNoRepotrs() {
-		return convert(NO_REP_TEMPLATE, null, null);
+		return convert(NO_REP_TEMPLATE, null, null, null);
 	}
 
-	private String convert(String templ, List<List<Report>> repsByType, List<List<Report>> repsByOwner) {
+	private String convert(String templ, List<List<Report>> repsByType, List<List<Report>> repsByOwner, List<HourReport> hReports) {
 		template = velocityEng.getTemplate(templ);
 		context = new VelocityContext();
 
 		context.put("reports", repsByType);
 		context.put("repsByOwner", repsByOwner);
+		context.put("hRepoerts", hReports);
 		context.put("date", new DateTool());
 		context.put("curDate", new Date());
 

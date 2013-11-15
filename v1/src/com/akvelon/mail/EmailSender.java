@@ -19,6 +19,7 @@ import javax.mail.internet.MimeMessage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.akvelon.report.HourReport;
 import com.akvelon.report.Report;
 import com.akvelon.util.TemplateConverter;
 
@@ -51,11 +52,12 @@ public class EmailSender {
 //		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByTaskOwner(reports));
 	}
 
-	public void sendTestNotificationsByRepType(List<List<Report>> reports) {
+	public void sendTestNotificationsByRepType(List<List<Report>> reports, List<HourReport> hReports) {
 		if (CollectionUtils.isEmpty(reports)) {
 			sendMessage("maria.serichenko@akvelon.com", null, templateConv.convertToHTMLNoRepotrs());
 			return;
 		}
+		sendMessage("anton.nagorny@akvelon.com", null, templateConv.convertToHTMLByRepTypeAndHourReps(reports, hReports));
 //		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByRepType(reports));
 	}
 

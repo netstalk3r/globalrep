@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.akvelon.test.V1ReportParser;
 import com.akvelon.test.V1SAXHourReportParser;
-import com.akvelon.writer.reports.XLSReportWriter;
+import com.akvelon.writer.reports.XLSHourReportWriter;
 
 public class HourReportChecker extends ReportChecker {
 
@@ -12,8 +12,8 @@ public class HourReportChecker extends ReportChecker {
 	
 	public HourReportChecker() {
 		super();
-		if (repWriter == null) { 
-			repWriter = new XLSReportWriter();
+		if (hRepWriter == null) { 
+			hRepWriter = new XLSHourReportWriter(workbook);
 		}
 	}
 	
@@ -25,4 +25,7 @@ public class HourReportChecker extends ReportChecker {
 		log.info(content);
 	}
 
+	public XLSHourReportWriter getWriter() {
+		return (XLSHourReportWriter) super.hRepWriter;
+	}
 }

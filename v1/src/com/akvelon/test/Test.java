@@ -17,15 +17,15 @@ public class Test {
 	 */
 	public static void main(String[] args) {
 //		ReportChecker checker = new ReportChecker();
-//		ReportChecker checker = new ParsedReplyReportChecker();
+		ReportChecker checker = new ParsedReplyReportChecker();
 //		ReportScheduler scheduler = new ReportScheduler();
-		ReportChecker checker = new HourReportChecker();
+//		ReportChecker checker = new HourReportChecker();
 		try {
 //			Class.forName("com.akvelon.util.JobSettingLaucher");
 //			scheduler.runJob();
-//			checker.checkBatchReport("./src/reports/daily/");
+			checker.checkBatchReport("./src/reports/daily/");
 //			checker.checkSingleReport("./src/reports/daily/");
-			checker.checkReportHours("./src/reports/hours/");
+//			checker.checkReportHours("./src/reports/hours/");
 		} catch (Exception e) {
 			System.out.println("failed to read report properties.");
 			e.printStackTrace();
