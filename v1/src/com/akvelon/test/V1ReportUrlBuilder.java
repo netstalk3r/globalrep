@@ -29,6 +29,9 @@ public class V1ReportUrlBuilder {
 
 		String stringurl = this.buildReportUrl(reportName);
 		stringurl = stringurl.replace(" ", "%20").replace(">", "%3E").replace("<", "%3C");
+		if (reportName.equalsIgnoreCase("all_done.properties")) {
+			stringurl = stringurl.replace("Owners", "Member");
+		}
 		URL url = new URL(stringurl);
 		URLConnection urlConnection = url.openConnection();
 		urlConnection.setRequestProperty("Authorization", "Basic " + authStringEnc);

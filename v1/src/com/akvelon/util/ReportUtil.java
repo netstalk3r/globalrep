@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.akvelon.report.HourReport;
 import com.akvelon.report.Report;
 
 public class ReportUtil {
@@ -33,5 +34,19 @@ public class ReportUtil {
 			}
 		}
 		return new ArrayList<List<Report>>(res.values());
+	}
+	
+	public static List<HourReport> countActuals(List<HourReport> hReports) {
+		Map<String, HourReport> res = new HashMap<String, HourReport>();
+		HourReport temp = null;
+		for (HourReport hRep : hReports) {
+			if (!res.keySet().contains(hRep.getTeamMember())) {
+				res.put(hRep.getTeamMember(), hRep);
+			} else {
+				temp = res.get(hRep.getTeamMember());
+				temp.setReportedHours(temp.getReportedHours() + hRep.getReportedHours());
+			}
+		}
+		return new ArrayList<HourReport>(res.values());
 	}
 }

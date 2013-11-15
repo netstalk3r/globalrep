@@ -48,7 +48,7 @@ public class EmailSender {
 			sendMessage("maria.serichenko@akvelon.com", null, templateConv.convertToHTMLNoRepotrs());
 			return;
 		}
-		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByTaskOwner(reports));
+//		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByTaskOwner(reports));
 	}
 
 	public void sendTestNotificationsByRepType(List<List<Report>> reports) {
@@ -56,7 +56,7 @@ public class EmailSender {
 			sendMessage("maria.serichenko@akvelon.com", null, templateConv.convertToHTMLNoRepotrs());
 			return;
 		}
-		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByRepType(reports));
+//		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByRepType(reports));
 	}
 
 /*	private String createEmail(String owner) {

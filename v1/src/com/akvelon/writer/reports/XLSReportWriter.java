@@ -23,8 +23,6 @@ public class XLSReportWriter extends ReportWriter {
 	
 	private HSSFWorkbook workbook;
 
-	private String EXTENSION = ".xls";
-	
 	private CellStyle style;
 
 	private int rowNum = 0;

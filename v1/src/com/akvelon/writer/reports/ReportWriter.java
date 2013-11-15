@@ -18,6 +18,8 @@ public abstract class ReportWriter {
 	protected SimpleDateFormat formatter;
 	protected String fileName;
 	
+	protected String EXTENSION = ".xls";
+	
 	protected static final String ENCODING = "UTF-8";
 	protected static final String DATE_FORMAT = "dd.MM.yyyy HH-mm";
 	protected static final String HEAD = "BLI ID,BLI NAME,BLI OWNER,TASK NAME,TASK OWNER,DESCRIPTION";

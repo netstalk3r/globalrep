@@ -55,6 +55,15 @@ public abstract class ReportChecker {
 		writeAndSend();
 	}
 
+	public void checkReportHours(String reportsStorage) throws Exception {
+		FileOptionsReader optionsReader = new FileOptionsReader(reportsStorage);
+		Map<String, String> options = optionsReader.readOptions();
+		
+		for (String choice : options.keySet()) {
+			checkReport(options.get(choice));
+		}
+	}
+	
 	private void writeAndSend() {
 		if (repWriter == null)
 			return;

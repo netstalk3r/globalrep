@@ -27,12 +27,12 @@ public class SAXUtil extends DefaultHandler {
 	
 	private String reportName;
 	
-	private Boolean nbr = false;
-	private Boolean name = false;
-	private Boolean bliOwner = false;
-	private Boolean taskName = false;
-	private Boolean taskOwner = false;
-	private Boolean assType = false;
+	private boolean nbr = false;
+	private boolean name = false;
+	private boolean bliOwner = false;
+	private boolean taskName = false;
+	private boolean taskOwner = false;
+	private boolean assType = false;
 	
 	private AssetType assetType = null;
 	
