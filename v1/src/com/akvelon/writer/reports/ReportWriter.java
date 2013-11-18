@@ -46,6 +46,7 @@ public abstract class ReportWriter {
 		formatter = new SimpleDateFormat(DATE_FORMAT);
 		fileName = formatter.format(new Date());
 		reports = new ArrayList<List<Report>>();
+		hReports = new ArrayList<HourReport>();
 		style = workbook.createCellStyle();
 		style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
 		style.setFillPattern(CellStyle.SOLID_FOREGROUND);
@@ -59,6 +60,10 @@ public abstract class ReportWriter {
 	
 	public List<List<Report>> getReports() {
 		return reports;
+	}
+	 
+	public void addHourReports(List<HourReport> hReps) {
+		hReports.addAll(hReps);
 	}
 	
 	public List<HourReport> getHourReports() {
@@ -76,5 +81,6 @@ public abstract class ReportWriter {
 			sheet.autoSizeColumn(cellIterator.next().getColumnIndex());
 		}
 	}
+	
 }
 	

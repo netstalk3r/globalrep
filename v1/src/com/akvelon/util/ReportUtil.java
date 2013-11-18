@@ -49,4 +49,8 @@ public class ReportUtil {
 		}
 		return new ArrayList<HourReport>(res.values());
 	}
+	
+	public static String normalizeName(String fullName) {
+		return fullName.split("/")[1].split("\\.")[0].replace("_", " ");
+	}
 }

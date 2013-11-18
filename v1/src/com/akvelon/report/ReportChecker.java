@@ -23,11 +23,11 @@ import com.akvelon.writer.reports.XLSHourReportWriter;
 public abstract class ReportChecker {
 
 	private static final Logger log = Logger.getLogger(ReportChecker.class);
-	
+
 	protected ReportWriter repWriter;
 	protected ReportWriter hRepWriter;
 	protected EmailSender emailSender;
-	
+
 	protected HSSFWorkbook workbook;
 
 	public ReportChecker() {
@@ -57,12 +57,14 @@ public abstract class ReportChecker {
 		FileOptionsReader optionsReader = new FileOptionsReader(reportsStorage);
 		Map<String, String> options = optionsReader.readOptions();
 
+		final String folder = "daily/";
+
 		for (String choice : options.keySet()) {
-			checkReport(options.get(choice));
+			checkReport(folder + options.get(choice));
 		}
-		
-		HourReportChecker hRepChecker = new HourReportChecker();
+
 		hRepWriter = new XLSHourReportWriter(workbook);
+		HourReportChecker hRepChecker = new HourReportChecker(hRepWriter);
 		hRepChecker.checkReportHours("./src/reports/hours/");
 		writeAndSend();
 	}
@@ -70,30 +72,41 @@ public abstract class ReportChecker {
 	public void checkReportHours(String reportsStorage) throws Exception {
 		FileOptionsReader optionsReader = new FileOptionsReader(reportsStorage);
 		Map<String, String> options = optionsReader.readOptions();
-		
+
+		final String folder = "hours/";
 		for (String choice : options.keySet()) {
-			checkReport(options.get(choice));
+			checkReport(folder + options.get(choice));
 		}
 	}
-	
+
 	private void writeAndSend() {
 		if (repWriter == null)
 			return;
 		if (hRepWriter != null) {
 			// TODO add send with this type report
 		}
-//		emailSender.sendTestNotificationsByRepType(repWriter.getReports());
-//		emailSender.sendTestNotificationsByTaskOwner(repWriter.getReports());
-		if (CollectionUtils.isEmpty(repWriter.getReports()))
-			return;
+		emailSender.sendTestNotificationsByRepType(repWriter.getReports(), hRepWriter.getHourReports());
+		// emailSender.sendTestNotificationsByRepType(repWriter.getReports());
+		// emailSender.sendTestNotificationsByTaskOwner(repWriter.getReports());
+		FileOutputStream out = null;
 		try {
-			repWriter.writeReport();
-			hRepWriter.writeReport();
-			FileOutputStream out = new FileOutputStream(new File(repWriter.getFileName()));
-			workbook.write(out);
-			out.close();
+			if (!CollectionUtils.isEmpty(repWriter.getReports()))
+				repWriter.writeReport();
+			if (!CollectionUtils.isEmpty(hRepWriter.getHourReports()))
+				hRepWriter.writeReport();
+			if (workbook.getNumberOfSheets() != 0) {
+				out = new FileOutputStream(new File(repWriter.getFileName()));
+				workbook.write(out);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				if (out != null)
+					out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

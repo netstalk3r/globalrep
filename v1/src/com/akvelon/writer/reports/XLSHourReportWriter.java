@@ -27,7 +27,7 @@ public class XLSHourReportWriter extends ReportWriter {
 			log.info("No hour reports to write");
 			return;
 		}
-		HSSFSheet sheet = workbook.createSheet("Reported hours");
+		HSSFSheet sheet = workbook.createSheet("reported hours");
 		rowNum = 0;
 		createReportHead(sheet);
 		for (HourReport hRep : hReports) {

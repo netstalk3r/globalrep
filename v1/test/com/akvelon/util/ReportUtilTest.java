@@ -94,4 +94,26 @@ public class ReportUtilTest {
 		assertTrue(req3.subtract(rep3).intValue() == 0);
 	}
 	
+	@Test
+	public void testNormilazeName_hp() {
+		// given 
+		String fullName = "folder/report_name.extension";
+		
+		// do
+		String res = ReportUtil.normalizeName(fullName);
+		
+		// verify
+		assertNotNull(res);
+		assertEquals("report name", res);
+	}
+	
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testNormilazeName_incorrectRepName_exception() {
+		// given
+		String  fullName = "no_folder.extension";
+		
+		// do
+		ReportUtil.normalizeName(fullName);
+	}
+	
 }

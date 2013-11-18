@@ -53,7 +53,7 @@ public class SAXUtil extends DefaultHandler {
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		if (qName.equalsIgnoreCase("Asset")) {
 			report = new Report();
-			report.setReportName(reportName.split("\\.")[0].replace("_", " "));
+			report.setReportName(ReportUtil.normalizeName(reportName));
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("AssetType")) {

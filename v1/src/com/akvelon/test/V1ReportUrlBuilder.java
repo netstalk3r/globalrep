@@ -14,7 +14,7 @@ public class V1ReportUrlBuilder {
 
 	private Properties connectionProps = new Properties();
 	private Properties teamProps = new Properties();
-	private final String reportStoragePath = "reports/daily/";
+	private final String reportStoragePath = "reports/";
 	private String delim = ";";
 	
 	public V1ReportUrlBuilder() throws IOException {
@@ -29,7 +29,7 @@ public class V1ReportUrlBuilder {
 
 		String stringurl = this.buildReportUrl(reportName);
 		stringurl = stringurl.replace(" ", "%20").replace(">", "%3E").replace("<", "%3C");
-		if (reportName.equalsIgnoreCase("all_done.properties")) {
+		if (reportName.endsWith("all_done.properties")) {
 			stringurl = stringurl.replace("Owners", "Member");
 		}
 		URL url = new URL(stringurl);

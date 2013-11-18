@@ -44,7 +44,7 @@ public class EmailSender {
 		templateConv = new TemplateConverter();
 	}
 
-	public void sendTestNotificationsByTaskOwner(List<List<Report>> reports) {
+	public void sendTestNotificationsByTaskOwner(List<List<Report>> reports, List<HourReport> hreports) {
 		if (CollectionUtils.isEmpty(reports)) {
 			sendMessage("maria.serichenko@akvelon.com", null, templateConv.convertToHTMLNoRepotrs());
 			return;
