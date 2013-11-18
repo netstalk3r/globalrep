@@ -45,12 +45,22 @@
 					#foreach ($rep in $reps)
 				
 					<tr>
-						<td>$rep.bliID</td>
+						<td>
+							#if($rep.bliLink)
+								<a href="$rep.bliLink">$rep.bliID</a>
+							#else
+								$rep.bliID
+							#end
+						</td>
 						<td>$rep.bliName</td>
 						<td>$rep.bliOwner</td>
 						<td>
 							#if($rep.taskName)
-								$rep.taskName
+								#if($rep.taskLink)
+									<a href="$rep.taskLink">$rep.taskName</a>
+								#else
+									$rep.taskName
+								#end
 							#end
 						</td>
 						<td>
@@ -87,10 +97,24 @@
 					#foreach ($rep in $reps)
 				
 					<tr>
-						<td>$rep.bliID</td>
+						<td>
+							#if($rep.bliLink)
+								<a href="$rep.bliLink">$rep.bliID</a>
+							#else
+								$rep.bliID
+							#end
+						</td>
 						<td>$rep.bliName</td>
 						<td>$rep.bliOwner</td>
-						<td>$rep.taskName</td>
+						<td>
+							#if($rep.taskName)
+								#if($rep.taskLink)
+									<a href="$rep.taskLink">$rep.taskName</a>
+								#else
+									$rep.taskName
+								#end
+							#end
+						</td>
 						<td>$rep.reportName</td>
 					</tr>
 					

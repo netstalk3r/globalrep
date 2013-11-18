@@ -3,6 +3,7 @@ package com.akvelon.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,6 +27,10 @@ public class SAXUtil extends DefaultHandler {
 	private List<Report> reports;
 	
 	private String reportName;
+
+	String linkTemplate = "https://www3.v1host.com/Tideworks/%s.mvc/Summary?oidToken=%s";
+	String delimeter = "%3A";
+	String id;
 	
 	private boolean nbr = false;
 	private boolean name = false;
@@ -54,6 +59,7 @@ public class SAXUtil extends DefaultHandler {
 		if (qName.equalsIgnoreCase("Asset")) {
 			report = new Report();
 			report.setReportName(ReportUtil.normalizeName(reportName));
+			id = attributes.getValue(1).split(":")[1];
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("AssetType")) {
@@ -79,6 +85,7 @@ public class SAXUtil extends DefaultHandler {
 	public void characters(char ch[], int start, int length) throws SAXException {
 		if (assType) {
 			assetType = AssetType.valueOf(new String(ch, start, length));
+			makeLink();
 			assType = false;
 			return;
 		}
@@ -151,6 +158,16 @@ public class SAXUtil extends DefaultHandler {
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Owners.Name")) {
 			taskOwner = true;
 			return;
+		}
+	}
+	
+	private void makeLink() {
+		StringBuilder link = new StringBuilder();
+		link.append(String.format(linkTemplate, assetType.name().toLowerCase(), assetType.name())).append(delimeter).append(id);
+		if (Arrays.asList(AssetType.Defect, AssetType.Story).contains(assetType)) {
+			report.setBliLink(link.toString());
+		} else if (Arrays.asList(AssetType.Test, AssetType.Task).contains(assetType)) {
+			report.setTaskLink(link.toString());
 		}
 	}
 }
