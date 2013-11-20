@@ -32,7 +32,7 @@ public class V1ReportUrlBuilder {
 		if (reportName.endsWith("all_done.properties")) {
 			stringurl = stringurl.replace("Owners", "Member");
 		}
-		System.out.println(stringurl);
+//		System.out.println(stringurl);
 		URL url = new URL(stringurl);
 		URLConnection urlConnection = url.openConnection();
 		urlConnection.setRequestProperty("Authorization", "Basic " + authStringEnc);
