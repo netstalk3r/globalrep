@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -46,8 +47,9 @@ public abstract class ReportChecker {
 		Map<String, String> options = optionsReader.readOptions();
 		CMDOptionReader optionReader = new CMDOptionReader("exit");
 		String choice = optionReader.readOption(options);
-
-		checkReport(options.get(choice));
+		
+		final String folder = "daily/";
+		checkReport(folder + options.get(choice));
 		writeAndSend();
 	}
 
@@ -85,14 +87,18 @@ public abstract class ReportChecker {
 		if (hRepWriter != null) {
 			// TODO add send with this type report
 		}
-		emailSender.sendTestNotificationsByRepType(repWriter.getReports(), hRepWriter.getHourReports());
+		
+		List<List<Report>> reps = repWriter != null ? repWriter.getReports() : null;
+		List<HourReport> hReps = hRepWriter != null ? hRepWriter.getHourReports() : null;
+		
+		emailSender.sendTestNotificationsByRepType(reps, hReps);
 		// emailSender.sendTestNotificationsByRepType(repWriter.getReports());
 		// emailSender.sendTestNotificationsByTaskOwner(repWriter.getReports());
 		FileOutputStream out = null;
 		try {
-			if (!CollectionUtils.isEmpty(repWriter.getReports()))
+			if (!CollectionUtils.isEmpty(reps))
 				repWriter.writeReport();
-			if (!CollectionUtils.isEmpty(hRepWriter.getHourReports()))
+			if (!CollectionUtils.isEmpty(hReps))
 				hRepWriter.writeReport();
 			if (workbook.getNumberOfSheets() != 0) {
 				out = new FileOutputStream(new File(repWriter.getFileName()));

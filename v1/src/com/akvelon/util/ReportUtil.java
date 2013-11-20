@@ -50,6 +50,12 @@ public class ReportUtil {
 		return new ArrayList<HourReport>(res.values());
 	}
 	
+	public static String createLink(AssetType assetType, String id) {
+		return new StringBuilder()
+				.append(String.format("https://www3.v1host.com/Tideworks/%s.mvc/Summary?oidToken=%s", assetType.name().toLowerCase(),
+						assetType.name())).append("%3A").append(id).toString();
+	}
+	
 	public static String normalizeName(String fullName) {
 		return fullName.split("/")[1].split("\\.")[0].replace("_", " ");
 	}

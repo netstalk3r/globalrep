@@ -2,6 +2,7 @@ package com.akvelon.test;
 
 import java.io.IOException;
 import java.net.URLConnection;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,6 +19,7 @@ public class V1SAXHourReportParser extends V1ReportParser {
 
 	private static List<HourReport> hReports;
 	private static int hours;
+	private static Date sprintStartDate;
 	
 	ReportWriter hRepWriter;
 
@@ -47,12 +49,14 @@ public class V1SAXHourReportParser extends V1ReportParser {
 //					throw new IllegalStateException("Actuals can not be null at this place!");
 				SAXBeginDateUtil saxBDate = new SAXBeginDateUtil();
 				hours = saxBDate.parse(urlConnection.getInputStream());
-				result = "Required hours before today - " + hours;
+				sprintStartDate = saxBDate.getSprintStartDate();
+				result = "Spring Start Date - " + sprintStartDate + "; Required hours before today - " + hours;
 			}
 			if (hours != 0 && hReports != null) {
 				StringBuilder sb = new StringBuilder();
 				for (HourReport hRep : hReports) {
 					hRep.setRequiredHours(hours);
+					hRep.setSprintStartDate(sprintStartDate);
 					sb.append(String.format(hReportLine, hRep.getTeamMember(), hRep.getReportedHours(), hRep.getRequiredHours()));
 				}
 				result = sb.toString();

@@ -28,16 +28,11 @@ public class SAXUtil extends DefaultHandler {
 	
 	private String reportName;
 
-	String linkTemplate = "https://www3.v1host.com/Tideworks/%s.mvc/Summary?oidToken=%s";
-	String delimeter = "%3A";
-	String id;
-	
-	private boolean nbr = false;
-	private boolean name = false;
-	private boolean bliOwner = false;
-	private boolean taskName = false;
-	private boolean taskOwner = false;
-	private boolean assType = false;
+	private boolean isNbr = false;
+	private boolean isName = false;
+	private boolean isBliOwner = false;
+	private boolean isTaskName = false;
+	private boolean isTaskOwner = false;
 	
 	private AssetType assetType = null;
 	
@@ -56,14 +51,12 @@ public class SAXUtil extends DefaultHandler {
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		if (qName.equalsIgnoreCase("Asset")) {
+		if (qName.equalsIgnoreCase("Asset") && attributes.getIndex("id") == 1) {
 			report = new Report();
 			report.setReportName(ReportUtil.normalizeName(reportName));
-			id = attributes.getValue(1).split(":")[1];
-			return;
-		}
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("AssetType")) {
-			assType = true;
+			String[] arrt = attributes.getValue(1).split(":");
+			assetType = AssetType.valueOf(arrt[0]);
+			makeLink(arrt[1]);
 			return;
 		}
 		if (assetType != null) {
@@ -83,35 +76,29 @@ public class SAXUtil extends DefaultHandler {
 
 	@Override
 	public void characters(char ch[], int start, int length) throws SAXException {
-		if (assType) {
-			assetType = AssetType.valueOf(new String(ch, start, length));
-			makeLink();
-			assType = false;
-			return;
-		}
-		if (nbr) {
+		if (isNbr) {
 			report.setBliID(new String(ch, start, length));
-			nbr = false;
+			isNbr = false;
 			return;
 		}
-		if (name) {
+		if (isName) {
 			report.setBliName(new String(ch, start, length));
-			name = false;
+			isName = false;
 			return;
 		}
-		if (bliOwner) {
+		if (isBliOwner) {
 			report.setBliOwner(new String(ch, start, length));
-			bliOwner = false;
+			isBliOwner = false;
 			return;
 		}
-		if (taskName) {
+		if (isTaskName) {
 			report.setTaskName(new String(ch, start, length));
-			taskName = false;
+			isTaskName = false;
 			return;
 		}
-		if (taskOwner) {
+		if (isTaskOwner) {
 			report.setTaskOwner(new String(ch, start, length));
-			taskOwner = false;
+			isTaskOwner = false;
 			return;
 		}
 	}
@@ -119,51 +106,56 @@ public class SAXUtil extends DefaultHandler {
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (qName.equalsIgnoreCase("Asset")) {
-			reports.add(report);
+			if (!reports.contains(report))
+				reports.add(report);
 		}
 	}
 	
 	private void storyElement(String qName, Attributes attributes) {
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Number")) {
-			nbr = true;
+			isNbr = true;
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Name")) {
-			name = true;
+			isName = true;
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Owners.Name")) {
-			bliOwner = true;
+			isBliOwner = true;
 			return;
 		}
 	}
 	
 	private void taskElement(String qName, Attributes attributes) {
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Number")) {
-			nbr = true;
+			isNbr = true;
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Name")) {
-			name = true;
+			isName = true;
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Owners.Name")) {
-			bliOwner = true;
+			isBliOwner = true;
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Name")) {
-			taskName = true;
+			isTaskName = true;
 			return;
 		}
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Owners.Name")) {
-			taskOwner = true;
+			isTaskOwner = true;
 			return;
+		}
+		if (qName.equalsIgnoreCase("Asset") && attributes.getIndex("idref") == 1) {
+			String[] attr = attributes.getValue("idref").split(":");
+			AssetType asset = AssetType.valueOf(attr[0]);
+			report.setBliLink(ReportUtil.createLink(asset, attr[1]));
 		}
 	}
 	
-	private void makeLink() {
-		StringBuilder link = new StringBuilder();
-		link.append(String.format(linkTemplate, assetType.name().toLowerCase(), assetType.name())).append(delimeter).append(id);
+	private void makeLink(String id) {
+		String link = ReportUtil.createLink(assetType, id);
 		if (Arrays.asList(AssetType.Defect, AssetType.Story).contains(assetType)) {
 			report.setBliLink(link.toString());
 		} else if (Arrays.asList(AssetType.Test, AssetType.Task).contains(assetType)) {

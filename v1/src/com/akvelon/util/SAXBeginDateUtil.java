@@ -18,31 +18,36 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-
 public class SAXBeginDateUtil extends DefaultHandler {
 
 	Logger log = Logger.getLogger(SAXBeginDateUtil.class);
-	
+
 	private InputStream inputStream;
-	
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	
+
+	SimpleDateFormat sdf;
+
 	Calendar date;
-	
+
 	private boolean bDate = false;
-	
+
 	public SAXBeginDateUtil() {
+		super();
 		date = Calendar.getInstance();
+		sdf = new SimpleDateFormat("yyyy-MM-dd");
 	}
-	
+
+	public Date getSprintStartDate() {
+		return date != null ? date.getTime() : null;
+	}
+
 	public int parse(InputStream is) throws SAXException, IOException, ParserConfigurationException {
 		this.inputStream = is;
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser parser = factory.newSAXParser();
 		parser.parse(inputStream, this);
-		return countDays();
+		return countHours();
 	}
-	
+
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("BeginDate")) {
@@ -50,7 +55,7 @@ public class SAXBeginDateUtil extends DefaultHandler {
 			return;
 		}
 	}
-	
+
 	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		if (bDate) {
@@ -64,21 +69,24 @@ public class SAXBeginDateUtil extends DefaultHandler {
 			bDate = false;
 		}
 	}
-	
-	private int countDays() {
+
+	private int countHours() {
 		int daysQuantity = 0;
-		
+
 		Calendar today = Calendar.getInstance();
 		today.setTime(new Date());
 		today.set(Calendar.HOUR_OF_DAY, 0);
 		today.set(Calendar.MINUTE, 0);
 		today.set(Calendar.SECOND, 0);
 		today.set(Calendar.MILLISECOND, 0);
-		
+
 		log.info("Today - " + today.getTime());
-		
+
 		List<Integer> weekends = Arrays.asList(Calendar.SATURDAY, Calendar.SUNDAY);
-		
+
+		Calendar date = Calendar.getInstance();
+		date.setTime(this.date.getTime());
+
 		while (date.before(today)) {
 			if (!weekends.contains(date.get(Calendar.DAY_OF_WEEK))) {
 				daysQuantity++;

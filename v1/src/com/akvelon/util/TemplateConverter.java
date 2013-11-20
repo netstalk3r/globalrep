@@ -52,7 +52,7 @@ public class TemplateConverter {
 
 		context.put("reports", repsByType);
 		context.put("repsByOwner", repsByOwner);
-		context.put("hRepoerts", hReports);
+		context.put("hReports", hReports);
 		context.put("date", new DateTool());
 		context.put("curDate", new Date());
 

@@ -25,7 +25,6 @@ public abstract class ReportWriter {
 	protected HSSFWorkbook workbook;
 	
 	protected List<List<Report>> reports;
-	
 	protected List<HourReport> hReports;
 	
 	protected SimpleDateFormat formatter;

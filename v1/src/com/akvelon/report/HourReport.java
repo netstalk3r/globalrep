@@ -1,20 +1,24 @@
 package com.akvelon.report;
 
+import java.util.Date;
+
 public class HourReport {
 
 	private String teamMember;
 	private double reportedHours;
 	private double requiredHours;
+	private Date sprintStartDate;
 
 	public HourReport() {
 		super();
 	}
 
-	public HourReport(String teamMember, double reportedHours, double requiredHours) {
+	public HourReport(String teamMember, double reportedHours, double requiredHours, Date springBeginDate) {
 		super();
 		this.teamMember = teamMember;
 		this.reportedHours = reportedHours;
 		this.requiredHours = requiredHours;
+		this.sprintStartDate = springBeginDate;
 	}
 
 	public String getTeamMember() {
@@ -40,5 +44,13 @@ public class HourReport {
 	public void setRequiredHours(double requiredHours) {
 		this.requiredHours = requiredHours;
 	}
-	
+
+	public Date getSprintStartDate() {
+		return sprintStartDate;
+	}
+
+	public void setSprintStartDate(Date springBeginDate) {
+		this.sprintStartDate = springBeginDate;
+	}
+
 }
