@@ -141,7 +141,7 @@
 					</thead>
 					<tbody>
 					
-						#foreach ($rep in $hRepoerts)
+						#foreach ($rep in $hReports)
 						
 						<tr>
 							<td>$rep.teamMember</td>
