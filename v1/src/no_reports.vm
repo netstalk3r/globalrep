@@ -26,7 +26,7 @@
 		<p>$date.format('HH:mm, EEEEEE, d MMMM yyyy', $curDate)</p>
 		<div>
 			
-			<p>No reports available</p>
+			<p>V1 looks good today!</p>
 			
 		</div>
 	</body>	
