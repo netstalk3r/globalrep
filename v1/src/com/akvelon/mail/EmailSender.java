@@ -44,9 +44,9 @@ public class EmailSender {
 		templateConv = new TemplateConverter();
 	}
 
-	public void sendTestNotificationsByTaskOwner(List<List<Report>> reports, List<HourReport> hreports) {
+	public void sendTestNotificationsByTaskOwner(List<List<Report>> reports, List<HourReport> hReports) {
 		if (CollectionUtils.isEmpty(reports)) {
-			sendMessage("maria.serichenko@akvelon.com", null, templateConv.convertToHTMLNoRepotrs());
+			sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLNoRepotrs(hReports));
 			return;
 		}
 //		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByTaskOwner(reports));
@@ -54,11 +54,11 @@ public class EmailSender {
 
 	public void sendTestNotificationsByRepType(List<List<Report>> reports, List<HourReport> hReports) {
 		if (CollectionUtils.isEmpty(reports)) {
-			sendMessage("maria.serichenko@akvelon.com", null, templateConv.convertToHTMLNoRepotrs());
+			sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLNoRepotrs(hReports));
 			return;
 		}
-//		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByRepTypeAndHourReps(reports, hReports));
-		sendMessage("anton.nagorny@akvelon.com", null, templateConv.convertToHTMLByRepTypeAndHourReps(reports, hReports));
+		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByRepTypeAndHourReps(reports, hReports));
+//		sendMessage("anton.nagorny@akvelon.com", null, templateConv.convertToHTMLByRepTypeAndHourReps(reports, hReports));
 	}
 
 /*	private String createEmail(String owner) {

@@ -42,8 +42,8 @@ public class TemplateConverter {
 		return convert(REP_TEMPLATE, reports, ReportUtil.sortReportsByTaskOwner(reports), hReports);
 	}
 
-	public String convertToHTMLNoRepotrs() {
-		return convert(NO_REP_TEMPLATE, null, null, null);
+	public String convertToHTMLNoRepotrs(List<HourReport> hReports) {
+		return convert(NO_REP_TEMPLATE, null, null, hReports);
 	}
 
 	private String convert(String templ, List<List<Report>> repsByType, List<List<Report>> repsByOwner, List<HourReport> hReports) {
