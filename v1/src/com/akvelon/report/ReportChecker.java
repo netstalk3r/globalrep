@@ -14,6 +14,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import com.akvelon.mail.EmailSender;
 import com.akvelon.test.CMDOptionReader;
 import com.akvelon.test.FileOptionsReader;
+import com.akvelon.util.ReportUtil;
 import com.akvelon.writer.reports.ReportWriter;
 import com.akvelon.writer.reports.XLSHourReportWriter;
 
@@ -90,6 +91,8 @@ public abstract class ReportChecker {
 		
 		List<List<Report>> reps = repWriter != null ? repWriter.getReports() : null;
 		List<HourReport> hReps = hRepWriter != null ? hRepWriter.getHourReports() : null;
+		
+		reps = ReportUtil.twoTaskInProgress(reps);
 		
 		emailSender.sendTestNotificationsByRepType(reps, hReps);
 		// emailSender.sendTestNotificationsByRepType(repWriter.getReports());
