@@ -51,7 +51,7 @@ public class SAXUtil extends DefaultHandler {
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		if (qName.equalsIgnoreCase("Asset") && attributes.getIndex("id") == 1) {
+		if (qName.equals("Asset") && attributes.getIndex("id") == 1) {
 			report = new Report();
 			report.setReportName(ReportUtil.normalizeName(reportName));
 			String[] arrt = attributes.getValue(1).split(":");
@@ -78,76 +78,91 @@ public class SAXUtil extends DefaultHandler {
 	public void characters(char ch[], int start, int length) throws SAXException {
 		if (isNbr) {
 			report.setBliID(new String(ch, start, length));
-			isNbr = false;
 			return;
 		}
 		if (isName) {
 			report.setBliName(new String(ch, start, length));
-			isName = false;
 			return;
 		}
 		if (isBliOwner) {
 			report.setBliOwner(new String(ch, start, length));
-			isBliOwner = false;
 			return;
 		}
 		if (isTaskName) {
 			report.setTaskName(new String(ch, start, length));
-			isTaskName = false;
 			return;
 		}
 		if (isTaskOwner) {
 			report.setTaskOwner(new String(ch, start, length));
-			isTaskOwner = false;
 			return;
 		}
 	}
 
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
-		if (qName.equalsIgnoreCase("Asset")) {
+		if (qName.equals("Asset")) {
 			if (!reports.contains(report))
 				reports.add(report);
+		}
+		if (isNbr) {
+			isNbr = false;
+			return;
+		}
+		if (isName) {
+			isName = false;
+			return;
+		}
+		if (isBliOwner) {
+			isBliOwner = false;
+			return;
+		}
+		if (isTaskName) {
+			isTaskName = false;
+			return;
+		}
+		if (isTaskOwner) {
+			isTaskOwner = false;
+			return;
 		}
 	}
 	
 	private void storyElement(String qName, Attributes attributes) {
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Number")) {
+		if (qName.equals("Attribute") && attributes.getValue(0).equals("Number")) {
 			isNbr = true;
 			return;
 		}
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Name")) {
+		if (qName.equals("Attribute") && attributes.getValue(0).equals("Name")) {
 			isName = true;
 			return;
 		}
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Owners.Name")) {
+		if (qName.equals("Attribute") && attributes.getValue(0).equals("Owners.Name")) {
 			isBliOwner = true;
 			return;
 		}
 	}
 	
 	private void taskElement(String qName, Attributes attributes) {
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Number")) {
+		if (qName.equals("Attribute") && attributes.getValue(0).equals("Parent.Number")) {
 			isNbr = true;
 			return;
 		}
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Name")) {
+		if (qName.equals("Attribute") && attributes.getValue(0).equals("Parent.Name")) {
 			isName = true;
 			return;
 		}
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Parent.Owners.Name")) {
+		if (qName.equals("Attribute") && attributes.getValue(0).equals("Parent.Owners.Name")) {
 			isBliOwner = true;
 			return;
 		}
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Name")) {
+		if (qName.equals("Attribute") && attributes.getValue(0).equals("Name")) {
 			isTaskName = true;
 			return;
 		}
-		if (qName.equalsIgnoreCase("Attribute") && attributes.getValue(0).equalsIgnoreCase("Owners.Name")) {
+		if (qName.equals("Attribute") && attributes.getValue(0).equals("Owners.Name")) {
 			isTaskOwner = true;
 			return;
 		}
-		if (qName.equalsIgnoreCase("Asset") && attributes.getIndex("idref") == 1) {
+		if (qName.equals("Asset") && attributes.getIndex("idref") == 1) {
 			String[] attr = attributes.getValue("idref").split(":");
 			AssetType asset = AssetType.valueOf(attr[0]);
 			report.setBliLink(ReportUtil.createLink(asset, attr[1]));

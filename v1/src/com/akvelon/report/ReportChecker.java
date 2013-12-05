@@ -93,6 +93,7 @@ public abstract class ReportChecker {
 		List<HourReport> hReps = hRepWriter != null ? hRepWriter.getHourReports() : null;
 		
 		reps = ReportUtil.twoTaskInProgress(reps);
+		reps = ReportUtil.findTaskTestInProgress(reps);
 		
 		emailSender.sendTestNotificationsByRepType(reps, hReps);
 		// emailSender.sendTestNotificationsByRepType(repWriter.getReports());

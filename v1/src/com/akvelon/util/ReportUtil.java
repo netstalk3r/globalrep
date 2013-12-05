@@ -1,11 +1,16 @@
 package com.akvelon.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 
@@ -81,7 +86,7 @@ public class ReportUtil {
 								newRep.setBliLink(r.getBliLink());
 								newRep.setBliName(r.getBliName());
 								newRep.setBliOwner(r.getBliOwner());
-								newRep.setTaskName(r.getTaskName());
+								newRep.setReportName(r.getReportName());
 								res.add(newRep);
 							}
 						}
@@ -97,6 +102,53 @@ public class ReportUtil {
 			}
 		}
 
+		return reports;
+	}
+	
+	public static List<List<Report>> findTaskTestInProgress(List<List<Report>> reports) {
+		List<List<Report>> res = new ArrayList<List<Report>>();
+		List<String> rps = Arrays.asList("developer has 1tesk inprogress","developer has 1task inprogress");
+		Report r = null;
+		Set<String> temp = new HashSet<String>();
+		
+		A :
+			for (int i = reports.size() - 1; i > 0; i--) {
+				List<Report> reps = reports.get(i);
+				for (Report rep : reps) {
+				if (rps.contains(rep.getReportName())) {
+						Queue<Report> queue = new LinkedList<Report>(reps);
+						while (!CollectionUtils.isEmpty(queue)) {
+							r = queue.poll();
+							for (Report rp : queue) {
+								if (r.getTaskOwner().equals(rp.getTaskOwner())) {
+									temp.add(r.getTaskOwner());
+								}
+							}
+						}
+						List<Report> oneTaskTest = new ArrayList<Report>();
+						for (Report rrp : reps) {
+							if (temp.contains(rrp.getTaskOwner())) {
+								oneTaskTest.add(rrp);
+							}
+						}
+					if (!CollectionUtils.isEmpty(oneTaskTest)) {
+						Collections.sort(oneTaskTest, new Comparator<Report>() {
+							@Override
+							public int compare(Report r1, Report r2) {
+								return r1.getTaskOwner().compareTo(r2.getTaskOwner());
+							}
+						});
+						res.add(oneTaskTest);
+					}
+					reports.remove(reps);
+					continue A;
+				} else {
+					continue A;
+					}
+				}
+			}
+
+		reports.addAll(res);
 		return reports;
 	}
 }

@@ -96,4 +96,9 @@ public class Report {
 		this.taskLink = taskLink;
 	}
 
+	@Override
+	public String toString() {
+		return "[BLI: " + bliID + " " + bliName + "; Owner: " + bliOwner + "; Task: " + taskName + "; Task owner: " + taskOwner
+				+ "; Report: " + reportName + "]";
+	}
 }
