@@ -75,7 +75,7 @@ public class ReportUtil {
 		A :
 		for (List<Report> reps : reports) {
 			for (Report rep : reps) {
-				if (rep.getReportName().equals("check bli def 1task in progress")) {
+				if (rep.getReportName().equals("check bli de 1task in progress")) {
 					Queue<Report> queue = new LinkedList<Report>(reps);
 					while (!CollectionUtils.isEmpty(queue)) {
 						Report r = queue.poll();
