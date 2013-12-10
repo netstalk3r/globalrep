@@ -151,4 +151,48 @@ public class ReportUtil {
 		reports.addAll(res);
 		return reports;
 	}
+	
+	public static List<List<Report>> findCodeReviewBLI(List<List<Report>> reports) {
+		List<Report> devDone = null;
+		List<Report> reviewNotPassed = null;
+
+		A: for (int i = reports.size() - 1; i > 0; i--) {
+			if ("check bli with done dev tasks".equals(reports.get(i).get(0).getReportName())) {
+				devDone = reports.get(i);
+//				reports.remove(reports.get(i));
+				continue A;
+			} else if ("check task peer review not passed".equals(reports.get(i).get(0).getReportName())) {
+				reviewNotPassed = reports.get(i);
+//				reports.remove(reports.get(i));
+				continue A;
+			}
+		}
+
+		if (CollectionUtils.isEmpty(devDone)) return reports;
+		List<Report> res = new ArrayList<Report>();
+		boolean flag = true;
+		
+		for (Report r : devDone) {
+			for (Report r2 : reviewNotPassed) {
+				if (r.getBliID().equals(r2.getBliID())) {
+					r.setReportName("check bli waiting fore code review");
+					r.setTaskName(null);
+					r.setTaskOwner(null);
+					for (int i = 0, n = res.size(); i < n; i++) {
+						if (r.getBliID().equals(res.get(i).getBliID())) {
+							flag = false;
+							break;
+						}
+					}
+					if (flag) {
+						res.add(r);
+						flag = true;	
+					}
+				}
+			}
+		}
+		
+		reports.add(res);
+		return reports;
+	}
 }
