@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
@@ -36,11 +37,12 @@ public class EmailSender {
 
 //	private static final String DOMEN = "@akvelon.com";
 
-	private static final String MAIL_FILE_CONFIG = "src/mail_conf.properties";
+	private static final String MAIL_FILE_CONFIG = "mail_conf.properties";
 
 	public EmailSender() throws FileNotFoundException, IOException {
 		props = new Properties();
-		props.load(new BufferedInputStream(new FileInputStream(new File(MAIL_FILE_CONFIG))));
+		InputStream is = new BufferedInputStream(new FileInputStream(new File(MAIL_FILE_CONFIG)));
+		props.load(is);
 		templateConv = new TemplateConverter();
 	}
 
@@ -49,7 +51,7 @@ public class EmailSender {
 			sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLNoRepotrs(hReports));
 			return;
 		}
-//		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByTaskOwner(reports));
+		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByTaskOwner(reports));
 	}
 
 	public void sendTestNotificationsByRepType(List<List<Report>> reports, List<HourReport> hReports) {

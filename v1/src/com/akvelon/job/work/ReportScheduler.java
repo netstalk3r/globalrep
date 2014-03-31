@@ -22,7 +22,7 @@ public class ReportScheduler {
 		CronTrigger reportTrigger = TriggerBuilder.newTrigger().withIdentity("reportTrigger", "reportGroup")
 				.withSchedule(CronScheduleBuilder.cronSchedule(JobSettingLaucher.getTimeExpr())).build();
 
-		Scheduler scheduler = new StdSchedulerFactory("src/quartz.properties").getScheduler();
+		Scheduler scheduler = new StdSchedulerFactory("quartz.properties").getScheduler();
 		scheduler.start();
 		scheduler.scheduleJob(reportJob, reportTrigger);
 	}

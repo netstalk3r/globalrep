@@ -26,13 +26,17 @@ public abstract class ReportChecker {
 
 	private static final Logger log = Logger.getLogger(ReportChecker.class);
 
+	private String repDir = "XLSreports";
+	
 	protected ReportWriter repWriter;
 	protected ReportWriter hRepWriter;
 	protected EmailSender emailSender;
-
+	
 	protected HSSFWorkbook workbook;
 
 	public ReportChecker() {
+		File repFolfer = new File(repDir);
+		repFolfer.mkdir();
 		workbook = new HSSFWorkbook();
 		try {
 			emailSender = new EmailSender();
@@ -68,7 +72,7 @@ public abstract class ReportChecker {
 
 		hRepWriter = new XLSHourReportWriter(workbook);
 		HourReportChecker hRepChecker = new HourReportChecker(hRepWriter);
-		hRepChecker.checkReportHours("./src/reports/hours/");
+		hRepChecker.checkReportHours("./reports/hours/");
 		writeAndSend();
 	}
 
@@ -94,6 +98,7 @@ public abstract class ReportChecker {
 		
 		reps = ReportUtil.twoTaskInProgress(reps);
 		reps = ReportUtil.findTaskTestInProgress(reps);
+		reps = ReportUtil.findCodeReviewBLI(reps);
 		
 		emailSender.sendTestNotificationsByRepType(reps, hReps);
 		// emailSender.sendTestNotificationsByRepType(repWriter.getReports());
@@ -105,7 +110,7 @@ public abstract class ReportChecker {
 			if (!CollectionUtils.isEmpty(hReps))
 				hRepWriter.writeReport();
 			if (workbook.getNumberOfSheets() != 0) {
-				out = new FileOutputStream(new File(repWriter.getFileName()));
+				out = new FileOutputStream(new File(repDir + File.separator + repWriter.getFileName()));
 				workbook.write(out);
 			}
 		} catch (IOException e) {

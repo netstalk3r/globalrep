@@ -17,9 +17,9 @@ public class TemplateConverter {
 
 	private static final Logger log = Logger.getLogger(TemplateConverter.class);
 
-	private static final String REP_TEMPLATE = "src/report_tepmlate.vm";
-	private static final String BLI_OWNER_TEMPLATE = "src/bli_owner_tepmlate.vm";
-	private static final String NO_REP_TEMPLATE = "src/no_reports.vm";
+	private static final String REP_TEMPLATE = "report_tepmlate.vm";
+	private static final String BLI_OWNER_TEMPLATE = "bli_owner_tepmlate.vm";
+	private static final String NO_REP_TEMPLATE = "no_reports.vm";
 
 	private VelocityEngine velocityEng;
 	private Template template;
