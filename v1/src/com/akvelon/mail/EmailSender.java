@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -35,8 +36,6 @@ public class EmailSender {
 
 	private String subject = "TWVG > V1 status";
 
-//	private static final String DOMEN = "@akvelon.com";
-
 	private static final String MAIL_FILE_CONFIG = "mail_conf.properties";
 
 	public EmailSender() throws FileNotFoundException, IOException {
@@ -48,34 +47,36 @@ public class EmailSender {
 
 	public void sendTestNotificationsByTaskOwner(List<List<Report>> reports, List<HourReport> hReports) {
 		if (CollectionUtils.isEmpty(reports)) {
-			sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLNoRepotrs(hReports));
+			sendMessage(getRequiredProp("mail.sent.to"), props.getProperty("mail.sent.cc"), templateConv.convertToHTMLNoRepotrs(hReports));
 			return;
 		}
-		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByTaskOwner(reports));
+		sendMessage(getRequiredProp("mail.sent.to"), props.getProperty("mail.sent.cc"), templateConv.convertToHTMLByTaskOwner(reports));
 	}
 
 	public void sendTestNotificationsByRepType(List<List<Report>> reports, List<HourReport> hReports) {
 		if (CollectionUtils.isEmpty(reports)) {
-			sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLNoRepotrs(hReports));
+			sendMessage(getRequiredProp("mail.sent.to"), props.getProperty("mail.sent.cc"), templateConv.convertToHTMLNoRepotrs(hReports));
 			return;
 		}
-		sendMessage("maria.serichenko@akvelon.com", "anton.nagorny@akvelon.com", templateConv.convertToHTMLByRepTypeAndHourReps(reports, hReports));
+		sendMessage(getRequiredProp("mail.sent.to"), props.getProperty("mail.sent.cc"), templateConv.convertToHTMLByRepTypeAndHourReps(reports, hReports));
 //		sendMessage("anton.nagorny@akvelon.com", null, templateConv.convertToHTMLByRepTypeAndHourReps(reports, hReports));
 	}
 
-/*	private String createEmail(String owner) {
-		return owner.trim().replace("\\s+", ".").toLowerCase() + DOMEN;
-	}*/
+	private String getRequiredProp(String propName) {
+		String prop = props.getProperty(propName);
+		if (prop == null) throw new IllegalArgumentException("Mail property " + propName + " cannot be null");
+		return prop;
+	}
 
 	private void sendMessage(String to, String cc, String text) {
 		Properties properties = new Properties();
-		properties.put("mail.transport.protocol", props.getProperty("mail.transport.protocol"));
-		properties.put("mail.smtp.host", props.getProperty("mail.smtp.host"));
-		properties.put("mail.smtp.port", props.getProperty("mail.smtp.port"));
+		properties.put("mail.transport.protocol", getRequiredProp("mail.transport.protocol"));
+		properties.put("mail.smtp.host", getRequiredProp("mail.smtp.host"));
+		properties.put("mail.smtp.port", getRequiredProp("mail.smtp.port"));
 
 		session = Session.getInstance(properties, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(props.getProperty("mail.user"), props.getProperty("mail.password"));
+				return new PasswordAuthentication(getRequiredProp("mail.user"), getRequiredProp("mail.password"));
 			}
 		});
 
@@ -84,7 +85,10 @@ public class EmailSender {
 			msg.setFrom(new InternetAddress(props.getProperty("mail.user")));
 			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 			if (!StringUtils.isBlank(cc)) {
-				msg.setRecipients(Message.RecipientType.CC, InternetAddress.parse(cc));
+				StringTokenizer tokenizer = new StringTokenizer(",");
+				while (tokenizer.hasMoreTokens()) {
+					msg.setRecipients(Message.RecipientType.CC, InternetAddress.parse(tokenizer.nextToken()));
+				}
 			}
 			msg.setSubject(StringUtils.isBlank(props.getProperty("mail.subject")) ? props.getProperty("mail.subject") : subject);
 			msg.setContent(text, "text/html; charset=UTF8");
