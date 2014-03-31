@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="v1" basedir="." default="jar">
+
+	<property name="bin.dir" value="${basedir}/bin" />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="jar.dir" value="${basedir}/jar" />
+	<property name="jar.file" value="${jar.dir}/${ant.project.name}.jar" />
+
+	<property name="main.class" value="com.akvelon.test.Test" />
+	<property name="run.file" value="run.bat" />
+
+	<path id="lib.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="clean">
+		<delete dir="${bin.dir}" />
+		<delete dir="${jar.dir}" />
+		<echo>clean done</echo>
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${bin.dir}" />
+		<mkdir dir="${jar.dir}" />
+		<copy file="${run.file}" todir="${jar.dir}" />
+		<echo>init done</echo>
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src.dir}" destdir="${bin.dir}" includeantruntime="false">
+			<classpath refid="lib.classpath"/>
+		</javac>
+		<echo>compile done</echo>
+	</target>
+
+	<target name="jar" depends="compile">
+		<manifestclasspath property="manifest.classpath" jarfile="${jar.file}">
+			<classpath refid="lib.classpath" />
+		</manifestclasspath>
+		<jar destfile="${jar.file}" basedir="${bin.dir}">
+			<restrict>
+				<not>
+					<or>
+						<name name="**/*.RSA" />
+						<name name="**/*.SF" />
+						<name name="**/*.DSA" />
+					</or>
+				</not>
+				<archives>
+					<zips>
+						<fileset dir="${lib.dir}" includes="**/*.jar" />
+					</zips>
+				</archives>
+			</restrict>
+			<fileset dir="${basedir}">
+				<include name="**/*.properties" />
+				<include name="**/*.vm" />
+			</fileset>
+			<fileset dir="${src.dir}" includes="**/*.java" />
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}" />
+				<!-- <attribute name="Class-Path" value="${manifest.classpath}" /> -->
+			</manifest>
+		</jar>
+		<echo>jar done</echo>
+	</target>
+</project>
