@@ -10,6 +10,7 @@
 
 	<property name="main.class" value="com.akvelon.test.Test" />
 	<property name="run.file" value="run.bat" />
+	<property name="readme.file" value="readme.txt" />
 
 	<path id="lib.classpath">
 		<fileset dir="${lib.dir}">
@@ -27,11 +28,13 @@
 		<mkdir dir="${bin.dir}" />
 		<mkdir dir="${jar.dir}" />
 		<mkdir dir="${jar.dir}/${rep.dir}" />
-		<copy file="${run.file}" todir="${jar.dir}" />
+		<copy file="${src.dir}/log4j.properties" todir="${bin.dir}" />
 		<copy todir="${jar.dir}">
 			<fileset dir="${basedir}">
 				<include name="**/*.properties" />
 				<include name="**/*.vm" />
+				<include name="${run.file}" />
+				<include name="${readme.file}" />
 			</fileset>
 		</copy>
 		<copy todir="${jar.dir}/${rep.dir}">
@@ -51,7 +54,7 @@
 		<manifestclasspath property="manifest.classpath" jarfile="${jar.file}">
 			<classpath refid="lib.classpath" />
 		</manifestclasspath>
-		<jar destfile="${jar.file}" basedir="${bin.dir}">
+		<jar destfile="${jar.file}" basedir="${bin.dir}" >
 			<restrict>
 				<not>
 					<or>
@@ -66,10 +69,6 @@
 					</zips>
 				</archives>
 			</restrict>
-			<fileset dir="${basedir}">
-				<exclude name="**.*" />
-			</fileset>
-			<fileset dir="${src.dir}" includes="log4j.properties" />
 			<manifest>
 				<attribute name="Main-Class" value="${main.class}" />
 			</manifest>
