@@ -28,13 +28,14 @@
 		<mkdir dir="${bin.dir}" />
 		<mkdir dir="${jar.dir}" />
 		<mkdir dir="${jar.dir}/${rep.dir}" />
-		<copy file="${src.dir}/log4j.properties" todir="${bin.dir}" />
+		<copy file="${run.file}" todir="${jar.dir}" />
+		<copy file="${readme.file}" todir="${jar.dir}" />
 		<copy todir="${jar.dir}">
 			<fileset dir="${basedir}">
+				<exclude name="**/bin/**" />
+				<exclude name="**/src/**" />
+				<exclude name="**/lib/**" />
 				<include name="**/*.properties" />
-				<include name="**/*.vm" />
-				<include name="${run.file}" />
-				<include name="${readme.file}" />
 			</fileset>
 		</copy>
 		<copy todir="${jar.dir}/${rep.dir}">
@@ -45,7 +46,7 @@
 
 	<target name="compile" depends="init">
 		<javac srcdir="${src.dir}" destdir="${bin.dir}" includeantruntime="false">
-			<classpath refid="lib.classpath"/>
+			<classpath refid="lib.classpath" />
 		</javac>
 		<echo>compile done</echo>
 	</target>
@@ -54,7 +55,7 @@
 		<manifestclasspath property="manifest.classpath" jarfile="${jar.file}">
 			<classpath refid="lib.classpath" />
 		</manifestclasspath>
-		<jar destfile="${jar.file}" basedir="${bin.dir}" >
+		<jar destfile="${jar.file}" basedir="${bin.dir}">
 			<restrict>
 				<not>
 					<or>
@@ -69,6 +70,10 @@
 					</zips>
 				</archives>
 			</restrict>
+			<fileset dir="${src.dir}">
+				<include name="**/*.properties" />
+				<include name="**/*.vm" />
+			</fileset>
 			<manifest>
 				<attribute name="Main-Class" value="${main.class}" />
 			</manifest>

@@ -8,6 +8,8 @@ import org.apache.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.tools.generic.DateTool;
 
 import com.akvelon.report.HourReport;
@@ -27,6 +29,8 @@ public class TemplateConverter {
 
 	public TemplateConverter() {
 		velocityEng = new VelocityEngine();
+		velocityEng.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+		velocityEng.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
 		velocityEng.init();
 	}
 
@@ -49,7 +53,7 @@ public class TemplateConverter {
 	private String convert(String templ, List<List<Report>> repsByType, List<List<Report>> repsByOwner, List<HourReport> hReports) {
 		template = velocityEng.getTemplate(templ);
 		context = new VelocityContext();
-
+		
 		context.put("reports", repsByType);
 		context.put("repsByOwner", repsByOwner);
 		context.put("hReports", hReports);
