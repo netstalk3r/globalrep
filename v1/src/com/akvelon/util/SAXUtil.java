@@ -67,6 +67,7 @@ public class SAXUtil extends DefaultHandler {
 				break;
 			case Task:
 			case Test:
+			case TestSet:
 			default:
 				taskElement(qName, attributes);
 				break;
