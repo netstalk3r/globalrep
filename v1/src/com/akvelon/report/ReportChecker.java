@@ -77,6 +77,8 @@ public abstract class ReportChecker {
 	}
 
 	public void checkReportHours(String reportsStorage) throws Exception {
+		log.info("Check report from folder: " + reportsStorage);
+		
 		FileOptionsReader optionsReader = new FileOptionsReader(reportsStorage);
 		Map<String, String> options = optionsReader.readOptions();
 
@@ -99,6 +101,7 @@ public abstract class ReportChecker {
 		reps = ReportUtil.twoTaskInProgress(reps);
 		reps = ReportUtil.findTaskTestInProgress(reps);
 		reps = ReportUtil.findCodeReviewBLI(reps);
+		reps = ReportUtil.findValidStroryPoints(reps);
 		
 		emailSender.sendTestNotificationsByRepType(reps, hReps);
 		// emailSender.sendTestNotificationsByRepType(repWriter.getReports());

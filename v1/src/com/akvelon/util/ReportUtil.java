@@ -195,4 +195,30 @@ public class ReportUtil {
 		reports.add(res);
 		return reports;
 	}
+	
+	/**
+	 * We get all items/defects which have digit 3 in their story point. Here we
+	 * removed items/defects with all valid story points and leave invalid.
+	 */
+	public static List<List<Report>> findValidStroryPoints(List<List<Report>> reports) {
+		
+		List<String> repsName = Arrays.asList("check defect with invalid story points","check item with invalid story points");
+		
+		for (List<Report> reps : reports) {
+			if (repsName.contains(reps.get(0).getReportName())) {
+				for (int i = 0; i < reps.size(); i++) {
+					if (isStoryPointValid(reps.get(i))) {
+						reps.remove(reps.get(i));
+					}
+				}
+			}
+		}
+		return reports;
+	}
+	
+	private static boolean isStoryPointValid(Report rep) {
+		double storyPoint = Double.parseDouble(rep.getStoryPoints());
+		int integer = (int) storyPoint;
+		return storyPoint - integer == 0;
+	}
 }

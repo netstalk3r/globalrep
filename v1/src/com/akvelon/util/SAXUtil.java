@@ -33,6 +33,7 @@ public class SAXUtil extends DefaultHandler {
 	private boolean isBliOwner = false;
 	private boolean isTaskName = false;
 	private boolean isTaskOwner = false;
+	private boolean isEstimate = false;
 	
 	private AssetType assetType = null;
 	
@@ -97,6 +98,10 @@ public class SAXUtil extends DefaultHandler {
 			report.setTaskOwner(new String(ch, start, length));
 			return;
 		}
+		if (isEstimate) {
+			report.setStoryPoints(new String(ch, start, length));
+			return;
+		}
 	}
 
 	@Override
@@ -125,6 +130,10 @@ public class SAXUtil extends DefaultHandler {
 			isTaskOwner = false;
 			return;
 		}
+		if (isEstimate) {
+			isEstimate = false;
+			return;
+		}
 	}
 	
 	private void storyElement(String qName, Attributes attributes) {
@@ -140,6 +149,10 @@ public class SAXUtil extends DefaultHandler {
 			isBliOwner = true;
 			return;
 		}
+		if (qName.equals("Attribute") && attributes.getValue(0).equals("Estimate")) {
+			isEstimate = true;
+			return;
+		} 
 	}
 	
 	private void taskElement(String qName, Attributes attributes) {

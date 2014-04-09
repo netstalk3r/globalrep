@@ -14,6 +14,8 @@ public class Report {
 
 	private String bliLink;
 	private String taskLink;
+	
+	private String storyPoints;
 
 	public Report(String bliID, String bliName, String bliOwner, String taskName, String taskOwner, String reportName, String bliLink,
 			String taskLink) {
@@ -94,6 +96,14 @@ public class Report {
 
 	public void setTaskLink(String taskLink) {
 		this.taskLink = taskLink;
+	}
+
+	public String getStoryPoints() {
+		return storyPoints;
+	}
+
+	public void setStoryPoints(String storyPoints) {
+		this.storyPoints = storyPoints;
 	}
 
 	@Override
