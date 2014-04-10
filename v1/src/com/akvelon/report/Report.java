@@ -1,5 +1,8 @@
 package com.akvelon.report;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class for report
  */
@@ -17,6 +20,9 @@ public class Report {
 	
 	private String storyPoints;
 
+	private List<String> taskNames = new ArrayList<String>();
+	private String project;
+	
 	public Report(String bliID, String bliName, String bliOwner, String taskName, String taskOwner, String reportName, String bliLink,
 			String taskLink) {
 		super();
@@ -104,6 +110,22 @@ public class Report {
 
 	public void setStoryPoints(String storyPoints) {
 		this.storyPoints = storyPoints;
+	}
+
+	public void addTaskName(String taskName) {
+		taskNames.add(taskName);
+	}
+	
+	public List<String> getTaskNames() {
+		return taskNames;
+	}
+	
+	public String getProject() {
+		return project;
+	}
+
+	public void setProject(String project) {
+		this.project = project;
 	}
 
 	@Override

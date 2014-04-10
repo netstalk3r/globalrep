@@ -4,3 +4,5 @@ To set recipients, go to mail_conf.properties file and change property "mail.sen
 "mail.sent.cc" (can be null or comma separated)
 
 To change team name, current sprint and team member nicknames go to team.properties file.
+
+To change version of the project go to project.properties file

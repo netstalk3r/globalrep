@@ -35,6 +35,11 @@ public class SAXUtil extends DefaultHandler {
 	private boolean isTaskOwner = false;
 	private boolean isEstimate = false;
 	
+	private boolean isTaskNames = false;
+	private boolean readName = false;
+	
+	private boolean isProject = false;
+	
 	private AssetType assetType = null;
 	
 	public SAXUtil(String taskName) {
@@ -102,6 +107,14 @@ public class SAXUtil extends DefaultHandler {
 			report.setStoryPoints(new String(ch, start, length));
 			return;
 		}
+		if (isProject) {
+			report.setProject(new String(ch, start, length));
+			return;
+		}
+		if (readName) {
+			report.addTaskName(new String(ch, start, length));
+			return;
+		}
 	}
 
 	@Override
@@ -134,6 +147,15 @@ public class SAXUtil extends DefaultHandler {
 			isEstimate = false;
 			return;
 		}
+		if (isProject) {
+			isProject = false;
+			return;
+		}
+		if (isTaskNames) {
+			isTaskNames = false;
+			readName = false;
+			return;
+		}
 	}
 	
 	private void storyElement(String qName, Attributes attributes) {
@@ -153,6 +175,18 @@ public class SAXUtil extends DefaultHandler {
 			isEstimate = true;
 			return;
 		} 
+		if (qName.equals("Attribute") && attributes.getValue(0).equals("Scope.Name")) {
+			isProject = true;
+			return;
+		}
+		if (qName.equals("Attribute") && attributes.getValue(0).equals("Children.Name")) {
+			readName = true;
+			return;
+		}
+		if (!qName.equals("Value")) {
+			isTaskNames = true;
+			return;
+		}
 	}
 	
 	private void taskElement(String qName, Attributes attributes) {

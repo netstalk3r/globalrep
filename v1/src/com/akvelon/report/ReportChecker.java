@@ -102,6 +102,7 @@ public abstract class ReportChecker {
 		reps = ReportUtil.findTaskTestInProgress(reps);
 		reps = ReportUtil.findCodeReviewBLI(reps);
 		reps = ReportUtil.findValidStroryPoints(reps);
+		reps = ReportUtil.verifyTaskForMergeTest(reps);
 		
 		emailSender.sendTestNotificationsByRepType(reps, hReps);
 		// emailSender.sendTestNotificationsByRepType(repWriter.getReports());
@@ -128,5 +129,6 @@ public abstract class ReportChecker {
 		}
 	}
 
+	
 	protected abstract void checkReport(String reportName) throws Exception;
 }

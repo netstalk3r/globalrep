@@ -202,10 +202,10 @@ public class ReportUtil {
 	 */
 	public static List<List<Report>> findValidStroryPoints(List<List<Report>> reports) {
 		
-		List<String> repsName = Arrays.asList("check defect with invalid story points","check item with invalid story points");
+		List<String> repsNames = Arrays.asList("check defect with invalid story points","check item with invalid story points");
 		
 		for (List<Report> reps : reports) {
-			if (repsName.contains(reps.get(0).getReportName())) {
+			if (repsNames.contains(reps.get(0).getReportName())) {
 				for (int i = 0; i < reps.size(); i++) {
 					if (isStoryPointValid(reps.get(i))) {
 						reps.remove(reps.get(i));
@@ -216,9 +216,38 @@ public class ReportUtil {
 		return reports;
 	}
 	
+	public static List<List<Report>> verifyTaskForMergeTest(List<List<Report>> reports) {
+	
+		List<String> repNames = Arrays.asList("check bli for merge tasks","check defect for merge tasks");
+		
+		for (List<Report> reps : reports) {
+			if (repNames.contains(reps.get(0).getReportName())) {
+				String project = reps.get(0).getProject().substring(2,reps.get(0).getProject().length()-2);
+				for (int i = reps.size() - 1; i >= 0; i--) {
+					if (hasTaskForMerge(reps.get(i),project)) {
+						reps.remove(reps.get(i));
+					}
+				}
+			}
+		}
+		
+		return reports;
+	}
+	
 	private static boolean isStoryPointValid(Report rep) {
 		double storyPoint = Double.parseDouble(rep.getStoryPoints());
 		int integer = (int) storyPoint;
 		return storyPoint - integer == 0;
+	}
+	
+	private static boolean hasTaskForMerge(Report report, String project) {
+		int counter = 0;
+		List<String> names = report.getTaskNames();
+		for (String name : names) {
+			if (name.indexOf(project) != -1) {
+				counter++;
+			}
+		}
+		return counter == 2;
 	}
 }

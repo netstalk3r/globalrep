@@ -1,5 +1,8 @@
 package com.akvelon.test;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -8,12 +11,14 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 
 
 public class V1ReportUrlBuilder {
 
 	private Properties connectionProps = new Properties();
 	private Properties teamProps = new Properties();
+	private Properties projectProps = new Properties();
 	private final String reportStoragePath = "reports/";
 	private String delim = ";";
 	
@@ -32,7 +37,7 @@ public class V1ReportUrlBuilder {
 		if (reportName.endsWith("all_done.properties")) {
 			stringurl = stringurl.replace("Owners", "Member");
 		}
-//		System.out.println(stringurl);
+		System.out.println(stringurl);
 		URL url = new URL(stringurl);
 		URLConnection urlConnection = url.openConnection();
 		urlConnection.setRequestProperty("Authorization", "Basic " + authStringEnc);
@@ -50,7 +55,7 @@ public class V1ReportUrlBuilder {
 		String url = "";
 		String urlTemplate = "%s://%s/%s/%s?sel=%s&where=%s";
 		Properties reportProps = new Properties();
-		reportProps.load(this.getClass().getClassLoader().getResourceAsStream(this.reportStoragePath + reportName));
+		reportProps.load(new BufferedInputStream(new FileInputStream(new File(reportStoragePath + reportName))));
 		
 		url = String.format(urlTemplate,
 				connectionProps.getProperty("protocol"),
@@ -65,25 +70,30 @@ public class V1ReportUrlBuilder {
 
 	private void readProps() throws IOException {
 		connectionProps.load(this.getClass().getClassLoader().getResourceAsStream("connection.properties"));
-		teamProps.load(this.getClass().getClassLoader().getResourceAsStream("team.properties"));
+		teamProps.load(new BufferedInputStream(new FileInputStream(new File("team.properties"))));
+		projectProps.load(new BufferedInputStream(new FileInputStream(new File("project.properties"))));
+		
 	}
 	
 	private String buildReportRestriction(Properties reportProps) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.restrictTeam(reportProps.getProperty("teamOwnership"))).append(delim);
+		sb.append(this.restrictProject(reportProps.getProperty("project")));
 		
 		Enumeration<?> keys = reportProps.propertyNames();
 		while (keys.hasMoreElements()) {
 			String key = (String) keys.nextElement();
-			if(!Arrays.asList("sel","AssetType","teamOwnership").contains(key)) {
-	            //get the property value and print it out
-	            sb.append(key);
-	            //if (!"ToDo".equals(key)){
-	            if (!Arrays.asList("<",">","!").contains(reportProps.get(key).toString().substring(0, 1))){
-	            	sb.append("=");
-	            }
-	            sb.append(reportProps.getProperty(key));
-	            if(keys.hasMoreElements()) {
+			if(!Arrays.asList("sel","AssetType","teamOwnership","project").contains(key)) {
+				// get the property value and print it out
+				sb.append(key);
+				// if (!"ToDo".equals(key)){
+				if ("Parent".equals(key)) {
+					sb.append(":");
+				} else if (!Arrays.asList("<", ">", "!").contains(reportProps.get(key).toString().substring(0, 1))) {
+					sb.append("=");
+				}
+				sb.append(reportProps.getProperty(key));
+				if (keys.hasMoreElements()) {
 	            	sb.append(delim);
 	            }
 			}
@@ -114,5 +124,15 @@ public class V1ReportUrlBuilder {
 		}
     		
     	return sb.toString();
+	}
+	
+	private String restrictProject(String currentProject) {
+		StringBuilder sb = new StringBuilder();
+		
+		if (StringUtils.isNotBlank(currentProject)) {
+			sb.append(currentProject).append("!=").append(projectProps.getProperty("project")).append(delim);
+		}
+		
+		return sb.toString();
 	}
 }

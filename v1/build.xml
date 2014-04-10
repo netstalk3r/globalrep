@@ -4,7 +4,7 @@
 	<property name="bin.dir" value="${basedir}/bin" />
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="lib.dir" value="${basedir}/lib" />
-	<property name="jar.dir" value="${basedir}/jar" />
+	<property name="jar.dir" value="${basedir}/V1Reporting" />
 	<property name="rep.dir" value="reports" />
 	<property name="jar.file" value="${jar.dir}/${ant.project.name}.jar" />
 
@@ -27,9 +27,9 @@
 	<target name="init" depends="clean">
 		<mkdir dir="${bin.dir}" />
 		<mkdir dir="${jar.dir}" />
-		<mkdir dir="${jar.dir}/${rep.dir}" />
 		<copy file="${run.file}" todir="${jar.dir}" />
 		<copy file="${readme.file}" todir="${jar.dir}" />
+	<!--	<mkdir dir="${jar.dir}/${rep.dir}" />  -->
 		<copy todir="${jar.dir}">
 			<fileset dir="${basedir}">
 				<exclude name="**/bin/**" />
@@ -38,9 +38,9 @@
 				<include name="**/*.properties" />
 			</fileset>
 		</copy>
-		<copy todir="${jar.dir}/${rep.dir}">
+	<!--	<copy todir="${jar.dir}/${rep.dir}">
 			<fileset dir="${rep.dir}" />
-		</copy>
+		</copy> -->
 		<echo>init done</echo>
 	</target>
 
