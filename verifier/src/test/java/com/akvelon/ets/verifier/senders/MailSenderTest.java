@@ -22,7 +22,7 @@ public class MailSenderTest {
 		rep2.setName("person2");
 		rep2.setEmail("email2@asd");
 		rep2.setHours(2.5);
-		mailSender.sendAllHourReports("anton.nagorny@akvelon.com", 23, Arrays.asList(rep1,rep2));
+		mailSender.sendAllHourReports("anton.nagorny@akvelon.com", null, 23, Arrays.asList(rep1,rep2));
 //		mailSender.sendAllHourReports("maria.serichenko@akvelon.com", 22, Arrays.asList(rep1,rep2));
 	}
 	
