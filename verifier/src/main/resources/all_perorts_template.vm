@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<style>
+		body {
+			font-family:calibri;
+			font-size:12px;
+			margin: 0px;
+		}
+		th,td {
+			border: 2px solid black;
+		}
+		th {
+			padding: 4px;
+			text-align: center;
+		}
+		table {
+			margin:0 auto;
+			border: 2px solid black;
+			border-collapse: collapse;
+		}
+		</style>
+	</head>
+	<body>
+		<h1>ETS reported hours</h1>
+		<p>$dateTool.format('HH:mm, EEEEEE, d MMMM yyyy', $curDate)</p>
+		<p style="font-weight:bold">Required hours - $reqHours</p>
+		
+		<div>
+			<table cellpadding="0" cellspacing="0" width="200px">
+				<thead>
+					<tr>
+						<th width="65%">Name</th>
+						<th width="35%">Reported Hours</th>
+					<tr>
+				</thead>
+				<tbody>
+					#foreach ($rep in $reps)
+						<tr>
+							<td>$rep.name</td>
+							<td align='right'>$rep.hours</td>
+						</tr>
+					#end
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>

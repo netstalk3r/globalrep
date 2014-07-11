@@ -1,0 +1,80 @@
+package com.akvelon.ets.verifier.util;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Util {
+
+	private static SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+	private static final Calendar today = Calendar.getInstance();
+	private static Calendar beginDateOfMonth = null;
+	private static Calendar endDateOfMonth = null;
+
+	static {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+		removeTime(calendar);
+		beginDateOfMonth = calendar;
+		calendar = Calendar.getInstance();
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		removeTime(calendar);
+		endDateOfMonth = calendar;
+	}
+
+	public static Calendar getBeginDateOfMonth() {
+		return beginDateOfMonth;
+	}
+
+	public static Calendar getToday() {
+		return today;
+	}
+
+	public static Calendar getEndDateOfTheMonth() {
+		return endDateOfMonth;
+	}
+
+	public static String getToDayForRequest() {
+		return sdf.format(today.getTime());
+	}
+
+	public static String getBeginOfMonthForRequest() {
+		return sdf.format(beginDateOfMonth.getTime());
+	}
+
+	public static String getEndOfMonthForRequest() {
+		return sdf.format(endDateOfMonth.getTime());
+	}
+
+	public static int getCurrentYear() {
+		return today.get(Calendar.YEAR);
+	}
+	
+	public static Map<String, String> getDefaultRequestParams() {
+		Map<String, String> params = new HashMap<String, String>();
+		params.put(Constants.ORDER_BY, Constants.EMPTY_PARAM);
+		params.put(Constants.ORDER, Constants.EMPTY_PARAM);
+		params.put(Constants.CONTROL, Constants.CONTROL_DEFAULT_OPTION);
+		params.put(Constants.ACCOUNT, Constants.EMPTY_PARAM);
+		params.put(Constants.PROJECT, Constants.PROJECT_DEFAULT_OPTION);
+		params.put(Constants.STATUS, Constants.STATUS_DEFAULT_OPTION);
+		params.put(Constants.TYPE, Constants.TYPE_DEFAULT_OPTION);
+		params.put(Constants.DATE_FROM, getBeginOfMonthForRequest());
+		params.put(Constants.DATE_TO, getEndOfMonthForRequest());
+		params.put(Constants.CHANGE_PERIOD, Constants.CHANGE_PERIOD_DEFAULT_OPTION);
+		return params;
+	}
+
+	public static String convertToEmailAddress(String account) {
+		return account.replace("ua.", Constants.EMPTY_PARAM);
+	}
+	
+	private static void removeTime(Calendar calendar) {
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+	}
+
+}

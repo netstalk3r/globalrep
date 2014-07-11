@@ -1,0 +1,18 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<style>
+			.warning {
+				font-size:1.5em;
+				color:red;
+			}
+		</style>		
+	</head>
+	<body>
+		<h1 class="warning">ETS Missed Hours</h1>
+		<p>$dateTool.format('HH:mm, EEEEEE, d MMMM yyyy', $curDate)</p>
+		<p>You have missed hours in the ETS for this month.</p>
+		<p>Reported hours - $rep.hours<p/>
+		<p style="font-weight:bold">Required hours - $reqHours<p/>
+	</body>
+</html>

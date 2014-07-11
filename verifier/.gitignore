@@ -1,0 +1,7 @@
+/target
+/.setting
+.classpath
+.project
+*-reduced-pom.xml
+run1.bat
+*log
