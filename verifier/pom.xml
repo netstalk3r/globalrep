@@ -19,6 +19,8 @@
 		<velocity.version>1.7</velocity.version>
 		<velocityTool.version>2.0</velocityTool.version>
 		<junit.version>4.11</junit.version>
+		
+		<build.descriptors.folder>build-descriptors</build.descriptors.folder>
 	</properties>
 
 	<dependencies>
@@ -71,9 +73,9 @@
 						</manifest>
 					</archive>
 					<descriptors>
-						<descriptor>dependency-descriptor.xml</descriptor>
-						<descriptor>src-descriptor.xml</descriptor>
-						<descriptor>zip-descriptor.xml</descriptor>
+						<descriptor>${build.descriptors.folder}/dependency-descriptor.xml</descriptor>
+						<descriptor>${build.descriptors.folder}/src-descriptor.xml</descriptor>
+						<descriptor>${build.descriptors.folder}/zip-descriptor.xml</descriptor>
 					</descriptors>
 					<finalName>verifier</finalName>
 				</configuration>
