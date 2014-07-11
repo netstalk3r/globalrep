@@ -1,9 +1,14 @@
 package com.akvelon.ets.verifier.util;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class Util {
 
@@ -75,6 +80,18 @@ public class Util {
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
+	}
+	
+	public static Properties loadProperties(String fileName) throws IOException {
+		BufferedReader reader = null;
+		Properties props = new Properties();
+		try {
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
+			props.load(reader);
+		} finally {
+			reader.close();
+		}
+		return props;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.akvelon.ets.verifier.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class HolidaysTest {
 	
 	@Test
 	public void testIsHoliday() {
+		assertFalse(holidays.hasMonthHolidays(Util.getToday()));
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.MONTH, Calendar.MAY);
 		assertTrue(holidays.hasMonthHolidays(cal));

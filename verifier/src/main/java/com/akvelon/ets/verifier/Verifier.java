@@ -1,10 +1,7 @@
 package com.akvelon.ets.verifier;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -151,30 +148,16 @@ public class Verifier {
 	}
 
 	private Map<String,String> loadAccounts4Verify() throws IOException {
-		BufferedReader reader = null;
-		Properties accountsProps = new Properties();
-		try {
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILE_WITH_ACCOUNTS)));
-			accountsProps.load(reader);
-		} finally {
-			reader.close();
-		}
+		Properties accountsProps = Util.loadProperties(FILE_WITH_ACCOUNTS);
 		Map<String,String> accounts = new HashMap<String,String>(accountsProps.size());
 		for (Entry<Object, Object> entry : accountsProps.entrySet()) {
-			accounts.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
+			accounts.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()).trim());
 		}
 		return accounts;
 	}
 	
 	private Map<RecipientType,String> loadRecipients() throws IOException {
-		BufferedReader reader = null;
-		Properties recipientsProps = new Properties();
-		try {
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILE_WITH_RECIPIENTS)));
-			recipientsProps.load(reader);
-		} finally {
-			reader.close();
-		}
+		Properties recipientsProps = Util.loadProperties(FILE_WITH_RECIPIENTS);
 		if (StringUtils.isBlank(recipientsProps.getProperty(Constants.RECIPIENT_TO))) {
 			throw new IllegalArgumentException("Recipiet to cannot be null. Verify " + FILE_WITH_RECIPIENTS + "file");
 		}

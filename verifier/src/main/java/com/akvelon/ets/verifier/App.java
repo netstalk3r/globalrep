@@ -1,13 +1,20 @@
 package com.akvelon.ets.verifier;
 
+import java.util.Properties;
+
+import com.akvelon.ets.verifier.util.Constants;
+import com.akvelon.ets.verifier.util.Util;
+
 public class App {
+
+	private static final String CREDENTIAL_FILE = "credentials.properties";
 
 	public static void main(String[] args) throws Exception {
 
-		if (args.length != 2)
-			throw new IllegalArgumentException("Invalid number of params: " + args.length + " Must be 2 params: login and password");
-		
+		Properties credentialProperties = Util.loadProperties(CREDENTIAL_FILE);
+
 		Verifier verifier = new Verifier();
-		verifier.verify(args[0], args[1]);
+		verifier.verify(credentialProperties.getProperty(Constants.LOGIN).trim(), credentialProperties.getProperty(Constants.PASSWORD)
+				.trim());
 	}
 }

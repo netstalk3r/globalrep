@@ -106,6 +106,7 @@
 										<include>run.bat</include>
 										<include>accounts.properties</include>
 										<include>recipients.property</include>
+										<include>credentials.properties</include>
 										<include>holidays</include>
 									</includes>
 									<filtering>true</filtering>

@@ -31,4 +31,9 @@ public class Constants {
 	
 	public static final String RECIPIENT_TO = "to";
 	public static final String RECIPIENT_CC = "cc";
+	
+	public static final String LOGIN = "login";
+	public static final String PASSWORD = "password";
+	
+	
 }

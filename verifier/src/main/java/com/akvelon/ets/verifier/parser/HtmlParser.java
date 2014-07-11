@@ -12,11 +12,11 @@ import com.akvelon.ets.verifier.util.Constants;
 
 public class HtmlParser implements Parser {
 	
+
 	private static final Logger log = Logger.getLogger(HtmlParser.class);
 	
 	private static final String LOGIN_FORM = "form[name=loginform]";
-	private static final String TOTAL_EFFORT_ID = "#totalEffort";
-	private static final String ATTRIBUTE_VALUE = "value";
+	private static final String TABLE_ROW_TOTAL_TD = ".TableRowTotal>td";
 
 	public boolean isLogin(InputStream is) throws IOException {
 		Document document = Jsoup.parse(is, IRequestSender.UTF8,Constants.REPORTED_HOURS_URL);
@@ -27,7 +27,8 @@ public class HtmlParser implements Parser {
 	public double parseReportedHours(InputStream is) throws IOException {
 		Document document = Jsoup.parse(is, IRequestSender.UTF8,Constants.REPORTED_HOURS_URL);
 		try {
-			return Double.parseDouble(document.select(TOTAL_EFFORT_ID).attr(ATTRIBUTE_VALUE));
+			// get value from the second column in the row with total values
+			return Double.parseDouble(document.select(TABLE_ROW_TOTAL_TD).get(1).text());
 		} catch (NumberFormatException ex) {
 			log.error("Number Format Exception for " + ex.getMessage() + "; -1 will be returned");
 			return -1;
