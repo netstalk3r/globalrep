@@ -20,7 +20,7 @@
         <include>*.xml</include>
         <include>build.bat</include>
         <include>run.bat</include>
-        <include>accounts.properties</include>
+        <include>*.properties</include>
         <include>holidays</include>
       </includes>
       <useDefaultExcludes>true</useDefaultExcludes>

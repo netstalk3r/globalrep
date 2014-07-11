@@ -4,7 +4,7 @@
 
 	<groupId>com.akvelon.ets</groupId>
 	<artifactId>verifier</artifactId>
-	<version>1.0.0.1</version>
+	<version>1.0.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>verifier</name>
@@ -15,11 +15,12 @@
 		<log4j.version>1.2.17</log4j.version>
 		<jsoup.version>1.7.3</jsoup.version>
 		<httpcomponents.version>4.3.3</httpcomponents.version>
+		<commons-lang.version>2.6</commons-lang.version>
 		<javaMail.version>1.4.7</javaMail.version>
 		<velocity.version>1.7</velocity.version>
 		<velocityTool.version>2.0</velocityTool.version>
 		<junit.version>4.11</junit.version>
-		
+
 		<build.descriptors.folder>build-descriptors</build.descriptors.folder>
 	</properties>
 
@@ -28,6 +29,11 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>${httpcomponents.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons-lang.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jsoup</groupId>
@@ -99,6 +105,7 @@
 									<includes>
 										<include>run.bat</include>
 										<include>accounts.properties</include>
+										<include>recipients.property</include>
 										<include>holidays</include>
 									</includes>
 									<filtering>true</filtering>

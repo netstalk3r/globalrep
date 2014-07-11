@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import javax.mail.Message.RecipientType;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.akvelon.ets.verifier.parser.HtmlParser;
@@ -32,6 +35,7 @@ public class Verifier {
 	private static final Logger log = Logger.getLogger(Verifier.class);
 	
 	private static final String FILE_WITH_ACCOUNTS = "accounts.properties";
+	private static final String FILE_WITH_RECIPIENTS = "recipients.property";
 
 	private IRequestSender requestSender;
 	private Parser parser;
@@ -97,8 +101,11 @@ public class Verifier {
 		}
 		int requiredWorkingHours = calculateWorkingHoursForMonth();
 
-		log.info("Send all hours report to " + username);
-		mailSender.sendAllHourReports(Util.convertToEmailAddress(username), requiredWorkingHours, reports);
+		log.info("Load recipients...");
+		Map<RecipientType, String> recipients = this.loadRecipients();
+		
+		log.info("Send all hours report...");
+		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);
 
 		log.info("Send missed hours reports...");
 		for (PersonalHourReport report : reports) {
@@ -157,6 +164,28 @@ public class Verifier {
 			accounts.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
 		}
 		return accounts;
+	}
+	
+	private Map<RecipientType,String> loadRecipients() throws IOException {
+		BufferedReader reader = null;
+		Properties recipientsProps = new Properties();
+		try {
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILE_WITH_RECIPIENTS)));
+			recipientsProps.load(reader);
+		} finally {
+			reader.close();
+		}
+		if (StringUtils.isBlank(recipientsProps.getProperty(Constants.RECIPIENT_TO))) {
+			throw new IllegalArgumentException("Recipiet to cannot be null. Verify " + FILE_WITH_RECIPIENTS + "file");
+		}
+		Map<RecipientType,String> recipients = new HashMap<RecipientType, String>(2);
+		log.info("TO : " + recipientsProps.getProperty(Constants.RECIPIENT_TO));
+		recipients.put(RecipientType.TO, recipientsProps.getProperty(Constants.RECIPIENT_TO));
+		if (StringUtils.isNotBlank(recipientsProps.getProperty(Constants.RECIPIENT_CC))) {
+			log.info("CC : " + recipientsProps.getProperty(Constants.RECIPIENT_CC));
+			recipients.put(RecipientType.CC, recipientsProps.getProperty(Constants.RECIPIENT_CC));
+		}
+		return recipients;
 	}
 	
 	private int calculateWorkingHoursForMonth() {

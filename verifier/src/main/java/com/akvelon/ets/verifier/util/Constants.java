@@ -28,4 +28,7 @@ public class Constants {
 	public static final String EMPTY_PARAM = "";
 	
 	public static final int RESPONSE_CODE_OK = 200;
+	
+	public static final String RECIPIENT_TO = "to";
+	public static final String RECIPIENT_CC = "cc";
 }
