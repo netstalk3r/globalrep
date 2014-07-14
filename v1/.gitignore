@@ -1,9 +1,0 @@
-/bin
-
-/lib
-/.settings
-.classpath
-.project
-**/*.csv
-**/*.xls
-**/*.jar
