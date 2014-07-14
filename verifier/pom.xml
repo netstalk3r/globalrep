@@ -4,7 +4,7 @@
 
 	<groupId>com.akvelon.ets</groupId>
 	<artifactId>verifier</artifactId>
-	<version>1.0.0.2</version>
+	<version>1.0.0.3</version>
 	<packaging>jar</packaging>
 
 	<name>verifier</name>
@@ -22,6 +22,7 @@
 		<junit.version>4.11</junit.version>
 
 		<build.descriptors.folder>build-descriptors</build.descriptors.folder>
+		<jar.name>verifier</jar.name>
 	</properties>
 
 	<dependencies>
@@ -83,7 +84,7 @@
 						<descriptor>${build.descriptors.folder}/src-descriptor.xml</descriptor>
 						<descriptor>${build.descriptors.folder}/zip-descriptor.xml</descriptor>
 					</descriptors>
-					<finalName>verifier</finalName>
+					<finalName>${jar.name}</finalName>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -105,7 +106,7 @@
 									<includes>
 										<include>run.bat</include>
 										<include>accounts.properties</include>
-										<include>recipients.property</include>
+										<include>recipients..properties</include>
 										<include>credentials.properties</include>
 										<include>holidays</include>
 									</includes>

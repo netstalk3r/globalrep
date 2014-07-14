@@ -1,2 +1,2 @@
-java -jar -cp . verifier-${project.version}.jar <ets account name> <ets password>
+java -jar -cp . ${jar.name}-${project.version}.jar
 set /p DUMMY=Hit ENTER to continue...

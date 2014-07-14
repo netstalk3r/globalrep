@@ -11,8 +11,8 @@
 	<body>
 		<h1 class="warning">ETS Missed Hours</h1>
 		<p>$dateTool.format('HH:mm, EEEEEE, d MMMM yyyy', $curDate)</p>
-		<p>You have missed hours in the ETS for this month.</p>
-		<p>Reported hours - $rep.hours<p/>
-		<p style="font-weight:bold">Required hours - $reqHours<p/>
+		<p>You have missed hours in the ETS.</p>
+		<p>Your reported hours for today - $rep.hours<p/>
+		<p style="font-weight:bold">Required hours for today - $reqHours<p/>
 	</body>
 </html>

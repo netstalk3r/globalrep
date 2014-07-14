@@ -30,9 +30,9 @@ import com.akvelon.ets.verifier.util.Util;
 public class Verifier {
 
 	private static final Logger log = Logger.getLogger(Verifier.class);
-	
+
 	private static final String FILE_WITH_ACCOUNTS = "accounts.properties";
-	private static final String FILE_WITH_RECIPIENTS = "recipients.property";
+	private static final String FILE_WITH_RECIPIENTS = "recipients.properties";
 
 	private IRequestSender requestSender;
 	private Parser parser;
@@ -58,7 +58,7 @@ public class Verifier {
 				log.error("Exit...");
 				return;
 			}
-			
+
 			InputStream is = requestSender.login(username, password);
 			try {
 				if (!parser.isLogin(is)) {
@@ -70,7 +70,7 @@ public class Verifier {
 			} finally {
 				is.close();
 			}
-			
+
 			log.info("Loading accounts...");
 			accounts = this.loadAccounts4Verify();
 
@@ -79,9 +79,9 @@ public class Verifier {
 				log.info("Exit...");
 				return;
 			}
-			
+
 			log.info("Accounts: " + accounts);
-			
+
 			reports = new ArrayList<PersonalHourReport>();
 
 			log.info("Get notified hours");
@@ -96,11 +96,11 @@ public class Verifier {
 		} finally {
 			requestSender.closeSession();
 		}
-		int requiredWorkingHours = calculateWorkingHoursForMonth();
+		int requiredWorkingHours = calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday());
 
 		log.info("Load recipients...");
 		Map<RecipientType, String> recipients = this.loadRecipients();
-		
+
 		log.info("Send all hours report...");
 		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);
 
@@ -147,21 +147,21 @@ public class Verifier {
 		return first;
 	}
 
-	private Map<String,String> loadAccounts4Verify() throws IOException {
+	private Map<String, String> loadAccounts4Verify() throws IOException {
 		Properties accountsProps = Util.loadProperties(FILE_WITH_ACCOUNTS);
-		Map<String,String> accounts = new HashMap<String,String>(accountsProps.size());
+		Map<String, String> accounts = new HashMap<String, String>(accountsProps.size());
 		for (Entry<Object, Object> entry : accountsProps.entrySet()) {
 			accounts.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()).trim());
 		}
 		return accounts;
 	}
-	
-	private Map<RecipientType,String> loadRecipients() throws IOException {
+
+	private Map<RecipientType, String> loadRecipients() throws IOException {
 		Properties recipientsProps = Util.loadProperties(FILE_WITH_RECIPIENTS);
 		if (StringUtils.isBlank(recipientsProps.getProperty(Constants.RECIPIENT_TO))) {
 			throw new IllegalArgumentException("Recipiet to cannot be null. Verify " + FILE_WITH_RECIPIENTS + "file");
 		}
-		Map<RecipientType,String> recipients = new HashMap<RecipientType, String>(2);
+		Map<RecipientType, String> recipients = new HashMap<RecipientType, String>(2);
 		log.info("TO : " + recipientsProps.getProperty(Constants.RECIPIENT_TO));
 		recipients.put(RecipientType.TO, recipientsProps.getProperty(Constants.RECIPIENT_TO));
 		if (StringUtils.isNotBlank(recipientsProps.getProperty(Constants.RECIPIENT_CC))) {
@@ -170,25 +170,26 @@ public class Verifier {
 		}
 		return recipients;
 	}
-	
-	private int calculateWorkingHoursForMonth() {
+
+	private int calculateWorkingHoursBetweenDates(Calendar startDate, Calendar endDate) {
+
+		log.info("Calculate working hours between " + Util.dateToString(startDate.getTime()) + " and "
+				+ Util.dateToString(endDate.getTime()));
 
 		int daysQuantity = 0;
-		Calendar startDate = Util.getBeginDateOfMonth();
-		Calendar endDate = Util.getEndDateOfTheMonth();
-		endDate.add(Calendar.DATE, 1);
+		System.out.println("end before " + Util.dateToString(endDate.getTime()));
+		System.out.println("end after " + Util.dateToString(endDate.getTime()));
 
-		List<Integer> weekends = Arrays.asList(Calendar.SATURDAY, Calendar.SUNDAY);
 		while (startDate.before(endDate)) {
-			if (!weekends.contains(startDate.get(Calendar.DAY_OF_WEEK))) {
+			if (!isWeekend(startDate.get(Calendar.DAY_OF_WEEK))) {
 				daysQuantity++;
 			}
+			System.out.println("start before " + Util.dateToString(startDate.getTime()));
 			startDate.add(Calendar.DATE, 1);
+			System.out.println("start after " + Util.dateToString(startDate.getTime()));
 		}
 
-		if (holidays.hasMonthHolidays(startDate)) {
-			daysQuantity -= holidays.getAmountOfHolidaysForMonth(startDate);
-		}
+		// TODO: add holidays verification from ets
 
 		log.info("Amount of working days: " + daysQuantity);
 
@@ -197,5 +198,9 @@ public class Verifier {
 		log.info("Amount of working hours: " + amountOfWorkingHours);
 
 		return amountOfWorkingHours;
+	}
+
+	private boolean isWeekend(int date) {
+		return (date == Calendar.SATURDAY) || (date == Calendar.SUNDAY);
 	}
 }

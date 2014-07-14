@@ -13,8 +13,8 @@
         <include>${project.basedir}/target/recipients.property</include>
         <include>${project.basedir}/target/holidays</include>
         <include>${project.basedir}/target/run.bat</include>
-        <include>${project.basedir}/target/${project.name}-${project.version}.jar</include>
-        <include>${project.basedir}/target/${project.name}-src-${project.version}.zip</include>
+        <include>${project.basedir}/target/${jar.name}-${project.version}.jar</include>
+        <include>${project.basedir}/target/${jar.name}-src-${project.version}.zip</include>
       </includes>
     </fileSet>
   </fileSets>

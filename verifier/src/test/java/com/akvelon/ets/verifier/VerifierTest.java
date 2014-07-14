@@ -8,18 +8,18 @@ import org.junit.Test;
 
 @Ignore
 public class VerifierTest {
-	
+
 	Verifier verifier;
 
 	@Before
 	public void setUp() throws IOException {
 		verifier = new Verifier();
 	}
-	
+
 	@Test
 	public void testCalculateWorkingHoursForMonth() {
-//		 now private
-//		System.out.println(verifier.calculateWorkingHoursForMonth());
+		// now private
+		// System.out.println(verifier.calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday()));
 	}
-	
+
 }
