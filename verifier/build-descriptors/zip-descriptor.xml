@@ -10,7 +10,7 @@
     <fileSet>
       <includes>
         <include>${project.basedir}/target/accounts.properties</include>
-        <include>${project.basedir}/target/recipients.property</include>
+        <include>${project.basedir}/target/recipients.properties</include>
         <include>${project.basedir}/target/holidays</include>
         <include>${project.basedir}/target/run.bat</include>
         <include>${project.basedir}/target/${jar.name}-${project.version}.jar</include>

@@ -14,7 +14,8 @@ public class App {
 		Properties credentialProperties = Util.loadProperties(CREDENTIAL_FILE);
 
 		Verifier verifier = new Verifier();
-		verifier.verify(credentialProperties.getProperty(Constants.LOGIN).trim(), credentialProperties.getProperty(Constants.PASSWORD)
-				.trim());
+//		verifier.verify(credentialProperties.getProperty(Constants.LOGIN).trim(), credentialProperties.getProperty(Constants.PASSWORD)
+//				.trim());
+		
 	}
 }

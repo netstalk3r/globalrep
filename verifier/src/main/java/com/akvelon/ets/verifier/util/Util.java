@@ -21,11 +21,9 @@ public class Util {
 	static {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-		removeTime(calendar);
 		beginDateOfMonth = calendar;
 		calendar = Calendar.getInstance();
 		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-		removeTime(calendar);
 		endDateOfMonth = calendar;
 	}
 
@@ -78,13 +76,6 @@ public class Util {
 
 	public static String convertToEmailAddress(String account) {
 		return account.replace("ua.", Constants.EMPTY_PARAM);
-	}
-	
-	private static void removeTime(Calendar calendar) {
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
 	}
 	
 	public static Properties loadProperties(String fileName) throws IOException {

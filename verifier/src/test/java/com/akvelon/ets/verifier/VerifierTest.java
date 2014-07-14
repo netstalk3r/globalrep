@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.akvelon.ets.verifier.util.Util;
+
 @Ignore
 public class VerifierTest {
 
@@ -19,7 +21,7 @@ public class VerifierTest {
 	@Test
 	public void testCalculateWorkingHoursForMonth() {
 		// now private
-		// System.out.println(verifier.calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday()));
+//		 System.out.println(verifier.calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday()));
 	}
 
 }

@@ -103,14 +103,14 @@ public class Verifier {
 
 		log.info("Send all hours report...");
 		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);
-
-		log.info("Send missed hours reports...");
-		for (PersonalHourReport report : reports) {
-			if (report.getHours() < requiredWorkingHours) {
-				log.info("Send to " + report.getName());
-				mailSender.sendMissedHoursReport(report.getEmail(), requiredWorkingHours, report);
-			}
-		}
+//
+//		log.info("Send missed hours reports...");
+//		for (PersonalHourReport report : reports) {
+//			if (report.getHours() < requiredWorkingHours) {
+//				log.info("Send to " + report.getName());
+//				mailSender.sendMissedHoursReport(report.getEmail(), requiredWorkingHours, report);
+//			}
+//		}
 	}
 
 	private List<PersonalHourReport> getReportedHours(Map<String, String> accounts, Map<String, String> params) throws IOException {
@@ -173,22 +173,25 @@ public class Verifier {
 
 	private int calculateWorkingHoursBetweenDates(Calendar startDate, Calendar endDate) {
 
+		boolean includeToday = this.includeToday(endDate);
+		
 		log.info("Calculate working hours between " + Util.dateToString(startDate.getTime()) + " and "
 				+ Util.dateToString(endDate.getTime()));
 
 		int daysQuantity = 0;
-		System.out.println("end before " + Util.dateToString(endDate.getTime()));
-		System.out.println("end after " + Util.dateToString(endDate.getTime()));
 
 		while (startDate.before(endDate)) {
 			if (!isWeekend(startDate.get(Calendar.DAY_OF_WEEK))) {
 				daysQuantity++;
 			}
-			System.out.println("start before " + Util.dateToString(startDate.getTime()));
 			startDate.add(Calendar.DATE, 1);
-			System.out.println("start after " + Util.dateToString(startDate.getTime()));
 		}
 
+		log.info("This day is" + (includeToday ? "" : " not") + " included.");
+		if (includeToday) {
+			daysQuantity--;
+		}
+		
 		// TODO: add holidays verification from ets
 
 		log.info("Amount of working days: " + daysQuantity);
@@ -202,5 +205,9 @@ public class Verifier {
 
 	private boolean isWeekend(int date) {
 		return (date == Calendar.SATURDAY) || (date == Calendar.SUNDAY);
+	}
+	
+	private boolean includeToday(Calendar today) {
+		return today.get(Calendar.AM_PM) == Calendar.PM ? today.get(Calendar.HOUR) >= 7 : false;
 	}
 }
