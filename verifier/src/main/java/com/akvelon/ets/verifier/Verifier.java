@@ -49,7 +49,13 @@ public class Verifier {
 	@SuppressWarnings("unchecked")
 	public void verify(String username, String password) throws IOException {
 
-		Map<String, String> accounts = null;
+		log.info("Loading accounts...");
+		Map<String, String> accounts = this.loadAccounts4Verify();
+		log.info("Accounts: " + accounts);
+		
+		log.info("Load recipients...");
+		Map<RecipientType, String> recipients = this.loadRecipients();
+		
 		List<PersonalHourReport> reports = null;
 
 		try {
@@ -71,16 +77,11 @@ public class Verifier {
 				is.close();
 			}
 
-			log.info("Loading accounts...");
-			accounts = this.loadAccounts4Verify();
-
 			if (accounts.size() == 0) {
 				log.info("No accounts available....");
 				log.info("Exit...");
 				return;
 			}
-
-			log.info("Accounts: " + accounts);
 
 			reports = new ArrayList<PersonalHourReport>();
 
@@ -98,19 +99,16 @@ public class Verifier {
 		}
 		int requiredWorkingHours = calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday());
 
-		log.info("Load recipients...");
-		Map<RecipientType, String> recipients = this.loadRecipients();
-
 		log.info("Send all hours report...");
 		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);
-//
-//		log.info("Send missed hours reports...");
-//		for (PersonalHourReport report : reports) {
-//			if (report.getHours() < requiredWorkingHours) {
-//				log.info("Send to " + report.getName());
-//				mailSender.sendMissedHoursReport(report.getEmail(), requiredWorkingHours, report);
-//			}
-//		}
+
+		log.info("Send missed hours reports...");
+		for (PersonalHourReport report : reports) {
+			if (report.getHours() < requiredWorkingHours) {
+				log.info("Send to " + report.getName());
+				mailSender.sendMissedHoursReport(report.getEmail(), requiredWorkingHours, report);
+			}
+		}
 	}
 
 	private List<PersonalHourReport> getReportedHours(Map<String, String> accounts, Map<String, String> params) throws IOException {
@@ -171,7 +169,7 @@ public class Verifier {
 		return recipients;
 	}
 
-	private int calculateWorkingHoursBetweenDates(Calendar startDate, Calendar endDate) {
+	public int calculateWorkingHoursBetweenDates(Calendar startDate, Calendar endDate) {
 
 		boolean includeToday = this.includeToday(endDate);
 		
@@ -179,6 +177,12 @@ public class Verifier {
 				+ Util.dateToString(endDate.getTime()));
 
 		int daysQuantity = 0;
+		
+		if (holidays.hasMonthHolidays(startDate)) {
+			daysQuantity -= holidays.getAmountOfHolidaysBetweenDatesWithinMonth(startDate, endDate);
+		}
+		
+		endDate.add(Calendar.DATE, 1);
 
 		while (startDate.before(endDate)) {
 			if (!isWeekend(startDate.get(Calendar.DAY_OF_WEEK))) {
@@ -188,11 +192,10 @@ public class Verifier {
 		}
 
 		log.info("This day is" + (includeToday ? "" : " not") + " included.");
-		if (includeToday) {
+		if (!includeToday) {
 			daysQuantity--;
 		}
 		
-		// TODO: add holidays verification from ets
 
 		log.info("Amount of working days: " + daysQuantity);
 
@@ -207,6 +210,7 @@ public class Verifier {
 		return (date == Calendar.SATURDAY) || (date == Calendar.SUNDAY);
 	}
 	
+	// if the current time is 7 PM or later  this day is included to count of working hours
 	private boolean includeToday(Calendar today) {
 		return today.get(Calendar.AM_PM) == Calendar.PM ? today.get(Calendar.HOUR) >= 7 : false;
 	}

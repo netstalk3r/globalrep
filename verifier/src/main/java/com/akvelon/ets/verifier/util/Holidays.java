@@ -52,8 +52,15 @@ public class Holidays {
 		return holidays.keySet().contains(Integer.valueOf(month.get(Calendar.MONTH)));
 	}
 	
-	public int getAmountOfHolidaysForMonth(Calendar month) {
-		return holidays.get(Integer.valueOf(month.get(Calendar.MONTH))).size();
+	public int getAmountOfHolidaysBetweenDatesWithinMonth(Calendar from, Calendar to) {
+		List<Integer> holidayDates = holidays.get(Integer.valueOf(from.get(Calendar.MONTH)));
+		int amountOfDaysOff = 0;
+		for (Integer dayOff : holidayDates) {
+			if (from.get(Calendar.DATE) <= dayOff && dayOff <= to.get(Calendar.DATE)) {
+				amountOfDaysOff++;
+			}
+		}
+		return amountOfDaysOff;
 	}
 	
 	public Map<Integer,List<Integer>> getHolidays() {

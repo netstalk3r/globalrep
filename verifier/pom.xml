@@ -4,7 +4,7 @@
 
 	<groupId>com.akvelon.ets</groupId>
 	<artifactId>verifier</artifactId>
-	<version>1.0.0.3</version>
+	<version>1.0.0.4</version>
 	<packaging>jar</packaging>
 
 	<name>verifier</name>
@@ -82,7 +82,6 @@
 					<descriptors>
 						<descriptor>${build.descriptors.folder}/dependency-descriptor.xml</descriptor>
 						<descriptor>${build.descriptors.folder}/src-descriptor.xml</descriptor>
-						<descriptor>${build.descriptors.folder}/zip-descriptor.xml</descriptor>
 					</descriptors>
 					<finalName>${jar.name}</finalName>
 				</configuration>
