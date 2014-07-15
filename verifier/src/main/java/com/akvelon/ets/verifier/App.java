@@ -1,6 +1,5 @@
 package com.akvelon.ets.verifier;
 
-import java.io.BufferedInputStream;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -17,17 +16,10 @@ public class App {
 
 	public static void main(String[] args) throws Exception {
 
-		Properties versionProps = new Properties();
-		BufferedInputStream is = null;
-		try {
-			is = new BufferedInputStream(App.class.getClassLoader().getResourceAsStream(VERSION_FILE));
-			versionProps.load(is);
-		} finally {
-			is.close();
-		}
+		Properties versionProps = Util.loadInternalProperties(VERSION_FILE);
 
-		log.info("ETS verifier v" + versionProps.getProperty("project.version"));
-		log.info("ETS verifier build number " + versionProps.getProperty("build.number"));
+		log.info("ETS verifier v" + versionProps.getProperty(Constants.PROJECT_VERSION));
+		log.info("ETS verifier build number " + versionProps.getProperty(Constants.BUILD_NUMBER));
 
 		log.info("Load credentials...");
 		Properties credentialProperties = Util.loadProperties(CREDENTIAL_FILE);

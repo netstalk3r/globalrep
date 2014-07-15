@@ -35,5 +35,7 @@ public class Constants {
 	public static final String LOGIN = "login";
 	public static final String PASSWORD = "password";
 	
+	public static final String PROJECT_VERSION = "project.version";
+	public static final String BUILD_NUMBER = "build.number";
 	
 }

@@ -1,5 +1,6 @@
 package com.akvelon.ets.verifier.util;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -86,6 +87,18 @@ public class Util {
 			props.load(reader);
 		} finally {
 			reader.close();
+		}
+		return props;
+	}
+	
+	public static Properties loadInternalProperties(String fileName) throws IOException {
+		BufferedInputStream is = null;
+		Properties props = new Properties();
+		try {
+			is = new BufferedInputStream(Util.class.getClassLoader().getResourceAsStream(fileName));
+			props.load(is);
+		} finally {
+			is.close();
 		}
 		return props;
 	}
