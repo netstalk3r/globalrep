@@ -52,9 +52,7 @@ public class Verifier {
 		log.info("Loading accounts...");
 		Map<String, String> accounts = this.loadAccounts4Verify();
 		
-		if (accounts.size() == 0) {
-			log.info("No accounts available....");
-			log.info("Exit...");
+		if (this.isEmptyMap(accounts,"accounts")) {
 			return;
 		}
 		
@@ -62,6 +60,10 @@ public class Verifier {
 		
 		log.info("Load recipients...");
 		Map<RecipientType, String> recipients = this.loadRecipients();
+		
+		if (this.isEmptyMap(recipients,"recipients")) {
+			return;
+		}
 		
 		List<PersonalHourReport> reports = null;
 
@@ -170,7 +172,16 @@ public class Verifier {
 		return recipients;
 	}
 
-	public int calculateWorkingHoursBetweenDates(Calendar startDate, Calendar endDate) {
+	private boolean isEmptyMap(Map<?,?> map, String message) {
+		boolean isEmpty = map.isEmpty();
+		if (isEmpty) {
+			log.info("No " + message + " available....");
+			log.info("Exit...");
+		}
+		return isEmpty;
+	}
+	
+	private int calculateWorkingHoursBetweenDates(Calendar startDate, Calendar endDate) {
 
 		boolean includeToday = this.includeToday(endDate);
 		
