@@ -51,6 +51,13 @@ public class Verifier {
 
 		log.info("Loading accounts...");
 		Map<String, String> accounts = this.loadAccounts4Verify();
+		
+		if (accounts.size() == 0) {
+			log.info("No accounts available....");
+			log.info("Exit...");
+			return;
+		}
+		
 		log.info("Accounts: " + accounts);
 		
 		log.info("Load recipients...");
@@ -75,12 +82,6 @@ public class Verifier {
 				log.info("Login succeed...");
 			} finally {
 				is.close();
-			}
-
-			if (accounts.size() == 0) {
-				log.info("No accounts available....");
-				log.info("Exit...");
-				return;
 			}
 
 			reports = new ArrayList<PersonalHourReport>();
