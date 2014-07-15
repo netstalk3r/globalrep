@@ -1,2 +1,3 @@
+mode con:cols=160 lines=40
 java -jar -cp . ${jar.name}-${project.version}.${buildNumber}.jar
 set /p DUMMY=Hit ENTER to continue...
