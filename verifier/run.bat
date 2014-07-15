@@ -1,2 +1,2 @@
-java -jar -cp . ${jar.name}-${project.version}.jar
+java -jar -cp . ${jar.name}-${project.version}.${buildNumber}.jar
 set /p DUMMY=Hit ENTER to continue...
