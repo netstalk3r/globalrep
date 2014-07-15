@@ -10,7 +10,7 @@
     <fileSet>
       <directory>${project.basedir}</directory>
       <excludes>
-      	<exclude>*-reduced-pom.xml</exclude>
+      	<exclude>buildNumber.properties</exclude>
       </excludes>
       <includes>
       	<include>${build.descriptors.folder}/*</include>
