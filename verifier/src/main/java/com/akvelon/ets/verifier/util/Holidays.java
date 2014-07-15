@@ -37,7 +37,7 @@ public class Holidays {
 		String[] dates = out.toString().split(DELIMETER_FOR_DATES);
 		for (String date : dates) {
 			String[] splittedDate = date.split(DELIMETER_FOR_DATE);
-			int month = Integer.parseInt(splittedDate[1]);
+			int month = Integer.parseInt(splittedDate[1]) - 1;
 			if (holidays.get(month) == null) {
 				List<Integer> days = new ArrayList<Integer>(3);
 				days.add(Integer.parseInt(splittedDate[0]));
