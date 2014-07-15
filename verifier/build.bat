@@ -1,2 +1,2 @@
-mvn clean compile assembly:single
+call mvn clean compile assembly:single
 set /p DUMMY=Hit ENTER to continue...
