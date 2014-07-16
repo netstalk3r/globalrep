@@ -15,14 +15,14 @@ import javax.mail.Message.RecipientType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import com.akvelon.verifier.parser.HtmlParser;
-import com.akvelon.verifier.parser.Parser;
-import com.akvelon.verifier.reports.PersonalHourReport;
-import com.akvelon.verifier.senders.IMailSender;
-import com.akvelon.verifier.senders.IRequestSender;
-import com.akvelon.verifier.senders.RequestSender;
-import com.akvelon.verifier.util.Constants;
-import com.akvelon.verifier.util.Util;
+import com.akvelon.verifiers.parser.ETSParser;
+import com.akvelon.verifiers.parser.HtmlParser;
+import com.akvelon.verifiers.reports.ETSHourReport;
+import com.akvelon.verifiers.senders.ETSRequestSender;
+import com.akvelon.verifiers.senders.IETSRequestSender;
+import com.akvelon.verifiers.senders.IMailSender;
+import com.akvelon.verifiers.util.Constants;
+import com.akvelon.verifiers.util.Util;
 
 public class ETSVerifier {
 
@@ -31,12 +31,12 @@ public class ETSVerifier {
 	private static final String FILE_WITH_ACCOUNTS = "accounts.properties";
 	private static final String FILE_WITH_RECIPIENTS = "recipients.properties";
 
-	private IRequestSender requestSender;
-	private Parser parser;
+	private IETSRequestSender requestSender;
+	private ETSParser parser;
 	private IMailSender mailSender;
 
 	public ETSVerifier() throws IOException {
-		requestSender = new RequestSender();
+		requestSender = new ETSRequestSender();
 		parser = new HtmlParser();
 	}
 
@@ -63,7 +63,7 @@ public class ETSVerifier {
 			return;
 		}
 		
-		List<PersonalHourReport> reports = null;
+		List<ETSHourReport> reports = null;
 
 		try {
 			if (Constants.RESPONSE_CODE_OK != requestSender.openSession()) {
@@ -84,15 +84,15 @@ public class ETSVerifier {
 				is.close();
 			}
 
-			reports = new ArrayList<PersonalHourReport>();
+			reports = new ArrayList<ETSHourReport>();
 
 			log.info("Get notified hours");
 			Map<String, String> params = Util.getDefaultRequestParams();
-			List<PersonalHourReport> notifiedHours = this.getReportedHours(accounts, params);
+			List<ETSHourReport> notifiedHours = this.getReportedHours(accounts, params);
 
 			log.info("Get accepted hours");
 			params.put(Constants.STATUS, Constants.STATUS_ACCEPTED_OPTION);
-			List<PersonalHourReport> acceptedHours = this.getReportedHours(accounts, params);
+			List<ETSHourReport> acceptedHours = this.getReportedHours(accounts, params);
 
 			reports = this.getAllHours(Arrays.asList(notifiedHours, acceptedHours));
 		} finally {
@@ -112,14 +112,14 @@ public class ETSVerifier {
 //		}
 	}
 
-	private List<PersonalHourReport> getReportedHours(Map<String, String> accounts, Map<String, String> params) throws IOException {
-		List<PersonalHourReport> reports = new ArrayList<PersonalHourReport>();
+	private List<ETSHourReport> getReportedHours(Map<String, String> accounts, Map<String, String> params) throws IOException {
+		List<ETSHourReport> reports = new ArrayList<ETSHourReport>();
 		InputStream html = null;
-		PersonalHourReport report;
+		ETSHourReport report;
 		for (Entry<String, String> account : accounts.entrySet()) {
 			params.put(Constants.ACCOUNT, account.getKey());
 			html = requestSender.sendRequest(Constants.REPORTED_HOURS_URL, params);
-			report = new PersonalHourReport();
+			report = new ETSHourReport();
 			report.setName(account.getValue());
 			report.setEmail(Util.convertToEmailAddress(account.getKey()));
 			report.setHours(parser.parseReportedHours(html));
@@ -130,16 +130,16 @@ public class ETSVerifier {
 		return reports;
 	}
 
-	private List<PersonalHourReport> getAllHours(List<List<PersonalHourReport>> allReports) {
+	private List<ETSHourReport> getAllHours(List<List<ETSHourReport>> allReports) {
 		if (allReports.size() == 0)
 			throw new IllegalStateException("No reports to connect!");
 		if (allReports.size() == 1)
 			return allReports.get(0);
-		List<PersonalHourReport> first = allReports.get(0);
+		List<ETSHourReport> first = allReports.get(0);
 		for (int i = 1; i < allReports.size(); i++) {
-			for (PersonalHourReport hourReport : allReports.get(i)) {
+			for (ETSHourReport hourReport : allReports.get(i)) {
 				int index = first.indexOf(hourReport);
-				PersonalHourReport personalHourReport = first.get(index);
+				ETSHourReport personalHourReport = first.get(index);
 				personalHourReport.setHours(personalHourReport.getHours() + hourReport.getHours());
 			}
 		}

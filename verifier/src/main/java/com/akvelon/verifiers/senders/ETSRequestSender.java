@@ -1,4 +1,4 @@
-package com.akvelon.verifier.senders;
+package com.akvelon.verifiers.senders;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -17,9 +17,9 @@ import javax.net.ssl.HttpsURLConnection;
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 import org.apache.log4j.Logger;
 
-public class RequestSender implements IRequestSender {
+public class ETSRequestSender implements IETSRequestSender {
 
-	private static final Logger log = Logger.getLogger(RequestSender.class);
+	private static final Logger log = Logger.getLogger(ETSRequestSender.class);
 
 	private static final String CONNECTION = "keep-alive";
 	private static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
@@ -44,7 +44,7 @@ public class RequestSender implements IRequestSender {
 	
 	private static final int OK_RESPONSE_CODE = 200;
 
-	public RequestSender() {
+	public ETSRequestSender() {
 		CookieHandler.setDefault(new CookieManager());
 	}
 

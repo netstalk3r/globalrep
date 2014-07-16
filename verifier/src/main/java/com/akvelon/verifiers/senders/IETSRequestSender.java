@@ -1,10 +1,10 @@
-package com.akvelon.verifier.senders;
+package com.akvelon.verifiers.senders;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-public interface IRequestSender {
+public interface IETSRequestSender {
 	
 	String UTF8 = "UTF-8";
 

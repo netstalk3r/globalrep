@@ -6,7 +6,7 @@ import java.util.Calendar;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.akvelon.verifier.util.Util;
+import com.akvelon.verifiers.util.Util;
 
 @Ignore
 public class UtilTest {

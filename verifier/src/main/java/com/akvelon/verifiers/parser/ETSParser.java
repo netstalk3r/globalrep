@@ -1,9 +1,9 @@
-package com.akvelon.verifier.parser;
+package com.akvelon.verifiers.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-public interface Parser {
+public interface ETSParser {
 
 	public boolean isLogin(InputStream is) throws IOException;
 

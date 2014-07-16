@@ -1,4 +1,4 @@
-package com.akvelon.verifier.util;
+package com.akvelon.verifiers.util;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

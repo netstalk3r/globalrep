@@ -1,12 +1,12 @@
-package com.akvelon.verifier.reports;
+package com.akvelon.verifiers.reports;
 
-public class PersonalHourReport {
+public class ETSHourReport {
 
 	private String name;
 	private String email;
 	private double hours;
 
-	public PersonalHourReport() {
+	public ETSHourReport() {
 		super();
 	}
 
@@ -51,7 +51,7 @@ public class PersonalHourReport {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PersonalHourReport other = (PersonalHourReport) obj;
+		ETSHourReport other = (ETSHourReport) obj;
 		if (email == null) {
 			if (other.email != null)
 				return false;

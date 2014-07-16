@@ -1,4 +1,4 @@
-package com.akvelon.verifier.util;
+package com.akvelon.verifiers.util;
 
 import java.io.StringWriter;
 import java.util.Date;
@@ -14,7 +14,7 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.tools.generic.DateTool;
 
-import com.akvelon.verifier.reports.PersonalHourReport;
+import com.akvelon.verifiers.reports.ETSHourReport;
 
 public class TemplateUtil {
 	
@@ -32,7 +32,7 @@ public class TemplateUtil {
 		velocityEng.init();
 	}
 	
-	public static String getTemplateForAllReportedHours(List<PersonalHourReport> reports, int requiredHours) {
+	public static String getTemplateForAllReportedHours(List<ETSHourReport> reports, int requiredHours) {
 		Map<String,Object> contextParams = new HashMap<String, Object>(2);
 		contextParams.put("reps", reports);
 		contextParams.put("reqHours", requiredHours);
@@ -40,7 +40,7 @@ public class TemplateUtil {
 		return getTemplate(ALL_HOURS_REPORTS,contextParams);
 	}
 
-	public static String getTemplateForMissedHours(PersonalHourReport report, int requiredHours) {
+	public static String getTemplateForMissedHours(ETSHourReport report, int requiredHours) {
 		Map<String,Object> contextParams = new HashMap<String, Object>(2);
 		contextParams.put("rep", report);
 		contextParams.put("reqHours", requiredHours);

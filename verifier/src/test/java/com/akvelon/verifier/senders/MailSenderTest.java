@@ -5,9 +5,9 @@ import java.util.Arrays;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.akvelon.verifier.reports.PersonalHourReport;
-import com.akvelon.verifier.senders.IMailSender;
-import com.akvelon.verifier.senders.MailSender;
+import com.akvelon.verifiers.reports.ETSHourReport;
+import com.akvelon.verifiers.senders.IMailSender;
+import com.akvelon.verifiers.senders.MailSender;
 
 @Ignore
 public class MailSenderTest {
@@ -16,11 +16,11 @@ public class MailSenderTest {
 	
 	@Test
 	public void testSendAllHourReports_hp(){
-		PersonalHourReport rep1 = new PersonalHourReport();
+		ETSHourReport rep1 = new ETSHourReport();
 		rep1.setName("person1");
 		rep1.setEmail("email@asd");
 		rep1.setHours(12.5);
-		PersonalHourReport rep2 = new PersonalHourReport();
+		ETSHourReport rep2 = new ETSHourReport();
 		rep2.setName("person2");
 		rep2.setEmail("email2@asd");
 		rep2.setHours(2.5);
@@ -30,7 +30,7 @@ public class MailSenderTest {
 	
 	@Test
 	public void testSendMissedHoursReport_hp() {
-		PersonalHourReport rep1 = new PersonalHourReport();
+		ETSHourReport rep1 = new ETSHourReport();
 		rep1.setName("person1");
 		rep1.setEmail("email@asd");
 		rep1.setHours(12.5);

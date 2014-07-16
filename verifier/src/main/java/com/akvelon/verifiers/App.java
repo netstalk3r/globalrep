@@ -4,10 +4,10 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.akvelon.verifier.senders.IMailSender;
-import com.akvelon.verifier.senders.MailSender;
-import com.akvelon.verifier.util.Constants;
-import com.akvelon.verifier.util.Util;
+import com.akvelon.verifiers.senders.IMailSender;
+import com.akvelon.verifiers.senders.MailSender;
+import com.akvelon.verifiers.util.Constants;
+import com.akvelon.verifiers.util.Util;
 
 public class App {
 
