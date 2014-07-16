@@ -5,6 +5,6 @@ import java.io.InputStream;
 
 public interface IV1RequestSender {
 	
-	InputStream sendRequest(String urlWithParams) throws IOException;
+	InputStream sendRequest(String login, String password, String urlWithParams) throws IOException;
 
 }
