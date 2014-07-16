@@ -1,4 +1,4 @@
-package com.akvelon.ets.verifier;
+package com.akvelon.verifier;
 
 import java.io.IOException;
 
@@ -6,16 +6,17 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.akvelon.ets.verifier.util.Util;
+import com.akvelon.verifier.util.Util;
+import com.akvelon.verifiers.ETSVerifier;
 
 @Ignore
 public class VerifierTest {
 
-	Verifier verifier;
+	ETSVerifier verifier;
 
 	@Before
 	public void setUp() throws IOException {
-		verifier = new Verifier();
+		verifier = new ETSVerifier();
 	}
 
 	@Test

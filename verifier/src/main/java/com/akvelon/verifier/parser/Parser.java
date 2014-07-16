@@ -1,4 +1,4 @@
-package com.akvelon.ets.verifier.parser;
+package com.akvelon.verifier.parser;
 
 import java.io.IOException;
 import java.io.InputStream;

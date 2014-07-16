@@ -1,4 +1,4 @@
-package com.akvelon.ets.verifier.util;
+package com.akvelon.verifier.util;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -9,6 +9,9 @@ import java.util.Calendar;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import com.akvelon.verifier.util.Holidays;
+import com.akvelon.verifier.util.Util;
 
 @Ignore
 public class HolidaysTest {

@@ -1,8 +1,8 @@
-package com.akvelon.ets.verifier.senders;
+package com.akvelon.verifier.senders;
 
 import java.util.List;
 
-import com.akvelon.ets.verifier.reports.PersonalHourReport;
+import com.akvelon.verifier.reports.PersonalHourReport;
 
 public interface IMailSender {
 	

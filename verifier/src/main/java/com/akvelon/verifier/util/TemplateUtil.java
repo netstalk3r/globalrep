@@ -1,4 +1,4 @@
-package com.akvelon.ets.verifier.util;
+package com.akvelon.verifier.util;
 
 import java.io.StringWriter;
 import java.util.Date;
@@ -14,7 +14,7 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.tools.generic.DateTool;
 
-import com.akvelon.ets.verifier.reports.PersonalHourReport;
+import com.akvelon.verifier.reports.PersonalHourReport;
 
 public class TemplateUtil {
 	

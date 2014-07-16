@@ -1,4 +1,4 @@
-package com.akvelon.ets.verifier.util;
+package com.akvelon.verifier.util;
 
 public class Constants {
 

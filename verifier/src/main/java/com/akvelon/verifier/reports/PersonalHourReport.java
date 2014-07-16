@@ -1,4 +1,4 @@
-package com.akvelon.ets.verifier.reports;
+package com.akvelon.verifier.reports;
 
 public class PersonalHourReport {
 

@@ -1,11 +1,13 @@
-package com.akvelon.ets.verifier.senders;
+package com.akvelon.verifier.senders;
 
 import java.util.Arrays;
 
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.akvelon.ets.verifier.reports.PersonalHourReport;
+import com.akvelon.verifier.reports.PersonalHourReport;
+import com.akvelon.verifier.senders.IMailSender;
+import com.akvelon.verifier.senders.MailSender;
 
 @Ignore
 public class MailSenderTest {

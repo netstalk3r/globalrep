@@ -1,4 +1,4 @@
-package com.akvelon.ets.verifier.senders;
+package com.akvelon.verifier.senders;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

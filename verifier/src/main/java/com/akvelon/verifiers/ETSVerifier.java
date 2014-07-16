@@ -1,4 +1,4 @@
-package com.akvelon.ets.verifier;
+package com.akvelon.verifiers;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,20 +16,20 @@ import javax.mail.Message.RecipientType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import com.akvelon.ets.verifier.parser.HtmlParser;
-import com.akvelon.ets.verifier.parser.Parser;
-import com.akvelon.ets.verifier.reports.PersonalHourReport;
-import com.akvelon.ets.verifier.senders.IMailSender;
-import com.akvelon.ets.verifier.senders.IRequestSender;
-import com.akvelon.ets.verifier.senders.MailSender;
-import com.akvelon.ets.verifier.senders.RequestSender;
-import com.akvelon.ets.verifier.util.Constants;
-import com.akvelon.ets.verifier.util.Holidays;
-import com.akvelon.ets.verifier.util.Util;
+import com.akvelon.verifier.parser.HtmlParser;
+import com.akvelon.verifier.parser.Parser;
+import com.akvelon.verifier.reports.PersonalHourReport;
+import com.akvelon.verifier.senders.IMailSender;
+import com.akvelon.verifier.senders.IRequestSender;
+import com.akvelon.verifier.senders.MailSender;
+import com.akvelon.verifier.senders.RequestSender;
+import com.akvelon.verifier.util.Constants;
+import com.akvelon.verifier.util.Holidays;
+import com.akvelon.verifier.util.Util;
 
-public class Verifier {
+public class ETSVerifier {
 
-	private static final Logger log = Logger.getLogger(Verifier.class);
+	private static final Logger log = Logger.getLogger(ETSVerifier.class);
 
 	private static final String FILE_WITH_ACCOUNTS = "accounts.properties";
 	private static final String FILE_WITH_RECIPIENTS = "recipients.properties";
@@ -39,7 +39,7 @@ public class Verifier {
 	private Holidays holidays;
 	private IMailSender mailSender;
 
-	public Verifier() throws IOException {
+	public ETSVerifier() throws IOException {
 		requestSender = new RequestSender();
 		parser = new HtmlParser();
 		holidays = new Holidays();
@@ -103,15 +103,15 @@ public class Verifier {
 		int requiredWorkingHours = calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday());
 
 		log.info("Send all hours report...");
-		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);
-
-		log.info("Send missed hours reports...");
-		for (PersonalHourReport report : reports) {
-			if (report.getHours() < requiredWorkingHours) {
-				log.info("Send to " + report.getName());
-				mailSender.sendMissedHoursReport(report.getEmail(), requiredWorkingHours, report);
-			}
-		}
+//		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);
+//
+//		log.info("Send missed hours reports...");
+//		for (PersonalHourReport report : reports) {
+//			if (report.getHours() < requiredWorkingHours) {
+//				log.info("Send to " + report.getName());
+//				mailSender.sendMissedHoursReport(report.getEmail(), requiredWorkingHours, report);
+//			}
+//		}
 	}
 
 	private List<PersonalHourReport> getReportedHours(Map<String, String> accounts, Map<String, String> params) throws IOException {

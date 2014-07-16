@@ -1,4 +1,4 @@
-package com.akvelon.ets.verifier.parser;
+package com.akvelon.verifier.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import com.akvelon.ets.verifier.senders.IRequestSender;
-import com.akvelon.ets.verifier.util.Constants;
+import com.akvelon.verifier.senders.IRequestSender;
+import com.akvelon.verifier.util.Constants;
 
 public class HtmlParser implements Parser {
 	

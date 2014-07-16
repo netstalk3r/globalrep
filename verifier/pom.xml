@@ -90,7 +90,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.akvelon.ets.verifier.App</mainClass>
+							<mainClass>com.akvelon.verifiers.App</mainClass>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 						</manifest>
 						<manifestEntries>
