@@ -20,7 +20,6 @@ import com.akvelon.verifiers.parser.HtmlParser;
 import com.akvelon.verifiers.reports.ETSHourReport;
 import com.akvelon.verifiers.senders.ETSRequestSender;
 import com.akvelon.verifiers.senders.IETSRequestSender;
-import com.akvelon.verifiers.senders.IMailSender;
 import com.akvelon.verifiers.util.Constants;
 import com.akvelon.verifiers.util.Util;
 
@@ -33,25 +32,20 @@ public class ETSVerifier {
 
 	private IETSRequestSender requestSender;
 	private ETSParser parser;
-	private IMailSender mailSender;
 
 	public ETSVerifier() throws IOException {
 		requestSender = new ETSRequestSender();
 		parser = new HtmlParser();
 	}
 
-	public void setMailSender(IMailSender mailSender) {
-		this.mailSender = mailSender;
-	}
-
 	@SuppressWarnings("unchecked")
-	public void verify(String username, String password) throws IOException {
+	public List<ETSHourReport> verify(String username, String password) throws IOException {
 
 		log.info("Loading accounts...");
 		Map<String, String> accounts = this.loadAccounts4Verify();
 		
 		if (this.isEmptyMap(accounts,"accounts")) {
-			return;
+			return null;
 		}
 		
 		log.info("Accounts: " + accounts);
@@ -60,18 +54,16 @@ public class ETSVerifier {
 		Map<RecipientType, String> recipients = this.loadRecipients();
 		
 		if (this.isEmptyMap(recipients,"recipients")) {
-			return;
+			return null;
 		}
 		
-		List<ETSHourReport> reports = null;
-
 		boolean isLogin = false;
 		
 		try {
 			if (Constants.RESPONSE_CODE_OK != requestSender.openSession()) {
 				log.error("Server response code is not OK!");
 				log.error("Exit...");
-				return;
+				return null;
 			}
 
 			InputStream is = requestSender.login(username, password);
@@ -80,15 +72,13 @@ public class ETSVerifier {
 				if (!isLogin) {
 					log.error("Login failed...");
 					log.error("Exit...");
-					return;
+					return null;
 				}
 				log.info("Login succeed...");
 			} finally {
 				is.close();
 			}
-
-			reports = new ArrayList<ETSHourReport>();
-
+			
 			log.info("Get notified hours");
 			Map<String, String> params = Util.getDefaultRequestParams();
 			List<ETSHourReport> notifiedHours = this.getReportedHours(accounts, params);
@@ -97,24 +87,25 @@ public class ETSVerifier {
 			params.put(Constants.STATUS, Constants.STATUS_ACCEPTED_OPTION);
 			List<ETSHourReport> acceptedHours = this.getReportedHours(accounts, params);
 
-			reports = this.getAllHours(Arrays.asList(notifiedHours, acceptedHours));
+			return this.getAllHours(Arrays.asList(notifiedHours, acceptedHours));
 		} finally {
 			if (isLogin) {
 				requestSender.closeSession();
 			}
 		}
-		int requiredWorkingHours = Util.calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday(),Constants.ETS_HOURS_PER_DAY);
-
-		log.info("Send all hours report...");
-		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);
-
-		log.info("Send missed hours reports...");
-		for (ETSHourReport report : reports) {
-			if (report.getHours() < requiredWorkingHours) {
-				log.info("Send to " + report.getName());
-				mailSender.sendMissedHoursReport(report.getEmail(), requiredWorkingHours, report);
-			}
-		}
+		
+//		int requiredWorkingHours = Util.calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday(),Constants.ETS_HOURS_PER_DAY);
+//
+//		log.info("Send all hours report...");
+//		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);
+//
+//		log.info("Send missed hours reports...");
+//		for (ETSHourReport report : reports) {
+//			if (report.getHours() < requiredWorkingHours) {
+//				log.info("Send to " + report.getName());
+//				mailSender.sendMissedHoursReport(report.getEmail(), requiredWorkingHours, report);
+//			}
+//		}
 	}
 
 	private List<ETSHourReport> getReportedHours(Map<String, String> accounts, Map<String, String> params) throws IOException {

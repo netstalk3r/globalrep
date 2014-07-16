@@ -36,7 +36,6 @@ public class DomParser implements V1Parser {
 	@Override
 	public Calendar parseSprintStartDate(InputStream is) throws Exception {
 		Document doc = db.parse(is);
-		is.close();
 		NodeList nodes = doc.getElementsByTagName("Attribute");
 
 		if (nodes.getLength() == 0) {
@@ -54,7 +53,6 @@ public class DomParser implements V1Parser {
 	@Override
 	public List<V1HourReport> parseReportedHours(InputStream is) throws Exception {
 		Document doc = db.parse(is);
-		is.close();
 		NodeList nodes = doc.getElementsByTagName("Asset");
 
 		if (nodes.getLength() == 0) {

@@ -54,11 +54,9 @@ public class V1HourReport {
 		return true;
 	}
 
-
 	@Override
 	public String toString() {
-		return "V1HourReport [name=" + name + ", requiredHours=" + reportedHours + "]";
+		return "V1HourReport [name=" + name + ", reportedHours=" + reportedHours + "]";
 	}
-	
 
 }
