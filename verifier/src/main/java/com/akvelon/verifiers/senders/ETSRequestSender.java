@@ -17,6 +17,9 @@ import javax.net.ssl.HttpsURLConnection;
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 import org.apache.log4j.Logger;
 
+import com.akvelon.verifiers.util.Constants;
+
+
 public class ETSRequestSender implements IETSRequestSender {
 
 	private static final Logger log = Logger.getLogger(ETSRequestSender.class);
@@ -27,9 +30,6 @@ public class ETSRequestSender implements IETSRequestSender {
 	private static final String HOST = "ua.ets.akvelon.com";
 	private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0";
 	private static final String ACCEPT_LANGUAGE = "en-US,en;q=0.5";
-
-	private static final String POST_REQUEST = "POST";
-	private static final String GET_REQUEST = "GET";
 
 	private static final String URL_MAIN = "https://ua.ets.akvelon.com";
 	private static final String URL_LOGON = "https://ua.ets.akvelon.com/logon.ets";
@@ -52,7 +52,7 @@ public class ETSRequestSender implements IETSRequestSender {
 
 		log.debug("Send request -> Url: " + url);
 
-		HttpsURLConnection con = this.createConnection(url, POST_REQUEST);
+		HttpsURLConnection con = this.createConnection(url, Constants.POST_REQUEST);
 		con.setRequestProperty("Referer", ACCOUNT_MANAGE_REFER);
 		con.setRequestProperty("Content-Type", CONTENT_TYPE);
 
@@ -82,7 +82,7 @@ public class ETSRequestSender implements IETSRequestSender {
 
 	public int openSession() throws IOException {
 		log.info("Openning new session...");
-		HttpsURLConnection con = this.createConnection(URL_MAIN, GET_REQUEST);
+		HttpsURLConnection con = this.createConnection(URL_MAIN, Constants.GET_REQUEST);
 		con.setRequestProperty("Content-Type", UTF8);
 
 		log.debug("Response Code : " + con.getResponseCode() + " Response Message : " + con.getResponseMessage());
@@ -102,7 +102,7 @@ public class ETSRequestSender implements IETSRequestSender {
 
 	public InputStream login(String username, String password) throws IOException {
 		log.info("Logining for user: " + username);
-		HttpsURLConnection con = this.createConnection(URL_LOGON, POST_REQUEST);
+		HttpsURLConnection con = this.createConnection(URL_LOGON, Constants.POST_REQUEST);
 		con.setRequestProperty("Referer", LOGON_REFER);
 		con.setRequestProperty("Content-Type", CONTENT_TYPE);
 
@@ -126,7 +126,7 @@ public class ETSRequestSender implements IETSRequestSender {
 
 	public int closeSession() throws IOException {
 		log.info("Logout for user " + this.username);
-		HttpsURLConnection con = this.createConnection(URL_LOGOUT, GET_REQUEST);
+		HttpsURLConnection con = this.createConnection(URL_LOGOUT, Constants.GET_REQUEST);
 		con.setRequestProperty("Referer", ACCOUNT_MANAGE_REFER);
 		
 		log.debug("Response Code : " + con.getResponseCode() + " Response Message : " + con.getResponseMessage());

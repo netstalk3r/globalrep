@@ -25,6 +25,17 @@ public class Constants {
 	
 	public static final String REPORTED_HOURS_URL = "https://ua.ets.akvelon.com/accountreport.ets";
 	
+	public static final String V1_URL = "v1.url";
+	
+	// request types
+	public static final String POST_REQUEST = "POST";
+	public static final String GET_REQUEST = "GET";
+	
+	// v1 request parameters properties
+	public static final String V1_TEAM_PROPS = "Team.Name";
+	public static final String V1_MEMBERS_PROPS = "Member.Nickname";
+	public static final String V1_SPRINT_PROPS = "Timebox.Name";
+	
 	public static final String EMPTY_PARAM = "";
 	
 	public static final int RESPONSE_CODE_OK = 200;
