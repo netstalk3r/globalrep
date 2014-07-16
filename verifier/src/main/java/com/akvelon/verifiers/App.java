@@ -30,7 +30,7 @@ public class App {
 		
 		ETSVerifier etsVerifier = new ETSVerifier();
 		etsVerifier.setMailSender(mailSender);
-		etsVerifier.verify(credentialProperties.getProperty(Constants.LOGIN).trim(), credentialProperties.getProperty(Constants.PASSWORD)
+		etsVerifier.verify(credentialProperties.getProperty(Constants.ETS_LOGIN).trim(), credentialProperties.getProperty(Constants.ETS_PASSWORD)
 				.trim());
 	}
 }

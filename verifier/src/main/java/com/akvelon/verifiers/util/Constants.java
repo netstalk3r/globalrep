@@ -32,10 +32,16 @@ public class Constants {
 	public static final String RECIPIENT_TO = "to";
 	public static final String RECIPIENT_CC = "cc";
 	
-	public static final String LOGIN = "login";
-	public static final String PASSWORD = "password";
+	public static final String ETS_LOGIN = "ets.login";
+	public static final String ETS_PASSWORD = "ets.password";
+	
+	public static final String V1_LOGIN = "v1.login";
+	public static final String V1_PASSWORD = "v1.password";
 	
 	public static final String PROJECT_VERSION = "project.version";
 	public static final String BUILD_NUMBER = "build.number";
+	
+	public static final int ETS_HOURS_PER_DAY = 8;
+	public static final int V1_HOURS_PER_DAY = 7;
 	
 }

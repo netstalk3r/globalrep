@@ -103,7 +103,7 @@ public class ETSVerifier {
 				requestSender.closeSession();
 			}
 		}
-		int requiredWorkingHours = Util.calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday());
+		int requiredWorkingHours = Util.calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday(),Constants.ETS_HOURS_PER_DAY);
 
 		log.info("Send all hours report...");
 		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);

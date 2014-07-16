@@ -108,7 +108,7 @@ public class Util {
 	}
 
 	
-	public static int calculateWorkingHoursBetweenDates(Calendar startDate, Calendar endDate) {
+	public static int calculateWorkingHoursBetweenDates(Calendar startDate, Calendar endDate, int hourPerDay) {
 
 		boolean includeToday = includeToday(endDate);
 		
@@ -137,7 +137,7 @@ public class Util {
 		
 		log.info("Amount of working days: " + daysQuantity);
 
-		int amountOfWorkingHours = daysQuantity * 8;
+		int amountOfWorkingHours = daysQuantity * hourPerDay;
 
 		log.info("Amount of working hours: " + amountOfWorkingHours);
 
