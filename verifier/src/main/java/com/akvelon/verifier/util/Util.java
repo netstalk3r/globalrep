@@ -12,8 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 public class Util {
 
+	private static final Logger log = Logger.getLogger(Util.class);
+	
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 	private static final Calendar today = Calendar.getInstance();
 	private static Calendar beginDateOfMonth = null;
@@ -103,4 +107,49 @@ public class Util {
 		return props;
 	}
 
+	
+	public static int calculateWorkingHoursBetweenDates(Calendar startDate, Calendar endDate) {
+
+		boolean includeToday = includeToday(endDate);
+		
+		log.info("Calculate working hours between " + Util.dateToString(startDate.getTime()) + " and "
+				+ Util.dateToString(endDate.getTime()));
+
+		int daysQuantity = 0;
+		
+		if (Holidays.hasMonthHolidays(startDate)) {
+			daysQuantity -= Holidays.getAmountOfHolidaysBetweenDatesWithinMonth(startDate, endDate);
+		}
+		
+		endDate.add(Calendar.DATE, 1);
+
+		while (startDate.before(endDate)) {
+			if (!isWeekend(startDate.get(Calendar.DAY_OF_WEEK))) {
+				daysQuantity++;
+			}
+			startDate.add(Calendar.DATE, 1);
+		}
+
+		log.info("This day is" + (includeToday ? "" : " not") + " included.");
+		if (!includeToday) {
+			daysQuantity--;
+		}
+		
+		log.info("Amount of working days: " + daysQuantity);
+
+		int amountOfWorkingHours = daysQuantity * 8;
+
+		log.info("Amount of working hours: " + amountOfWorkingHours);
+
+		return amountOfWorkingHours;
+	}
+
+	private static boolean isWeekend(int date) {
+		return (date == Calendar.SATURDAY) || (date == Calendar.SUNDAY);
+	}
+	
+	// if the current time is 7 PM or later  this day is included to count of working hours
+	private static boolean includeToday(Calendar today) {
+		return today.get(Calendar.AM_PM) == Calendar.PM ? today.get(Calendar.HOUR) >= 7 : false;
+	}
 }

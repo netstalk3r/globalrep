@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,10 +20,8 @@ import com.akvelon.verifier.parser.Parser;
 import com.akvelon.verifier.reports.PersonalHourReport;
 import com.akvelon.verifier.senders.IMailSender;
 import com.akvelon.verifier.senders.IRequestSender;
-import com.akvelon.verifier.senders.MailSender;
 import com.akvelon.verifier.senders.RequestSender;
 import com.akvelon.verifier.util.Constants;
-import com.akvelon.verifier.util.Holidays;
 import com.akvelon.verifier.util.Util;
 
 public class ETSVerifier {
@@ -36,14 +33,15 @@ public class ETSVerifier {
 
 	private IRequestSender requestSender;
 	private Parser parser;
-	private Holidays holidays;
 	private IMailSender mailSender;
 
 	public ETSVerifier() throws IOException {
 		requestSender = new RequestSender();
 		parser = new HtmlParser();
-		holidays = new Holidays();
-		mailSender = new MailSender();
+	}
+
+	public void setMailSender(IMailSender mailSender) {
+		this.mailSender = mailSender;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -100,7 +98,7 @@ public class ETSVerifier {
 		} finally {
 			requestSender.closeSession();
 		}
-		int requiredWorkingHours = calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday());
+		int requiredWorkingHours = Util.calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday());
 
 		log.info("Send all hours report...");
 //		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);
@@ -179,51 +177,5 @@ public class ETSVerifier {
 			log.info("Exit...");
 		}
 		return isEmpty;
-	}
-	
-	private int calculateWorkingHoursBetweenDates(Calendar startDate, Calendar endDate) {
-
-		boolean includeToday = this.includeToday(endDate);
-		
-		log.info("Calculate working hours between " + Util.dateToString(startDate.getTime()) + " and "
-				+ Util.dateToString(endDate.getTime()));
-
-		int daysQuantity = 0;
-		
-		if (holidays.hasMonthHolidays(startDate)) {
-			daysQuantity -= holidays.getAmountOfHolidaysBetweenDatesWithinMonth(startDate, endDate);
-		}
-		
-		endDate.add(Calendar.DATE, 1);
-
-		while (startDate.before(endDate)) {
-			if (!isWeekend(startDate.get(Calendar.DAY_OF_WEEK))) {
-				daysQuantity++;
-			}
-			startDate.add(Calendar.DATE, 1);
-		}
-
-		log.info("This day is" + (includeToday ? "" : " not") + " included.");
-		if (!includeToday) {
-			daysQuantity--;
-		}
-		
-
-		log.info("Amount of working days: " + daysQuantity);
-
-		int amountOfWorkingHours = daysQuantity * 8;
-
-		log.info("Amount of working hours: " + amountOfWorkingHours);
-
-		return amountOfWorkingHours;
-	}
-
-	private boolean isWeekend(int date) {
-		return (date == Calendar.SATURDAY) || (date == Calendar.SUNDAY);
-	}
-	
-	// if the current time is 7 PM or later  this day is included to count of working hours
-	private boolean includeToday(Calendar today) {
-		return today.get(Calendar.AM_PM) == Calendar.PM ? today.get(Calendar.HOUR) >= 7 : false;
 	}
 }

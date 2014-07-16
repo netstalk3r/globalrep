@@ -4,6 +4,8 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import com.akvelon.verifier.senders.IMailSender;
+import com.akvelon.verifier.senders.MailSender;
 import com.akvelon.verifier.util.Constants;
 import com.akvelon.verifier.util.Util;
 
@@ -24,8 +26,11 @@ public class App {
 		log.info("Load credentials...");
 		Properties credentialProperties = Util.loadProperties(CREDENTIAL_FILE);
 
-		ETSVerifier verifier = new ETSVerifier();
-		verifier.verify(credentialProperties.getProperty(Constants.LOGIN).trim(), credentialProperties.getProperty(Constants.PASSWORD)
+		IMailSender mailSender = new MailSender();
+		
+		ETSVerifier etsVerifier = new ETSVerifier();
+		etsVerifier.setMailSender(mailSender);
+		etsVerifier.verify(credentialProperties.getProperty(Constants.LOGIN).trim(), credentialProperties.getProperty(Constants.PASSWORD)
 				.trim());
 	}
 }

@@ -13,14 +13,14 @@ import java.util.Map;
 
 public class Holidays {
 
-	private Map<Integer, List<Integer>> holidays;
+	private static Map<Integer, List<Integer>> holidays;
 	
 	private static final String FILE_WITH_HOLIDAYS = "holidays";
 
 	private static final String DELIMETER_FOR_DATES = "\\+";
 	private static final String DELIMETER_FOR_DATE = "\\.";
 
-	public Holidays() throws IOException {
+	static {
 		BufferedReader reader = null;
 		StringBuilder out = null;
 		try {
@@ -30,9 +30,18 @@ public class Holidays {
 			while ((line = reader.readLine()) != null) {
 				out.append(line);
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
 		} finally {
-			reader.close();
+			try {
+				reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
 		}
+		
 		holidays = new HashMap<Integer, List<Integer>>();
 		String[] dates = out.toString().split(DELIMETER_FOR_DATES);
 		for (String date : dates) {
@@ -47,12 +56,12 @@ public class Holidays {
 			}
 		}
 	}
-	
-	public boolean hasMonthHolidays(Calendar month) {
+		
+	public static boolean hasMonthHolidays(Calendar month) {
 		return holidays.keySet().contains(Integer.valueOf(month.get(Calendar.MONTH)));
 	}
 	
-	public int getAmountOfHolidaysBetweenDatesWithinMonth(Calendar from, Calendar to) {
+	public static int getAmountOfHolidaysBetweenDatesWithinMonth(Calendar from, Calendar to) {
 		List<Integer> holidayDates = holidays.get(Integer.valueOf(from.get(Calendar.MONTH)));
 		int amountOfDaysOff = 0;
 		for (Integer dayOff : holidayDates) {
@@ -63,7 +72,7 @@ public class Holidays {
 		return amountOfDaysOff;
 	}
 	
-	public Map<Integer,List<Integer>> getHolidays() {
+	public static Map<Integer,List<Integer>> getHolidays() {
 		return holidays;
 	}
 }
