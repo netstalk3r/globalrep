@@ -28,6 +28,7 @@
 
 		<build.descriptors.folder>build-descriptors</build.descriptors.folder>
 		<jar.name>verifier</jar.name>
+		<jar.last.name>enhanced</jar.last.name>
 	</properties>
 
 	<dependencies>
