@@ -65,6 +65,8 @@ public class ETSVerifier {
 		
 		List<ETSHourReport> reports = null;
 
+		boolean isLogin = false;
+		
 		try {
 			if (Constants.RESPONSE_CODE_OK != requestSender.openSession()) {
 				log.error("Server response code is not OK!");
@@ -74,7 +76,8 @@ public class ETSVerifier {
 
 			InputStream is = requestSender.login(username, password);
 			try {
-				if (!parser.isLogin(is)) {
+				isLogin = parser.isLogin(is);
+				if (!isLogin) {
 					log.error("Login failed...");
 					log.error("Exit...");
 					return;
@@ -96,20 +99,22 @@ public class ETSVerifier {
 
 			reports = this.getAllHours(Arrays.asList(notifiedHours, acceptedHours));
 		} finally {
-			requestSender.closeSession();
+			if (isLogin) {
+				requestSender.closeSession();
+			}
 		}
 		int requiredWorkingHours = Util.calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday());
 
 		log.info("Send all hours report...");
-//		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);
-//
-//		log.info("Send missed hours reports...");
-//		for (PersonalHourReport report : reports) {
-//			if (report.getHours() < requiredWorkingHours) {
-//				log.info("Send to " + report.getName());
-//				mailSender.sendMissedHoursReport(report.getEmail(), requiredWorkingHours, report);
-//			}
-//		}
+		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);
+
+		log.info("Send missed hours reports...");
+		for (ETSHourReport report : reports) {
+			if (report.getHours() < requiredWorkingHours) {
+				log.info("Send to " + report.getName());
+				mailSender.sendMissedHoursReport(report.getEmail(), requiredWorkingHours, report);
+			}
+		}
 	}
 
 	private List<ETSHourReport> getReportedHours(Map<String, String> accounts, Map<String, String> params) throws IOException {

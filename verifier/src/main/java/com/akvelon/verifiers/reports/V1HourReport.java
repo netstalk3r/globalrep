@@ -3,7 +3,7 @@ package com.akvelon.verifiers.reports;
 public class V1HourReport {
 	
 	private String name;
-	private double requiredHours;
+	private double reportedHours;
 	
 	public V1HourReport() {
 		super();
@@ -15,11 +15,13 @@ public class V1HourReport {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public double getRequiredHours() {
-		return requiredHours;
+
+	public double getReportedHours() {
+		return reportedHours;
 	}
-	public void setRequiredHours(double requiredHours) {
-		this.requiredHours = requiredHours;
+
+	public void setReportedHours(double reportedHours) {
+		this.reportedHours = reportedHours;
 	}
 
 	@Override
@@ -28,7 +30,7 @@ public class V1HourReport {
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		long temp;
-		temp = Double.doubleToLongBits(requiredHours);
+		temp = Double.doubleToLongBits(reportedHours);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
@@ -47,7 +49,7 @@ public class V1HourReport {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (Double.doubleToLongBits(requiredHours) != Double.doubleToLongBits(other.requiredHours))
+		if (Double.doubleToLongBits(reportedHours) != Double.doubleToLongBits(other.reportedHours))
 			return false;
 		return true;
 	}
@@ -55,7 +57,7 @@ public class V1HourReport {
 
 	@Override
 	public String toString() {
-		return "V1HourReport [name=" + name + ", requiredHours=" + requiredHours + "]";
+		return "V1HourReport [name=" + name + ", requiredHours=" + reportedHours + "]";
 	}
 	
 
