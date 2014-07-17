@@ -6,8 +6,6 @@ import java.util.Map;
 
 public interface IETSRequestSender {
 	
-	String UTF8 = "UTF-8";
-
 	int openSession() throws IOException;
 	
 	InputStream login(String username, String password) throws IOException;

@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 import org.apache.log4j.Logger;
 
@@ -83,7 +84,7 @@ public class ETSRequestSender implements IETSRequestSender {
 	public int openSession() throws IOException {
 		log.info("Openning new session...");
 		HttpsURLConnection con = this.createConnection(URL_MAIN, Constants.GET_REQUEST);
-		con.setRequestProperty("Content-Type", UTF8);
+		con.setRequestProperty("Content-Type", CharEncoding.UTF_8);
 
 		log.debug("Response Code : " + con.getResponseCode() + " Response Message : " + con.getResponseMessage());
 

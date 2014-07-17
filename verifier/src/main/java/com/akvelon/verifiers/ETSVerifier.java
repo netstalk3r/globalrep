@@ -122,11 +122,12 @@ public class ETSVerifier {
 			throw new IllegalStateException("No reports to connect!");
 		if (allReports.size() == 1)
 			return allReports.get(0);
+		ETSHourReport personalHourReport = null;
 		List<ETSHourReport> first = allReports.get(0);
 		for (int i = 1; i < allReports.size(); i++) {
 			for (ETSHourReport hourReport : allReports.get(i)) {
 				int index = first.indexOf(hourReport);
-				ETSHourReport personalHourReport = first.get(index);
+				personalHourReport = first.get(index);
 				personalHourReport.setHours(personalHourReport.getHours() + hourReport.getHours());
 			}
 		}
