@@ -1,6 +1,6 @@
 package com.akvelon.verifiers.senders;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -11,7 +11,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import com.akvelon.verifiers.reports.ETSHourReport;
 import com.akvelon.verifiers.util.TemplateUtil;
 
 public class MailSender implements IMailSender {
@@ -30,12 +29,12 @@ public class MailSender implements IMailSender {
 	private static final String ETS_MISSED_HOUR_SUBJECT = "ETS missed hours";
 	private static final String ETS_ALL_HOURS_SUBJECT = "ETS all hours report";
 
-	public void sendAllHourReports(String to, String cc, int requiredHours, List<ETSHourReport> reports) {
-		sendMessage(to, cc, ETS_ALL_HOURS_SUBJECT, TemplateUtil.getTemplateForAllReportedHours(reports,requiredHours));
+	public void sendAllHourReports(String to, String cc, Map<Integer, ?> params) {
+		sendMessage(to, cc, ETS_ALL_HOURS_SUBJECT, TemplateUtil.getTemplateForAllReportedHours(params));
 	}
 
-	public void sendMissedHoursReport(String to, int requiredHours, ETSHourReport report) {
-		sendMessage(to, null, ETS_MISSED_HOUR_SUBJECT, TemplateUtil.getTemplateForMissedHours(report,requiredHours));
+	public void sendMissedHoursReport(String to, Map<Integer, ?> params) {
+		sendMessage(to, null, ETS_MISSED_HOUR_SUBJECT, TemplateUtil.getTemplateForMissedHours(params));
 	}
 
 	private void sendMessage(String to, String cc, String subject, String text) {

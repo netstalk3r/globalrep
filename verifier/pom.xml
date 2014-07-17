@@ -4,7 +4,7 @@
 
 	<groupId>com.akvelon.ets</groupId>
 	<artifactId>verifier</artifactId>
-	<version>1.0.0</version>
+	<version>2.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>verifier</name>
@@ -125,6 +125,7 @@
 										<include>accounts.properties</include>
 										<include>recipients.properties</include>
 										<include>credentials.properties</include>
+										<include>v1.properties</include>
 										<include>holidays</include>
 									</includes>
 									<filtering>true</filtering>

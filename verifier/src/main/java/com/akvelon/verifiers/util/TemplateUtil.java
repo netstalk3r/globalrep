@@ -3,7 +3,6 @@ package com.akvelon.verifiers.util;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -14,8 +13,6 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.tools.generic.DateTool;
 
-import com.akvelon.verifiers.reports.ETSHourReport;
-
 public class TemplateUtil {
 	
 	private static final String ALL_HOURS_REPORTS = "all_perorts_template.vm";
@@ -24,6 +21,7 @@ public class TemplateUtil {
 	private static VelocityEngine velocityEng;
 	private static Template template;
 	private static VelocityContext context;
+	private static DateTool dateTool = new DateTool();
 	
 	static {
 		velocityEng = new VelocityEngine();
@@ -32,18 +30,22 @@ public class TemplateUtil {
 		velocityEng.init();
 	}
 	
-	public static String getTemplateForAllReportedHours(List<ETSHourReport> reports, int requiredHours) {
-		Map<String,Object> contextParams = new HashMap<String, Object>(2);
-		contextParams.put("reps", reports);
-		contextParams.put("reqHours", requiredHours);
+	public static String getTemplateForAllReportedHours(Map<Integer, ?> params) {
+		Map<String,Object> contextParams = new HashMap<String, Object>(5);
+		contextParams.put("v1Reps", params.get(Constants.V1_HOUR_REPORTS));
+		contextParams.put("v1ReqHours", params.get(Constants.V1_REQUIRED_HOURS));
+		contextParams.put("etsReps", params.get(Constants.ETS_HOUR_REPORTS));
+		contextParams.put("etsReqHours", params.get(Constants.ETS_REQUIRED_HOURS));
 		contextParams.put("curDate", new Date());
 		return getTemplate(ALL_HOURS_REPORTS,contextParams);
 	}
 
-	public static String getTemplateForMissedHours(ETSHourReport report, int requiredHours) {
-		Map<String,Object> contextParams = new HashMap<String, Object>(2);
-		contextParams.put("rep", report);
-		contextParams.put("reqHours", requiredHours);
+	public static String getTemplateForMissedHours(Map<Integer, ?> params) {
+		Map<String,Object> contextParams = new HashMap<String, Object>(5);
+		contextParams.put("v1RepHours", params.get(Constants.V1_REPORTED_HOURS));
+		contextParams.put("v1ReqHours", params.get(Constants.V1_REQUIRED_HOURS));
+		contextParams.put("etsRepHours", params.get(Constants.ETS_REPORTED_HOURS));
+		contextParams.put("etsReqHours", params.get(Constants.ETS_REQUIRED_HOURS));
 		contextParams.put("curDate", new Date());
 		return getTemplate(MISSED_HOURS_REPORTS,contextParams);
 	}
@@ -55,7 +57,7 @@ public class TemplateUtil {
  		for (Entry<String,Object> contextParm : contextParams.entrySet()) {
  			context.put(contextParm.getKey(), contextParm.getValue());
  		}
- 		context.put("dateTool", new DateTool());
+ 		context.put("dateTool", dateTool);
  		
  		StringWriter writer = new StringWriter();
 		template.merge(context, writer);

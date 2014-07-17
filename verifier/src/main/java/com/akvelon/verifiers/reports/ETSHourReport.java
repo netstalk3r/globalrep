@@ -1,6 +1,6 @@
 package com.akvelon.verifiers.reports;
 
-public class ETSHourReport {
+public class ETSHourReport implements Comparable<ETSHourReport> {
 
 	private String name;
 	private String email;
@@ -38,7 +38,6 @@ public class ETSHourReport {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -52,11 +51,6 @@ public class ETSHourReport {
 		if (getClass() != obj.getClass())
 			return false;
 		ETSHourReport other = (ETSHourReport) obj;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -68,6 +62,11 @@ public class ETSHourReport {
 	@Override
 	public String toString() {
 		return "PersonalHourReport [name=" + name + ", email=" + email + ", hours=" + hours + "]";
+	}
+
+	@Override
+	public int compareTo(ETSHourReport o) {
+		return this.getName().compareTo(o.getName());
 	}
 
 	

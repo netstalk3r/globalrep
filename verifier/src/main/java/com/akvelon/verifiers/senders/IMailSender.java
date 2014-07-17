@@ -1,13 +1,11 @@
 package com.akvelon.verifiers.senders;
 
-import java.util.List;
-
-import com.akvelon.verifiers.reports.ETSHourReport;
+import java.util.Map;
 
 public interface IMailSender {
-	
-	void sendAllHourReports(String to, String cc, int requiredHours, List<ETSHourReport> reports);
-	
-	void sendMissedHoursReport(String to, int requiredHours, ETSHourReport report);
+
+	void sendAllHourReports(String to, String cc, Map<Integer, ?> params);
+
+	void sendMissedHoursReport(String to, Map<Integer, ?> params);
 
 }

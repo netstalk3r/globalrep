@@ -22,11 +22,12 @@
 		</style>
 	</head>
 	<body>
-		<h1>ETS reported hours</h1>
+		<h1>V1 and ETS reported hours</h1>
 		<p>$dateTool.format('HH:mm, EEEEEE, d MMMM yyyy', $curDate)</p>
-		<p style="font-weight:bold">Required hours - $reqHours</p>
 		
 		<div>
+			<h4>V1 Report</h4>
+			<p style="font-weight:bold">Required hours - $v1ReqHours</p>
 			<table cellpadding="0" cellspacing="0" width="200px">
 				<thead>
 					<tr>
@@ -35,10 +36,31 @@
 					<tr>
 				</thead>
 				<tbody>
-					#foreach ($rep in $reps)
+					#foreach ($v1Rep in $v1Reps)
 						<tr>
-							<td>$rep.name</td>
-							<td align='right'>$rep.hours</td>
+							<td>$v1Rep.name</td>
+							<td align='right'>$v1Rep.reportedHours</td>
+						</tr>
+					#end
+				</tbody>
+			</table>
+			
+			<br />
+			
+			<h4>ETS Report</h4>
+			<p style="font-weight:bold">Required hours - $etsReqHours</p>
+			<table cellpadding="0" cellspacing="0" width="200px">
+				<thead>
+					<tr>
+						<th width="65%">Name</th>
+						<th width="35%">Reported Hours</th>
+					<tr>
+				</thead>
+				<tbody>
+					#foreach ($etsRep in $etsReps)
+						<tr>
+							<td>$etsRep.name</td>
+							<td align='right'>$etsRep.hours</td>
 						</tr>
 					#end
 				</tbody>

@@ -55,4 +55,12 @@ public class Constants {
 	public static final int ETS_HOURS_PER_DAY = 8;
 	public static final int V1_HOURS_PER_DAY = 7;
 	
+	public static final Integer V1_REQUIRED_HOURS = 1;
+	public static final Integer ETS_REQUIRED_HOURS = 2;
+	public static final Integer V1_HOUR_REPORTS = 3;
+	public static final Integer ETS_HOUR_REPORTS = 4;
+	public static final Integer V1_REPORTED_HOURS = 5;
+	public static final Integer ETS_REPORTED_HOURS = 6;
+	
+	
 }

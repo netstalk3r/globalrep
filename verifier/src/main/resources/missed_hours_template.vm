@@ -9,10 +9,25 @@
 		</style>		
 	</head>
 	<body>
-		<h1 class="warning">ETS Missed Hours</h1>
+		<h1 class="warning">Missed Hours</h1>
 		<p>$dateTool.format('HH:mm, EEEEEE, d MMMM yyyy', $curDate)</p>
-		<p>You have missed hours in the ETS.</p>
-		<p>Your reported hours for today - $rep.hours<p/>
-		<p style="font-weight:bold">Required hours for today - $reqHours<p/>
+		
+		<br />
+		
+		#if ($etsRepHours < $etsReqHours)
+			<div> 
+				<p>You have missed hours in the ETS.</p>
+				<p>Your reported hours for today - $etsRepHours<p/>
+				<p style="font-weight:bold">Required hours for today - $etsReqHours<p/>
+			</div>
+			<br />
+		#end
+		#if (($v1RepHours) && ($v1RepHours < $v1ReqHours))
+			<div> 
+				<p>You have missed hours in the V1.</p>
+				<p>Your reported hours for today - $v1RepHours<p/>
+				<p style="font-weight:bold">Required hours for today - $v1ReqHours<p/>
+			</div>
+		#end
 	</body>
 </html>

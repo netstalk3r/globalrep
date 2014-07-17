@@ -12,6 +12,7 @@ import com.akvelon.verifiers.parser.V1Parser;
 import com.akvelon.verifiers.reports.V1HourReport;
 import com.akvelon.verifiers.senders.IV1RequestSender;
 import com.akvelon.verifiers.senders.V1RequestSender;
+import com.akvelon.verifiers.util.Constants;
 import com.akvelon.verifiers.util.Util;
 import com.akvelon.verifiers.util.V1UrlBuilder;
 
@@ -25,7 +26,7 @@ public class V1Verifier {
 	private IV1RequestSender requestSender;
 	private V1UrlBuilder urlBuilder;
 	
-	private Calendar sprintBeginDate;
+	private int requiredWorkingHours = 0;
 	
 	public V1Verifier() throws Exception {
 		super();
@@ -34,8 +35,8 @@ public class V1Verifier {
 		urlBuilder = new V1UrlBuilder();
 	}
 	
-	public Calendar getSprintBeginDate() {
-		return sprintBeginDate;
+	public int getRequiredWorkingHours() {
+		return requiredWorkingHours;
 	}
 
 	public List<V1HourReport> verify(String login, String password) throws Exception {
@@ -48,6 +49,8 @@ public class V1Verifier {
 			log.error("Exit...");
 			return null;
 		}
+		
+		Calendar sprintBeginDate = null;
 		
 		InputStream response = null;
 		try {
@@ -64,6 +67,12 @@ public class V1Verifier {
 			reports = parser.parseReportedHours(response);
 		} finally {
 			response.close();
+		}
+		
+		requiredWorkingHours = Util.calculateWorkingHoursBetweenDates(sprintBeginDate, Util.getToday(), Constants.V1_HOURS_PER_DAY);
+		
+		for (V1HourReport v1Report : reports) {
+			log.info(v1Report.getName() + " - " + v1Report.getReportedHours());
 		}
 		
 		return reports;

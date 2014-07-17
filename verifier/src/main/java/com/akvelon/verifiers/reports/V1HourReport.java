@@ -1,6 +1,6 @@
 package com.akvelon.verifiers.reports;
 
-public class V1HourReport {
+public class V1HourReport implements Comparable<V1HourReport> {
 	
 	private String name;
 	private double reportedHours;
@@ -24,14 +24,12 @@ public class V1HourReport {
 		this.reportedHours = reportedHours;
 	}
 
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(reportedHours);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -49,14 +47,17 @@ public class V1HourReport {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (Double.doubleToLongBits(reportedHours) != Double.doubleToLongBits(other.reportedHours))
-			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
 		return "V1HourReport [name=" + name + ", reportedHours=" + reportedHours + "]";
+	}
+
+	@Override
+	public int compareTo(V1HourReport o) {
+		return this.getName().compareTo(o.getName());
 	}
 
 }

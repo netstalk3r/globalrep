@@ -10,9 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import javax.mail.Message.RecipientType;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.akvelon.verifiers.parser.ETSParser;
@@ -28,7 +25,7 @@ public class ETSVerifier {
 	private static final Logger log = Logger.getLogger(ETSVerifier.class);
 
 	private static final String FILE_WITH_ACCOUNTS = "accounts.properties";
-	private static final String FILE_WITH_RECIPIENTS = "recipients.properties";
+	
 
 	private IETSRequestSender requestSender;
 	private ETSParser parser;
@@ -57,13 +54,6 @@ public class ETSVerifier {
 		}
 		
 		log.info("Accounts: " + accounts);
-		
-		log.info("Load recipients...");
-		Map<RecipientType, String> recipients = this.loadRecipients();
-		
-		if (this.isEmptyMap(recipients,"recipients")) {
-			return null;
-		}
 		
 		boolean isLogin = false;
 		
@@ -107,17 +97,6 @@ public class ETSVerifier {
 		requiredWorkingHours = Util.calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday(),Constants.ETS_HOURS_PER_DAY);
 		
 		return reports;
-//
-//		log.info("Send all hours report...");
-//		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);
-//
-//		log.info("Send missed hours reports...");
-//		for (ETSHourReport report : reports) {
-//			if (report.getHours() < requiredWorkingHours) {
-//				log.info("Send to " + report.getName());
-//				mailSender.sendMissedHoursReport(report.getEmail(), requiredWorkingHours, report);
-//			}
-//		}
 	}
 
 	private List<ETSHourReport> getReportedHours(Map<String, String> accounts, Map<String, String> params) throws IOException {
@@ -161,21 +140,6 @@ public class ETSVerifier {
 			accounts.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()).trim());
 		}
 		return accounts;
-	}
-
-	private Map<RecipientType, String> loadRecipients() throws IOException {
-		Properties recipientsProps = Util.loadProperties(FILE_WITH_RECIPIENTS);
-		if (StringUtils.isBlank(recipientsProps.getProperty(Constants.RECIPIENT_TO))) {
-			throw new IllegalArgumentException("Recipiet to cannot be null. Verify " + FILE_WITH_RECIPIENTS + "file");
-		}
-		Map<RecipientType, String> recipients = new HashMap<RecipientType, String>(2);
-		log.info("TO : " + recipientsProps.getProperty(Constants.RECIPIENT_TO));
-		recipients.put(RecipientType.TO, recipientsProps.getProperty(Constants.RECIPIENT_TO));
-		if (StringUtils.isNotBlank(recipientsProps.getProperty(Constants.RECIPIENT_CC))) {
-			log.info("CC : " + recipientsProps.getProperty(Constants.RECIPIENT_CC));
-			recipients.put(RecipientType.CC, recipientsProps.getProperty(Constants.RECIPIENT_CC));
-		}
-		return recipients;
 	}
 
 	private boolean isEmptyMap(Map<?,?> map, String message) {
