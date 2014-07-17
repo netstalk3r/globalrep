@@ -19,11 +19,11 @@ public class V1Verifier {
 	
 	private static final Logger log = Logger.getLogger(V1Verifier.class);
 
-	private static final String ACTUAL_FILE = "actual.properties";
-	private static final String SPRINT_FILE = "sprint_start_date.properties";
+	private static final String V1_EXTERNAL_PROPERTIES = "v1.properties";
 	
 	private V1Parser parser;
 	private IV1RequestSender requestSender;
+	private V1UrlBuilder urlBuilder;
 	
 	private Calendar sprintBeginDate;
 	
@@ -31,6 +31,7 @@ public class V1Verifier {
 		super();
 		parser = new DomParser();
 		requestSender = new V1RequestSender();
+		urlBuilder = new V1UrlBuilder();
 	}
 	
 	public Calendar getSprintBeginDate() {
@@ -39,27 +40,18 @@ public class V1Verifier {
 
 	public List<V1HourReport> verify(String login, String password) throws Exception {
 		
-		log.info("Load actual properties...");
-		Properties actualProperties = Util.loadProperties(ACTUAL_FILE);
+		log.info("Load v1 properties...");
+		Properties v1Properties = Util.loadProperties(V1_EXTERNAL_PROPERTIES);
 
-		if (actualProperties.isEmpty()) {
+		if (v1Properties.isEmpty()) {
 			log.error("Actual properties can not be loaded");
-			log.error("Exit...");
-			return null;
-		}
-		
-		log.info("Load sprint properties...");
-		Properties sprintProperties = Util.loadProperties(SPRINT_FILE);
-		
-		if (sprintProperties.isEmpty()) {
-			log.error("Sprint properties can not be loaded");
 			log.error("Exit...");
 			return null;
 		}
 		
 		InputStream response = null;
 		try {
-			response = requestSender.sendRequest(login, password, V1UrlBuilder.buildUrl(sprintProperties));
+			response = requestSender.sendRequest(login, password, urlBuilder.buildUrlTimebox(v1Properties));
 			sprintBeginDate = parser.parseSprintStartDate(response);
 		} finally {
 			response.close();
@@ -68,7 +60,7 @@ public class V1Verifier {
 		List<V1HourReport> reports = null;
 		
 		try {
-			response = requestSender.sendRequest(login, password, V1UrlBuilder.buildUrl(actualProperties));
+			response = requestSender.sendRequest(login, password, urlBuilder.buildUrlActual(v1Properties));
 			reports = parser.parseReportedHours(response);
 		} finally {
 			response.close();

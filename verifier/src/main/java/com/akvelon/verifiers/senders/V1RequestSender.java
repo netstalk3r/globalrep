@@ -30,7 +30,7 @@ public class V1RequestSender implements IV1RequestSender {
 		con.setRequestMethod(Constants.GET_REQUEST);
 		con.setRequestProperty("Authorization", "Basic " + authStringEnc);
 
-		log.info("Server response code - " + con.getResponseCode());
+		log.debug("Server response code - " + con.getResponseCode());
 
 		return con.getInputStream();
 	}

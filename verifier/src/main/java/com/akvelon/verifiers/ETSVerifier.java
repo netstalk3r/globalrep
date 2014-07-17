@@ -33,10 +33,18 @@ public class ETSVerifier {
 	private IETSRequestSender requestSender;
 	private ETSParser parser;
 
+	private int requiredWorkingHours = 0;
+	
 	public ETSVerifier() throws IOException {
 		requestSender = new ETSRequestSender();
 		parser = new HtmlParser();
 	}
+
+	public int getRequiredWorkingHours() {
+		return requiredWorkingHours;
+	}
+
+
 
 	@SuppressWarnings("unchecked")
 	public List<ETSHourReport> verify(String username, String password) throws IOException {
@@ -58,6 +66,8 @@ public class ETSVerifier {
 		}
 		
 		boolean isLogin = false;
+		
+		List<ETSHourReport> reports = null;
 		
 		try {
 			if (Constants.RESPONSE_CODE_OK != requestSender.openSession()) {
@@ -87,14 +97,16 @@ public class ETSVerifier {
 			params.put(Constants.STATUS, Constants.STATUS_ACCEPTED_OPTION);
 			List<ETSHourReport> acceptedHours = this.getReportedHours(accounts, params);
 
-			return this.getAllHours(Arrays.asList(notifiedHours, acceptedHours));
+			reports = this.getAllHours(Arrays.asList(notifiedHours, acceptedHours));
 		} finally {
 			if (isLogin) {
 				requestSender.closeSession();
 			}
 		}
 		
-//		int requiredWorkingHours = Util.calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday(),Constants.ETS_HOURS_PER_DAY);
+		requiredWorkingHours = Util.calculateWorkingHoursBetweenDates(Util.getBeginDateOfMonth(), Util.getToday(),Constants.ETS_HOURS_PER_DAY);
+		
+		return reports;
 //
 //		log.info("Send all hours report...");
 //		mailSender.sendAllHourReports(recipients.get(RecipientType.TO), recipients.get(RecipientType.CC), requiredWorkingHours, reports);
