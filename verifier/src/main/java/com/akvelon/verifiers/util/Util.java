@@ -19,7 +19,6 @@ public class Util {
 	private static final Logger log = Logger.getLogger(Util.class);
 	
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-	private static final Calendar today = Calendar.getInstance();
 	private static Calendar beginDateOfMonth = null;
 	private static Calendar endDateOfMonth = null;
 
@@ -37,7 +36,7 @@ public class Util {
 	}
 
 	public static Calendar getToday() {
-		return today;
+		return Calendar.getInstance();
 	}
 
 	public static Calendar getEndDateOfTheMonth() {
@@ -45,7 +44,7 @@ public class Util {
 	}
 
 	public static String getToDayForRequest() {
-		return sdf.format(today.getTime());
+		return sdf.format(Calendar.getInstance().getTime());
 	}
 
 	public static String getBeginOfMonthForRequest() {
@@ -57,7 +56,7 @@ public class Util {
 	}
 
 	public static int getCurrentYear() {
-		return today.get(Calendar.YEAR);
+		return Calendar.getInstance().get(Calendar.YEAR);
 	}
 	
 	public static String dateToString(Date date) {

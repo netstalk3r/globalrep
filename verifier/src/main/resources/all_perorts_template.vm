@@ -37,10 +37,12 @@
 				</thead>
 				<tbody>
 					#foreach ($v1Rep in $v1Reps)
-						<tr>
-							<td>$v1Rep.name</td>
-							<td align='right'>$v1Rep.reportedHours</td>
-						</tr>
+						#if ($v1Rep.reportedHours < $v1ReqHours)
+							<tr>
+								<td>$v1Rep.name</td>
+								<td align='right'>$v1Rep.reportedHours</td>
+							</tr>
+						#end
 					#end
 				</tbody>
 			</table>
@@ -58,10 +60,12 @@
 				</thead>
 				<tbody>
 					#foreach ($etsRep in $etsReps)
-						<tr>
-							<td>$etsRep.name</td>
-							<td align='right'>$etsRep.hours</td>
-						</tr>
+						#if ($etsRep.hours < $etsReqHours)
+							<tr>
+								<td>$etsRep.name</td>
+								<td align='right'>$etsRep.hours</td>
+							</tr>
+						#end
 					#end
 				</tbody>
 			</table>
