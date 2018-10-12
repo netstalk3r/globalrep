@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <script type="text/javascript">
+        function printResult(data, textStatus, jqXHR) {
+             $( "#resultData" ).html('');
+             $( "#resultData" ).html( data );
+             $( "#resultMessage" ).html('');
+             $( "#resultMessage" ).html( textStatus );
+             $( "#resultCode" ).html('');
+             $( "#resultCode" ).html( jqXHR.status );
+             $( "#resultHeaders" ).html('');
+            var resultHeaders = document.getElementById('resultHeaders');
+            var headers = jqXHR.getAllResponseHeaders().split("\n");
+            for (var i = 0; i < headers.length; i++) {
+                var x = document.createElement("P");
+                var t = document.createTextNode(headers[i]);
+                x.appendChild(t);
+                resultHeaders.appendChild(x);
+            }
+        }
+
+        function xsrf(jqXHR) {
+            $( "#xsrf" ).html('');
+             $( "#xsrf" ).html( jqXHR.getResponseHeader('x-xsrf-token') );
+            $( "#csrf-token" ).val( jqXHR.getResponseHeader('x-xsrf-token') );
+        }
+
+        function getxsrf() {
+            $.ajax({
+                url: '/index',
+                complete: function(jqXHR, textStatus){
+                    xsrf(jqXHR);
+                }
+            });
+        }
+
+         function signout() {
+
+            var token = $("#xsrf").html();
+
+            $.ajax({
+                url: '/logout',
+                headers: {
+                    'X-XSRF-TOKEN':token
+                },
+                method: 'POST',
+                success: function(data, textStatus, jqXHR){
+                    printResult(data, textStatus, jqXHR);
+                    xsrf(jqXHR);
+                },
+                error: function(jqXHR, textStatus, data) {
+                    printResult(data, textStatus, jqXHR);
+                    xsrf(jqXHR);
+                }
+            });
+
+        }
+
+        function secure(serviceIndex) {
+            var service = '/service' + serviceIndex;
+            $( "#resultData" ).load( "/api" + service + "/secure", function( data, textStatus, jqXHR ) {
+                 printResult(data, textStatus, jqXHR);
+                 xsrf(jqXHR);
+            });
+        }
+        function insecure(serviceIndex) {
+            var service = '/service' + serviceIndex;
+            $( "#resultData" ).load( "/api" +  service +"/insecure", function( data, textStatus, jqXHR ) {
+                 printResult(data, textStatus, jqXHR);
+                 xsrf(jqXHR);
+            });
+        }
+    </script>
+</head>
+<body onload="getxsrf()">
+<form action="/logout" method="post">
+    <p><input type="submit" value="Signout"></p>
+    <input id="csrf-token" type="hidden" name="_csrf"/>
+</form>
+    <p><button onclick="secure(1)">Secure Call Service 1</button></p>
+    <p><button onclick="insecure(1)">Insecure Call Service 1</button></p>
+    <p><button onclick="secure(2)">Secure Call Service 2</button></p>
+    <p><button onclick="insecure(2)">Insecure Call Service 2</button></p>
+ Status Code
+ <p id="resultCode" style="border-style: solid"></p>
+ Response Headers
+ <p id="resultHeaders" style="border-style: solid"></p>
+ Response JS Message
+ <p id="resultMessage" style="border-style: solid"></p>
+ CSRF Token
+ <p id="xsrf" style="border-style: solid"></p>
+ Response Data
+<p id="resultData" style="border-style: solid"></p>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: auth-service
+
+
+server:
+  port: 9099
+  use-forward-headers: false
+  servlet:
+    context-path: /
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+  instance:
+    hostname: localhost
+    port: 8761
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+

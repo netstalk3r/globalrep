@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script type="text/javascript">
+
+        function signup() {
+            var data = {};
+            data.username = $("#user").val();
+            data.password = $("#pass").val();
+            $.post("/login", data, function (data, textStatus, jqXHR) {
+                $("#result").html('');
+                $("#result").html(textStatus + '</br>' + data);
+            });
+        }
+
+    </script>
+</head>
+<body>
+<form action="/login" method="post">
+    <p>
+        <label>
+            User
+            <input id="user" type="text" name="username"/>
+        </label>
+    </p>
+    <p>
+        <label>
+            Password
+            <input id="pass" type="text" name="password"/>
+        </label>
+    </p>
+    <p>
+        <input type="submit" value="Signup">
+    </p>
+</form>
+<p id="result" style="border-style: solid"></p>
+</body>
+</html>

@@ -1,0 +1,25 @@
+spring:  
+  application:
+    name: web-service-1
+
+server:
+  port: 9092
+
+eureka:
+  instance:
+    hostname: localhost
+    port: 8761
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+
+security:
+  oauth2:
+    resource:
+      jwt:
+        key-value: |
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhr48B5ICsfOIfd4S/+x1j+pKpLcxKsiiF1J7jbZeneTRMKL+peZCnrvLCqKAODyir5AyYKqv8T1PnczfOceif+zKJ0cTr4Lmz7I0P1lEhakpjJIxAGtWktPtKWX3ZK7uX8galzOYhcWeOPYL+MJIUSkwRA2pdIsjC8wf/6qIaz19C8URNG1ciBirXre5Ambd6guQ5hKKnzWMZdz77lAKbpVK2RRIY6+5r0BR/NxMcn5Lgp7ZzBFA+nwCaqRnKFPbjceKBQzNY7wKut/TvdQCIW6btdU6/WT8IOY5HIOqCAyq/BQmU2jOM0WGhvcl2NOgLI0vdZ1oC0Uu34HG+YgQLwIDAQAB
+          -----END PUBLIC KEY-----
