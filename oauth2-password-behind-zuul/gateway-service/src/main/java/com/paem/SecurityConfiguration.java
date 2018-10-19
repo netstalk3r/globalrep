@@ -76,7 +76,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
                 .logout()
-                .logoutSuccessUrl(sso().getLoginPath())
                 .permitAll()
                 .logoutSuccessUrl(sso().getLoginPath());
                 addAuthenticationEntryPoint(http);

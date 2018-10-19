@@ -20,7 +20,6 @@ eureka:
 
 zuul:
   prefix: /api
-  add-proxy-headers: true
   routes:
     service1:
       path: /service1/**

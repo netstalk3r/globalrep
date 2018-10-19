@@ -12,8 +12,6 @@ eureka:
   instance:
     hostname: localhost
     port: 8761
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 2
 
 security:
   oauth2:
