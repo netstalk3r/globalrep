@@ -3,26 +3,26 @@
 ## Introduction
 This article describes how to create Spring Boot application with OAuth2 Resource Owner Password Credentials Grant Type.
 
+To learn what is OAuth2 protocol see the specification - https://tools.ietf.org/html/rfc6749
+
 From [OAuth2 Specification](https://tools.ietf.org/html/rfc6749#section-4.3):
 *The resource owner password credentials grant type is suitable in cases where the resource owner has a trust relationship with the client*
-
-To learn what it OAuth2 protocol, how it works see the specification - https://tools.ietf.org/html/rfc6749
 
 This example is a draft, the code quality is not perfect and is used just to demonstrate the configuration, not to use in production.
 
 ## Useful links
-During working on this example there are a couple of articles (besides [OAuth2 specification](https://tools.ietf.org/html/rfc6749) and Spring articles [#1](https://projects.spring.io/spring-security-oauth/docs/oauth2.html), [#2](https://spring.io/guides/tutorials/spring-boot-oauth2/), [#3](https://docs.spring.io/spring-security-oauth2-boot/docs/current/reference/htmlsingle/)) that helped me a lot:
+During working on this example there are a couple of articles (besides Spring articles [#1](https://projects.spring.io/spring-security-oauth/docs/oauth2.html), [#2](https://spring.io/guides/tutorials/spring-boot-oauth2/), [#3](https://docs.spring.io/spring-security-oauth2-boot/docs/current/reference/htmlsingle/)) that helped me a lot:
  * [Spring Boot OAuth2 workflow behind Zuul for internal client authorization](http://lifeinide.com/post/2018-04-14-spring-oauth2-zuul-internal-external-client-workflow/)
  * [UAA (AuthorizationServer) load balanced behind API-GATEWAY (Edge service Zuul)](https://github.com/kakawait/uaa-behind-zuul-sample)
  
 ## Overview
-The goal is to build an application which consist of next micro-services:
+The goal is to build an application which consists of next micro-services:
 * API-GATEWAY - `Zuul`
 * SERVICE REGISTRY - `Eureka`
-* AUTHORIZATION SERVICE - Spring Boot OAuth2 Authorization Server
+* AUTHORIZATION SERVICE - Spring Boot OAuth2 Authorization Server, for issuing access tokens
 * RESOURCE SERVICE - Spring Boot OAuth2 Resource servers, token is required to access them
 
-This example uses JwtTokens. 
+Access Token is JwtToken.
 
 ## Usage
 
@@ -31,8 +31,6 @@ In each service folder run following command:
 ```sh
 mvn spring-boot:run
 ```
-
-## Run
 
 Open http://localhost:8765/login and login with credentials user/user or admin/admin
 
@@ -52,7 +50,7 @@ Open http://localhost:8765/login and login with credentials user/user or admin/a
        │                                 │   HTTP Basic Authentification    │
        │                                 ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄>│
        │                                 │                                  │
-       │                                 │           Access Token           │
+       │                                 │          {Access Token}          │
        │                                 │<┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┤
        │                                 │                                  │
        │    Location:http://ZUUL/index   │                                  │
@@ -68,8 +66,8 @@ Open http://localhost:8765/login and login with credentials user/user or admin/a
        ├────────────────────────────────>│                                  │
        │                                 │                                  │
        │                                 │           /secure (GET)          │
-       │                                 │   HTTP Basic Authentification    │
-       │                                 │   Header: bearer access token    │
+       │                                 │     HTTP Basic Authorization:    │
+       │                                 │       bearer {access token}      │
        │                                 ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄>│
        │                                 │                                  │
        │                                 │         Resource response        │
@@ -80,10 +78,9 @@ Open http://localhost:8765/login and login with credentials user/user or admin/a
        │                                 │                                  │
     
     ```
-## Service configuration
+## Services configuration
 
 ### Service registry
-This service requires a minimum configuration. 
 
 ```java
 @SpringBootApplication
@@ -94,7 +91,7 @@ public class Eureka {
     }
 }
 ```
-* `@EnableEurekaServer` - this will stand up the registry
+* `@EnableEurekaServer` - in conjunction with configuration, this stands up the registry
 
 ```yaml
 spring:
@@ -112,7 +109,6 @@ eureka:
     fetchRegistry: false
 ```
 
-In the `application.yml` next configurations are specified:
 * `spring.application.name` - service name
 * `server.port` - port that is user to run the registry
 * `eureka.instance.hostname` - eureka hostname, this hostname should be specified to other services so they can register in service registry
@@ -133,7 +129,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
 ```
 
 The class extends `WebSecurityConfigurerAdapter` to configure security.
-<br>Let's go through `SecurityConfigurations` methods and see what they do.
 
 ```java
     @Override
@@ -151,7 +146,7 @@ The class extends `WebSecurityConfigurerAdapter` to configure security.
 ```
 
 Users, that can login in the application, are configured using `AuthenticationManagerBuilder`. They are stored in memory. The password is not encrypted.
-<br/>**Note**: this is done, because by default spring expects passwords to be already encrypted in request, or it can be manually encrypted in filters.
+<br/>**Note**: `NoOpPasswordEncoder` is used, because by default spring expects passwords to be already encrypted.
 `NoOpPasswordEncoder` is deprecated. [Alternately password can be prefixed with *{noop}* prefix](https://spring.io/blog/2017/11/01/spring-security-5-0-0-rc1-released#password-storage-updated). 
 
 ```java
@@ -181,7 +176,7 @@ Security is told that every request should be authenticated with HTTP Basic auth
 }
 ```
 
-Next `AuthenticationManager` and `UserDetailsService` are exposed to use in OAuth2 `AuthorizationServer` configuration.
+`AuthenticationManager` and `UserDetailsService` are exposed to use in OAuth2 `AuthorizationServer` configuration.
 `AuthenticationManager` is required to authenticate the users. It uses `UserDetailsService` internally to perform authentication. However to support **refresh_token** grant type, 
 `UserDetailsService` should be exposed also, because **refresh_token** flow does not authenticate users, but directly loads their info from `UserDetailsService`.
 
@@ -195,7 +190,7 @@ Next `AuthenticationManager` and `UserDetailsService` are exposed to use in OAut
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter
 ```
 `AuthorizationServer` class extends `AuthorizationServerConfigurerAdapter` to configure OAuth2 Authorization Server. `@EnableAuthorizationServer` works together with `AuthorizationServerConfigurerAdapter`.
-`@EnableEurekaClient` by using this annotation, service makes registration on Service Registry when server is started up.
+`@EnableEurekaClient` by using this annotation, service makes registration on Service Registry when service starts up.
 
 ```java
     @Bean
@@ -206,8 +201,8 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter
         return converter;
     }
 ```
-To use `RsaSigner` for JWToken, private and public keys are required. On the `AuthorizationServer` these keys are stored in the Java Key Store on the Server - keypair.jks.
-When Access and Refresh tokens are issues, they encoded using private keys, then Resource Servers can check token signature and decode it by using public key.
+To use `RsaSigner` for JWToken, private and public keys are required. On the `AuthorizationServer` these keys are stored in the Java Key Store on the Server - **_keypair.jks_**.
+When Access and Refresh tokens are issued, they encoded and signed using private keys, then Resource Servers can check token signature and decode it by using public key.
 Every Resource server should have public key. 
 
 ```java
@@ -228,7 +223,7 @@ Injecting `AuthenticationManager` and `UserDetailsService` to use them for user 
                 .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
 ```
-Specify the access to the tokens endpoints. Here it is said that for '/oauth/token' endpoint all requests should be authenticated.
+Specify the access to the `AuthorizationServer` endpoints. It is said that for '/oauth/token' endpoint all requests should be authenticated.
 Additionally specify `NoOpPasswordEncoder` so spring expects passwords as plain text, not as encrypted string.
 
 ```java
@@ -245,9 +240,9 @@ Additionally specify `NoOpPasswordEncoder` so spring expects passwords as plain 
     }
 ```
 
-Configuration of the clients, who will use this `AuthorizationServer`. One in-memory client is specified with **client_id** and **client_secret**,
-**password** and **refresh_token** grant types and **scopes**. Auto approve to true means server will auto approve all scopes.
-Next Access Token and Refresh Token validity is specified.
+Configuration of the clients, who can issue tokens on this `AuthorizationServer`. One in-memory client is specified with **client_id** and **client_secret**,
+**password**, **refresh_token** grant types and **scopes**. Auto approve to true means server will auto approve all scopes.
+In the end Access Token and Refresh Token validity is specified.
 
 ```java
     @Override
@@ -260,8 +255,10 @@ Next Access Token and Refresh Token validity is specified.
 ```
 
 Configuration of the Token Endpoints itself. `AuthenticationManager` and `UserDetailsService` are specified to authenticate users that were configured in `SecurityConfigurations`.
-By default **refresh_token** has a very long lifetime. To use non-reusable refresh token `reuseRefreshTokens(false)` configuration is set. 
-Next pass the configured token converter, that has private and public keys, to `AuthorizationServer`, so it knows how to encode tokens. 
+<br>
+By default **refresh_token** has a very long lifetime. To use non-reusable refresh token `reuseRefreshTokens(false)` configuration is set.
+<br> 
+Configured token converter is passed, that has private and public keys, to `AuthorizationServer`, so it knows how to encode and sign tokens. 
 <br> **Note**: see `SecurityConfigurations` for details why `AuthorizationServer` requires `AuthenticationManager` and `UserDetailsService`.
 
 ```yaml
@@ -284,8 +281,8 @@ eureka:
     hostname: localhost
     port: 8761
 ```
-Almost all of these properties were already described in the previous service. Here only new properties will be explained.
-* `server.servlet.contex-path` - service context path, it is by default the same.
+Almost all of these properties were already described in the previous service. Here only new properties are explained.
+* `server.servlet.contex-path` - service context path, it is the same by default.
 * `eureka.client.serviceUtl.defaultZone` - Eureka endpoint
 
 #### Resource Service
@@ -302,8 +299,11 @@ public class RestService1 {
 * `@EnableGlobalMethodSecurity(prePostEnabled = true)` - enable processing of `PreAuthorize` and `PostAuthorize` annotations.
 
 ```java
-@PreAuthorize("#oauth2.hasScope('read') and hasRole('ROLE_ADMIN')")
-@GetMapping(path = "/secure")
+    @PreAuthorize("#oauth2.hasScope('read') and hasRole('ROLE_ADMIN')")
+    @GetMapping(path = "/secure")
+    public String secure(Principal p) {
+        return String.format("Secure Hello %s from Web Service 1", p.getName());
+    }
 ```
 Security for the api /secure
 
@@ -333,7 +333,7 @@ security:
           -----END PUBLIC KEY-----
 ```
 The key part here is `security.oauth2.resource.jwt.key-value` - this is the public key, which is used to verify key signature and decode it.
-`@EnableResourceServer` - creates converter with RSA Verifier, which is used on token store.
+`@EnableResourceServer` - creates converter with RSA Verifier, which is used in token store.
 
 ### Api-Gateway Service
 This service is the key communication part of the system. For browser it manages simple sessions, but for the internal services it manages OAuth2 tokens.
@@ -352,7 +352,7 @@ public class Gateway {
     }
 }
 ```
-* `@EnableZuulProxy` - the main part here. Annotation together with configurations boots zuul proxy server.
+* `@EnableZuulProxy` - together with configurations boots zuul proxy server.
 
 ```yaml
 zuul:
@@ -395,7 +395,7 @@ spring:
 
 Registering static content. 
 <br> Next is the main configuration part of the Api-Gateway. It is consist of security configuration and OAuth2 client configuration.
-First OAuth2 client configuration will be explained and then how they fit into Spring Security.
+First OAuth2 client configuration is explained and then how it fits into Spring Security.
 
 #### OAuth2 Client Configuration
 
@@ -418,9 +418,9 @@ security:
 
 * `security.oauth2.sso.loginPath` - login path for OAuth2 SSO
 * `security.oauth2.client` - OAuth2 client configuration
-* `security.oauth2.client.accessTokenUri` - url for obtaining access token, it is the uri of `AuthorizationServer`, not it is defined with service name from registry
-* `security.oauth2.client.clientId` - client_id that is specified on`AuthorizationServer`
-* `security.oauth2.client.clientSecret` - client_secret that is specified on`AuthorizationServer`
+* `security.oauth2.client.accessTokenUri` - url for obtaining access token, it is the uri of `AuthorizationServer`, note it is defined with service name from registry
+* `security.oauth2.client.clientId` - *client_id* that is specified on`AuthorizationServer`
+* `security.oauth2.client.clientSecret` - *client_secret* that is specified on`AuthorizationServer`
 * `security.oauth2.resource` - the same configuration as for Resource Service
 
 ```java
@@ -479,8 +479,8 @@ These beans are holding values from yaml configurations.
 ```
 Configuration of `TokenService`. 
 * `JwtAccessTokenConverter` - token converter which aware of public key and know how to verify and decode token.
-* `TokenStore` - on our case it is `JwtTokenStore`, that actually does not store tokens, but know how to decode it, using given token converter.
-* `DefaultTokenServices` - token service with uses token store, and additional configurations about refresh token, that reflects Authorization server configuration,
+* `TokenStore` - in our case it is `JwtTokenStore`, that actually does not store tokens, but know how to decode it, using given token converter.
+* `DefaultTokenServices` - token service with uses token store, and additional configurations about refresh token, that reflects Authorization server configuration.
  
 
 ```java
@@ -490,8 +490,8 @@ Configuration of `TokenService`.
     @Autowired
     private LoadBalancerInterceptor loadBalancerInterceptor;
 ```
-* `OAuth2ClientContext` - to pass it to `OAuth2RestTemplate`, which will be created later, so it knows where to get Access Token.
-* `LoadBalancerInterceptor` - is needed for `RestTemplate` instances, so the know how to resolve service names in uri.
+* `OAuth2ClientContext` - to pass it to `OAuth2RestTemplate`, which will be created later, so it knows where to get Access Token from.
+* `LoadBalancerInterceptor` - is needed for `RestTemplate` instances, so they know how to resolve service names in uri.
  
 
 ```java
@@ -507,10 +507,13 @@ Configuration of `TokenService`.
         return oauth2Template;
     }
 ```
-* `OAuth2RestOperations` - configuration of `OAuth2RestTemplate`. First create token provider, which in our case is `ResourceOwnerPasswordAccessTokenProvider`.
-Pass it `loadBalancerInterceptor`, so it can resolve service names. Next create `OAuth2RestTemplate` with `OAuth2ClientContext`, so it knows where to get access tokens from and
+* `OAuth2RestOperations` - configuration of `OAuth2RestTemplate`. 
+  * Create token provider, which in our case is `ResourceOwnerPasswordAccessTokenProvider` and pass it `loadBalancerInterceptor`, so it can resolve service names. 
+  * Create `OAuth2RestTemplate` with `OAuth2ClientContext`, so it knows where to get access tokens from and
 client details, that are specified in the yaml configurations. Configure it with `loadBalancerInterceptor` and `ResourceOwnerPasswordAccessTokenProvider` created above.
-<br> **Note**: `loadBalancerInterceptor` is passed to `OAuth2RestTemplate` and `ResourceOwnerPasswordAccessTokenProvider`.
+
+ **Note**: 
+`loadBalancerInterceptor` is passed to `OAuth2RestTemplate` and `ResourceOwnerPasswordAccessTokenProvider`.
 It looks strange, because `OAuth2RestTemplate` uses `ResourceOwnerPasswordAccessTokenProvider` internally. But in practice,
 these are two independent classes, and they all need to be configured with `loadBalancerInterceptor`.
 
@@ -535,7 +538,60 @@ This is the filter where OAuth2 authentication happens - where Api-Gateway is ge
  * `OAuth2RestTemplate` - so the filter can obtain access token
  * `TokenService` - to load authentication by access token 
 
+#### Security Configuration
 
+```java
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers(sso().getLoginPath()).permitAll().anyRequest().authenticated()
+                .and()
+                .httpBasic().disable()
+                .csrf().requireCsrfProtectionMatcher(csrfRequestMatcher()).csrfTokenRepository(csrfTokenRepository())
+                .and()
+                .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
+                .logout()
+                .permitAll()
+                .logoutSuccessUrl(sso().getLoginPath());
+                addAuthenticationEntryPoint(http);
+
+    }
+```
+
+* `.authorizeRequests().antMatchers(sso().getLoginPath()).permitAll().anyRequest().authenticated()` - specify login path, allow all requests to it, and all other requests should be authenticated.
+* `.httpBasic().disable()` - disable HTTP Basic security
+* `.csrf().requireCsrfProtectionMatcher(csrfRequestMatcher()).csrfTokenRepository(csrfTokenRepository())` - specify CSRF request matchers and token repository.
+* `.addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class)` - add `OAuth2ClientAuthenticationProcessingFilter` filter into the filters chain.
+* `.addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)` - add CSRF filter to put token into cookie and header
+* `logout().permitAll().logoutSuccessUrl(sso().getLoginPath());` - configure logout. 
+* `addAuthenticationEntryPoint(http);` - configure entry point, to redirect in case of any issue
+
+
+**Note**: this application uses CSRF token, but its configuration is out of scope of this example. 
+
+```java
+    private void addAuthenticationEntryPoint(HttpSecurity http)
+            throws Exception {
+        ExceptionHandlingConfigurer<HttpSecurity> exceptions = http.exceptionHandling();
+        ContentNegotiationStrategy contentNegotiationStrategy = http
+                .getSharedObject(ContentNegotiationStrategy.class);
+        if (contentNegotiationStrategy == null) {
+            contentNegotiationStrategy = new HeaderContentNegotiationStrategy();
+        }
+        MediaTypeRequestMatcher preferredMatcher = new MediaTypeRequestMatcher(
+                contentNegotiationStrategy, MediaType.APPLICATION_XHTML_XML,
+                new MediaType("image", "*"), MediaType.TEXT_HTML, MediaType.TEXT_PLAIN);
+        preferredMatcher.setIgnoredMediaTypes(Collections.singleton(MediaType.ALL));
+        exceptions.defaultAuthenticationEntryPointFor(
+                new LoginUrlAuthenticationEntryPoint(sso().getLoginPath()),
+                preferredMatcher);
+        // When multiple entry points are provided the default is the first one
+        exceptions.defaultAuthenticationEntryPointFor(
+                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+                new RequestHeaderRequestMatcher("X-Requested-With", "XMLHttpRequest"));
+    }
+```
+Entry points configuration, it is takes from Spring source code. Placed here to get rid of `@EnableResourceServer` annotation.
 
 
  
