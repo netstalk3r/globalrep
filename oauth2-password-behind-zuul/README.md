@@ -22,7 +22,7 @@ The goal is to build an application which consists of next micro-services:
 * AUTHORIZATION SERVICE - Spring Boot OAuth2 Authorization Server, for issuing access tokens
 * RESOURCE SERVICE - Spring Boot OAuth2 Resource servers, token is required to access them
 
-Access Token is JwtToken.
+Example is based on JwtToken.
 
 ## Usage
 
