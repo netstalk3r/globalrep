@@ -365,10 +365,10 @@ zuul:
       path: /service2/**
       serviceId: web-service-2
 ```
-* `zuul.prefix` - uri prefix for zuul server
+* `zuul.prefix` - URI prefix for zuul server
 * `zuul.routes` - routes configuration for proxy
 * `zuul.routes.service1` - config for particular proxy, _service1_ - is the name of the route, it can be any string
-* `zuul.routes.service1.path` - uri for requests that will be proxied to _service1_
+* `zuul.routes.service1.path` - URI for requests that will be proxied to _service1_
 * `zuul.routes.service1.serviceId` - service name from the service-registry to proxy requests to
 
 #### MVC Configuration
@@ -418,7 +418,7 @@ security:
 
 * `security.oauth2.sso.loginPath` - login path for OAuth2 SSO
 * `security.oauth2.client` - OAuth2 client configuration
-* `security.oauth2.client.accessTokenUri` - url for obtaining access token, it is the uri of `AuthorizationServer`, note it is defined with service name from registry
+* `security.oauth2.client.accessTokenUri` - URI for obtaining access token, it is the URI of `AuthorizationServer`, note it is defined with service name from registry
 * `security.oauth2.client.clientId` - *client_id* that is specified on`AuthorizationServer`
 * `security.oauth2.client.clientSecret` - *client_secret* that is specified on`AuthorizationServer`
 * `security.oauth2.resource` - the same configuration as for Resource Service
@@ -491,7 +491,7 @@ Configuration of `TokenService`.
     private LoadBalancerInterceptor loadBalancerInterceptor;
 ```
 * `OAuth2ClientContext` - to pass it to `OAuth2RestTemplate`, which will be created later, so it knows where to get Access Token from.
-* `LoadBalancerInterceptor` - is needed for `RestTemplate` instances, so they know how to resolve service names in uri.
+* `LoadBalancerInterceptor` - is needed for `RestTemplate` instances, so they know how to resolve service names in URI.
  
 
 ```java
@@ -530,10 +530,10 @@ these are two independent classes, and they all need to be configured with `load
     }
 ```
 
-The key part of the client configuration. All preceding configuration was done to be able to configure `OAuth2ClientAuthenticationProcessingFilter`.
+All preceding configuration is done to be able to configure `OAuth2ClientAuthenticationProcessingFilter` - the key part of the client configuration..
 This is the filter where OAuth2 authentication happens - where Api-Gateway is getting the access token.
 <br> First filter is created and configured with:
- * login uri - the uri that filter will process to perform login
+ * login URI - the URI that filter will process to perform login
  * authenticationSuccessHandler - what to do if authentication is successful
  * `OAuth2RestTemplate` - so the filter can obtain access token
  * `TokenService` - to load authentication by access token 
