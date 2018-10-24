@@ -110,7 +110,7 @@ eureka:
 ```
 
 * `spring.application.name` - service name
-* `server.port` - port that is user to run the registry
+* `server.port` - port that is used to run the registry
 * `eureka.instance.hostname` - eureka hostname, this hostname should be specified to other services so they can register in service registry
 * `eureka.client.registerWithEureka` - specifies whether to register itself in registry or not
 * `eureka.client.fetchRegistry` - specifies whether to pull registry or not
@@ -145,7 +145,7 @@ The class extends `WebSecurityConfigurerAdapter` to configure security.
     }
 ```
 
-Users, that can login in the application, are configured using `AuthenticationManagerBuilder`. They are stored in memory. The password is not encrypted.
+Users configuration using `AuthenticationManagerBuilder`. They are stored in memory. The password is not encrypted.
 <br/>**Note**: `NoOpPasswordEncoder` is used, because by default spring expects passwords to be already encrypted.
 `NoOpPasswordEncoder` is deprecated. [Alternately password can be prefixed with *{noop}* prefix](https://spring.io/blog/2017/11/01/spring-security-5-0-0-rc1-released#password-storage-updated). 
 
@@ -202,8 +202,8 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter
     }
 ```
 To use `RsaSigner` for JWToken, private and public keys are required. On the `AuthorizationServer` these keys are stored in the Java Key Store on the Server - **_keypair.jks_**.
-When Access and Refresh tokens are issued, they encoded and signed using private keys, then Resource Servers can check token signature and decode it by using public key.
-Every Resource server should have public key. 
+When Access and Refresh tokens are issued, they encoded and signed using a private keys, then Resource Servers can check token signature and decode it by using a public key.
+Every Resource server should have the public key. 
 
 ```java
     @Autowired
@@ -214,7 +214,7 @@ Every Resource server should have public key.
     @Qualifier("userDetailsServiceBean")
     private UserDetailsService userDetailsService;
 ```
-Injecting `AuthenticationManager` and `UserDetailsService` to use them for user authentication.
+Inject `AuthenticationManager` and `UserDetailsService` for later use in `AuthorizationServer`.
 
 ```java
     @Override
@@ -223,7 +223,7 @@ Injecting `AuthenticationManager` and `UserDetailsService` to use them for user 
                 .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
 ```
-Specify the access to the `AuthorizationServer` endpoints. It is said that for '/oauth/token' endpoint all requests should be authenticated.
+Specify the security access configuration for the `AuthorizationServer` endpoints. It is said that for '/oauth/token' endpoint all requests should be authenticated.
 Additionally specify `NoOpPasswordEncoder` so spring expects passwords as plain text, not as encrypted string.
 
 ```java
@@ -256,7 +256,7 @@ In the end Access Token and Refresh Token validity is specified.
 
 Configuration of the Token Endpoints itself. `AuthenticationManager` and `UserDetailsService` are specified to authenticate users that were configured in `SecurityConfigurations`.
 <br>
-By default **refresh_token** has a very long lifetime. To use non-reusable refresh token `reuseRefreshTokens(false)` configuration is set.
+By default **refresh_token** has a very long lifetime, which is 30 days out of the box. To have new **refresh_token** every time when new **access_token** is generated, `reuseRefreshTokens(false)` configuration is set.
 <br> 
 Configured token converter is passed, that has private and public keys, to `AuthorizationServer`, so it knows how to encode and sign tokens. 
 <br> **Note**: see `SecurityConfigurations` for details why `AuthorizationServer` requires `AuthenticationManager` and `UserDetailsService`.
@@ -394,7 +394,7 @@ spring:
 ```
 
 Registering static content. 
-<br> Next is the main configuration part of the Api-Gateway. It is consist of security configuration and OAuth2 client configuration.
+<br> Next is the main configuration part of the Api-Gateway. It consists of security configuration and OAuth2 client configuration.
 First OAuth2 client configuration is explained and then how it fits into Spring Security.
 
 #### OAuth2 Client Configuration
@@ -591,7 +591,7 @@ This is the filter where OAuth2 authentication happens - where Api-Gateway is ge
                 new RequestHeaderRequestMatcher("X-Requested-With", "XMLHttpRequest"));
     }
 ```
-Entry points configuration, it is takes from Spring source code. Placed here to get rid of `@EnableResourceServer` annotation.
+Entry points configuration is taken from Spring source code. Placed here to get rid of `@EnableResourceServer` annotation.
 
 
  
