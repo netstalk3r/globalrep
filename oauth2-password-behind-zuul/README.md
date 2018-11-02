@@ -3,7 +3,7 @@
 ## Introduction
 This article describes how to create Spring Boot application with OAuth2 Resource Owner Password Credentials Grant Type.
 
-To learn what is OAuth2 protocol see the specification - https://tools.ietf.org/html/rfc6749
+To learn what is OAuth2 protocol see the specification - https://tools.ietf.org/html/rfc6749 
 
 From [OAuth2 Specification](https://tools.ietf.org/html/rfc6749#section-4.3):
 *The resource owner password credentials grant type is suitable in cases where the resource owner has a trust relationship with the client*
