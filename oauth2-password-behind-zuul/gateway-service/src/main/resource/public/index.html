@@ -74,6 +74,41 @@
                  xsrf(jqXHR);
             });
         }
+
+        function query() {
+            $( "#resultData" ).load( "/api/mediator/query", function( data, textStatus, jqXHR ) {
+                printResult(data, textStatus, jqXHR);
+                xsrf(jqXHR);
+            });
+        }
+
+        function values() {
+            var prId = $( "#processId" ).val();
+            $( "#resultData" ).load( "/api/mediator/values?id="+prId, function( data, textStatus, jqXHR ) {
+                printResult(data, textStatus, jqXHR);
+                xsrf(jqXHR);
+            });
+        }
+
+        function startProcess() {
+            var token = $("#xsrf").html();
+
+            $.ajax({
+                url: '/api/mediator/start',
+                headers: {
+                    'X-XSRF-TOKEN':token
+                },
+                method: 'POST',
+                success: function(data, textStatus, jqXHR){
+                    printResult(data, textStatus, jqXHR);
+                    xsrf(jqXHR);
+                },
+                error: function(jqXHR, textStatus, data) {
+                    printResult(data, textStatus, jqXHR);
+                    xsrf(jqXHR);
+                }
+            });
+        }
     </script>
 </head>
 <body onload="getxsrf()">
@@ -85,6 +120,9 @@
     <p><button onclick="insecure(1)">Insecure Call Service 1</button></p>
     <p><button onclick="secure(2)">Secure Call Service 2</button></p>
     <p><button onclick="insecure(2)">Insecure Call Service 2</button></p>
+    <p><button onclick="startProcess()">Start Process</button></p>
+    <p><button onclick="query()">Query Processes</button></p>
+    <p><input id="processId"/><button onclick="values()">Process Values</button></p>
  Status Code
  <p id="resultCode" style="border-style: solid"></p>
  Response Headers

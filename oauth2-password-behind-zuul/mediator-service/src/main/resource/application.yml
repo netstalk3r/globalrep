@@ -1,45 +1,22 @@
 spring:
-  aop:
-    proxyTargetClass: true
   application:
-    name: api-gateway
-  mvc:
-    view:
-      suffix: .html
+    name: mediator-service
+  activiti:
+    process-definition-location-prefix: "classpath:/processes/**/"
 
 server:
-  port: 8765
+  port: 9094
 
 eureka:
-  instance:
-      hostname: localhost
-      port: 8761
   client:
-    registryFetchIntervalSeconds: 5
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
-
-zuul:
-  prefix: /api
-  routes:
-    service1:
-      path: /service1/**
-      serviceId: web-service-1
-    service2:
-      path: /service2/**
-      serviceId: web-service-2
-    mediator:
-      path: /mediator/**
-      serviceId: mediator-service
+  instance:
+    hostname: localhost
+    port: 8761
 
 security:
   oauth2:
-    sso:
-      loginPath: /login
-    client:
-      accessTokenUri: http://auth-service/oauth/token
-      clientId: example_id
-      clientSecret: example_secret
     resource:
       jwt:
         key-value: |

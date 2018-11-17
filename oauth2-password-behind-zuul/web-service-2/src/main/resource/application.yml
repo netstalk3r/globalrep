@@ -3,7 +3,7 @@ spring:
     name: web-service-2
 
 server:
-  port: 9091
+  port: 9089
 
 eureka:
   client:

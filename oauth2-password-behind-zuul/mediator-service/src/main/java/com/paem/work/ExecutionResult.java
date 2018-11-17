@@ -1,0 +1,34 @@
+package com.paem.work;
+
+import java.io.Serializable;
+
+public class ExecutionResult implements Serializable {
+
+    private int taskHash;
+    private String threadName;
+
+
+    public int getTaskHash() {
+        return taskHash;
+    }
+
+    public void setTaskHash(int taskHash) {
+        this.taskHash = taskHash;
+    }
+
+    public String getThreadName() {
+        return threadName;
+    }
+
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
+    }
+
+    @Override
+    public String toString() {
+        return "ExecutionResult{" +
+                "taskHash='" + taskHash + '\'' +
+                ", threadName='" + threadName + '\'' +
+                '}';
+    }
+}
