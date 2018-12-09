@@ -23,11 +23,6 @@ public class OAuth2FeignRequestInterceptor implements RequestInterceptor {
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
     /**
-     * The {@code Bearer} token type.
-     */
-    private static final String BEARER_TOKEN_TYPE = "Bearer";
-
-    /**
      * Current OAuth2 authentication context.
      */
     private final OAuth2ProcessTokenContext oauth2TokenContext;
@@ -49,10 +44,10 @@ public class OAuth2FeignRequestInterceptor implements RequestInterceptor {
     public void apply(RequestTemplate template) {
         if (template.headers().containsKey(AUTHORIZATION_HEADER)) {
             throw new IllegalArgumentException("There should not be any Authorization header");
-        } else if (oauth2TokenContext.getOAuth2AccessToken() == null) {
-            throw new IllegalArgumentException("OAuth2AccessToken should not be null");
+        } else if (oauth2TokenContext.getOAuth2AccessToken() == null || oauth2TokenContext.getoAuth2TokeType() == null) {
+            throw new IllegalArgumentException("OAuth2AccessToken and OAuth2AccessTokeType should not be null");
         } else {
-            LOGGER.debug("Constructing Header {} for Token {}", AUTHORIZATION_HEADER, BEARER_TOKEN_TYPE);
+            LOGGER.debug("Constructing Header {} for Token {}", AUTHORIZATION_HEADER, oauth2TokenContext.getoAuth2TokeType());
             template.header(AUTHORIZATION_HEADER, String.format("%s %s", oauth2TokenContext.getoAuth2TokeType(),
                     oauth2TokenContext.getOAuth2AccessToken()));
         }
