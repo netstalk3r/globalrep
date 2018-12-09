@@ -55,6 +55,11 @@ import java.util.regex.Pattern;
 @Configuration
 @EnableOAuth2Client
 @Order(value = 0)
+// TODO this might be an issue/trade off
+// TODO access toke has its expiration period, if business flow interval exceeds token interval,
+// TODO main flow would not be able to make requests to other services
+// TODO before proxy to mediator service, verify token expiration, it should be greater or equal some interval
+// TODO another option might be is to make mediator service as OAuth2Client
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String CSRF_COOKIE_NAME = "XSRF-TOKEN";

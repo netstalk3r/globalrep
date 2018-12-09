@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @EnableEurekaClient
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@ComponentScan("com.paem")
+@EnableFeignClients
 public class Mediator {
     public static void main(String[] args) {
         SpringApplication.run(Mediator.class, args);
@@ -52,7 +52,6 @@ public class Mediator {
         public String startProcess() {
             Map<String, Execution> params = new ConcurrentHashMap<>();
             ProcessInstance testProcess = runtimeService.startProcessInstanceByKey("TestProcess", Collections.singletonMap("params", params));
-            System.out.println(Thread.currentThread().getName());
             return testProcess.getId();
         }
 

@@ -27,7 +27,7 @@ public class LogServiceTask implements NameAwarness {
 
     public void printParams(Map<String, ExecutionResult> params) {
         System.out.println("param hash " + params.hashCode());
-        System.out.println(String.valueOf(params));
+        System.out.println(params);
     }
 
     @Override

@@ -4,9 +4,17 @@ import java.io.Serializable;
 
 public class ExecutionResult implements Serializable {
 
+    private String result;
     private int taskHash;
     private String threadName;
 
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
 
     public int getTaskHash() {
         return taskHash;
@@ -27,7 +35,8 @@ public class ExecutionResult implements Serializable {
     @Override
     public String toString() {
         return "ExecutionResult{" +
-                "taskHash='" + taskHash + '\'' +
+                "result='" + result + '\'' +
+                ", taskHash=" + taskHash +
                 ", threadName='" + threadName + '\'' +
                 '}';
     }

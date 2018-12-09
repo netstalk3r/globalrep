@@ -6,15 +6,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Component("executionListener")
-public class MyExecutionListener {
+@Component("endExecutionListener")
+public class EndEventExecutionListener {
 
     @Autowired
     private Memory memory;
 
     public void notify(DelegateExecution execution) {
-        System.out.println("in listener");
-        Map<String, ExecutionResult> params = (Map<String, ExecutionResult>) execution.getVariable("params");
-        memory.put(execution.getId(), params);
+        memory.put(execution.getProcessInstanceId(), (Map<String, ExecutionResult>) execution.getVariable("params"));
     }
 }
