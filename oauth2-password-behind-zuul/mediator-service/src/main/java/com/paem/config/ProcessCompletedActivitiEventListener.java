@@ -4,14 +4,8 @@ import org.activiti.engine.delegate.event.ActivitiEntityEvent;
 import org.activiti.engine.delegate.event.ActivitiEvent;
 import org.activiti.engine.delegate.event.ActivitiEventListener;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.beans.factory.config.Scope;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * This listener is called when process is completed, additional check is done to make sure that
@@ -19,9 +13,10 @@ import org.springframework.util.Assert;
  */
 
 @Component
-public class ProcessCompletedActivitiEventListener implements ActivitiEventListener, BeanFactoryAware, InitializingBean {
+public class ProcessCompletedActivitiEventListener implements ActivitiEventListener {
 
-    private Scope processScope;
+    @Autowired
+    private ProcessScopeHolder processScopeHolder;
 
     @Override
     public void onEvent(ActivitiEvent event) {
@@ -29,7 +24,7 @@ public class ProcessCompletedActivitiEventListener implements ActivitiEventListe
 
         if (sourceEvent instanceof ProcessInstance && ((ProcessInstance) sourceEvent).getRootProcessInstanceId().equals(event.getExecutionId())) {
             // when process is finished remove custom scope bean from scope
-            processScope.remove(event.getProcessInstanceId());
+            processScopeHolder.removeBeanFromScope(event.getProcessInstanceId());
         }
 
     }
@@ -40,13 +35,4 @@ public class ProcessCompletedActivitiEventListener implements ActivitiEventListe
     }
 
 
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.processScope = ((ConfigurableBeanFactory) beanFactory).getRegisteredScope("process");
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Assert.notNull(processScope, "Process Scope should not be null");
-    }
 }

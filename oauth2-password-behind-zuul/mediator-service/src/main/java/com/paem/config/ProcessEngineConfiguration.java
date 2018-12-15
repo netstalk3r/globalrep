@@ -1,14 +1,16 @@
 package com.paem.config;
 
+import org.activiti.engine.ManagementService;
 import org.activiti.engine.delegate.event.ActivitiEventListener;
 import org.activiti.engine.delegate.event.ActivitiEventType;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.activiti.spring.boot.ProcessEngineConfigurationConfigurer;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.*;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.Collections;
@@ -22,6 +24,7 @@ import java.util.Map;
  */
 
 @Configuration
+@EnableScheduling
 public class ProcessEngineConfiguration implements ProcessEngineConfigurationConfigurer {
 
     @Autowired
@@ -44,6 +47,7 @@ public class ProcessEngineConfiguration implements ProcessEngineConfigurationCon
         };
 
         processEngineConfiguration.setTypedEventListeners(typedListeners);
+        processEngineConfiguration.setFailedJobCommandFactory(JobNoRetryCmd::new);
     }
 
     /**
@@ -65,5 +69,12 @@ public class ProcessEngineConfiguration implements ProcessEngineConfigurationCon
             }
         }));
         return executor;
+    }
+
+    @Autowired
+    @Bean
+    @Scope(value = "singleton", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public ProcessScopeHolder processScopeHolder(BeanFactory beanFactory, ManagementService managementService) {
+        return new ProcessScopeHolder(((ConfigurableBeanFactory) beanFactory).getRegisteredScope("process"), managementService);
     }
 }
