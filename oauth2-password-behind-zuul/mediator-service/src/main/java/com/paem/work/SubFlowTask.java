@@ -33,6 +33,5 @@ public class SubFlowTask implements NameAwarness {
         String key = getName() + ":doFalse";
         params.put(key, result);
         System.out.println("false work");
-        throw new RuntimeException();
     }
 }
