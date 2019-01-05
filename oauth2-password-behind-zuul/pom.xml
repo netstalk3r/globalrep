@@ -52,6 +52,7 @@
     <module>oauth2-service</module>
     <module>service-registry</module>
     <module>mediator-service</module>
+    <module>scheduler-service</module>
   </modules>
 
   <pluginRepositories>
