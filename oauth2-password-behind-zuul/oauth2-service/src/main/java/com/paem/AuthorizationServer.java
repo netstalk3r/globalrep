@@ -6,18 +6,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.builders.InMemoryClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
@@ -47,6 +46,7 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     @Qualifier("userDetailsServiceBean")
     private UserDetailsService userDetailsService;
 
+    // TODO need to use real password encoder
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
         security.tokenKeyAccess("isAuthenticated()")
@@ -55,7 +55,8 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
+        InMemoryClientDetailsServiceBuilder inMemoryClientDetailsServiceBuilder = clients.inMemory();
+        inMemoryClientDetailsServiceBuilder
                 .withClient("example_id")
                 .secret("example_secret")
                 .authorizedGrantTypes("password", "refresh_token")
@@ -63,6 +64,12 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
                 .autoApprove(true) // This client won’t display approval screen to get access to selected oauth2 scopes
                 .accessTokenValiditySeconds(60*60)
                 .refreshTokenValiditySeconds(120 * 60);
+        inMemoryClientDetailsServiceBuilder.withClient("system_id")
+                .secret("system_secret")
+                .authorizedGrantTypes("client_credentials")
+                .scopes("all")
+                .autoApprove(true)
+                .accessTokenValiditySeconds(-1);
     }
 
     @Override

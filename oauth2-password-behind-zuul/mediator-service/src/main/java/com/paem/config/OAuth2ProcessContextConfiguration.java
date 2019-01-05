@@ -1,15 +1,19 @@
 package com.paem.config;
 
-import feign.RequestInterceptor;
+import com.cmlatitude.annotation.EnableOAuth2TokenInterceptor;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 
 @Configuration
+@EnableOAuth2TokenInterceptor
 public class OAuth2ProcessContextConfiguration {
 
     /**
@@ -26,15 +30,12 @@ public class OAuth2ProcessContextConfiguration {
      * @return
      */
     @Bean
-    @Scope(value = "process", proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public OAuth2ProcessTokenContext processOauth2ClientContext() {
+    @Scope(value = "process", proxyMode = ScopedProxyMode.INTERFACES)
+    public OAuth2ClientContext oAuth2ClientContext() {
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        return new OAuth2ProcessTokenContext(details.getTokenValue(), details.getTokenType());
-    }
-
-    @Bean
-    public RequestInterceptor oauth2FeignRequestInterceptor(OAuth2ProcessTokenContext oAuth2ProcessTokenContext) {
-        return new OAuth2FeignRequestInterceptor(oAuth2ProcessTokenContext);
+        DefaultOAuth2AccessToken oAuth2AccessToken = new DefaultOAuth2AccessToken(details.getTokenValue());
+        oAuth2AccessToken.setTokenType(details.getTokenType());
+        return new DefaultOAuth2ClientContext(oAuth2AccessToken);
     }
 
 }

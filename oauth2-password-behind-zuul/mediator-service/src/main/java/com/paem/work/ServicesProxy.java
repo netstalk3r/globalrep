@@ -18,7 +18,7 @@ public class ServicesProxy implements NameAwarness {
 
     public void callService1(Map<String, ExecutionResult> params) {
         ExecutionResult result = new ExecutionResult();
-        result.setResult(proxy1.insecure());
+        result.setResult(proxy1.secure());
         result.setTaskHash(hashCode());
         result.setThreadName(Thread.currentThread().getName());
         String key = getName() + ":callService1";
@@ -27,7 +27,7 @@ public class ServicesProxy implements NameAwarness {
 
     public void callService2(Map<String, ExecutionResult> params) {
         ExecutionResult result = new ExecutionResult();
-        result.setResult(proxy2.insecure());
+        result.setResult(proxy2.secure());
         result.setTaskHash(hashCode());
         result.setThreadName(Thread.currentThread().getName());
         String key = getName() + ":callService2";
