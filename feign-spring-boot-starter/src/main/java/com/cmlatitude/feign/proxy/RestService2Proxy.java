@@ -1,4 +1,4 @@
-package com.paem.feigh;
+package com.cmlatitude.feign.proxy;
 
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;

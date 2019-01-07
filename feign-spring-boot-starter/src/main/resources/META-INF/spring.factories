@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.cmlatitude.configuration.OAuth2RestClientAutoConfiguration
+com.cmlatitude.configuration.FeignAutoConfiguration
