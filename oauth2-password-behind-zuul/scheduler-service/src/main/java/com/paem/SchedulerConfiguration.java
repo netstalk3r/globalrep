@@ -1,5 +1,6 @@
 package com.paem;
 
+import com.cmlatitude.feign.proxy.RestService1Proxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

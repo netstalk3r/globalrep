@@ -1,7 +1,7 @@
 package com.paem.work;
 
-import com.paem.feigh.RestService1Proxy;
-import com.paem.feigh.RestService2Proxy;
+import com.cmlatitude.feign.proxy.RestService1Proxy;
+import com.cmlatitude.feign.proxy.RestService2Proxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
