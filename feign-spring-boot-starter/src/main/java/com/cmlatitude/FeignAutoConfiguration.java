@@ -1,4 +1,4 @@
-package com.cmlatitude.configuration;
+package com.cmlatitude;
 
 
 import feign.Feign;
@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableFeignClients(basePackages = "com.cmlatitude.feign")
+@EnableFeignClients
 @ConditionalOnClass(Feign.class)
 public class FeignAutoConfiguration {
 }
