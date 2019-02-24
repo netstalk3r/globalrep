@@ -1,6 +1,6 @@
 spring:  
   application:
-    name: web-service-1
+    name: service1
 
 server:
   port: 9092

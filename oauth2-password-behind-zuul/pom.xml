@@ -11,7 +11,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.0.7.RELEASE</version>
+    <version>2.0.8.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -24,11 +24,6 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-      <!--<dependency>-->
-        <!--<groupId>org.springframework.security.oauth.boot</groupId>-->
-        <!--<artifactId>spring-security-oauth2-autoconfigure</artifactId>-->
-        <!--<version>2.1.0.RELEASE</version>-->
-      <!--</dependency>-->
       <dependency>
         <groupId>com.cmlatitude</groupId>
         <artifactId>oauth2-client-spring-boot-starter</artifactId>
