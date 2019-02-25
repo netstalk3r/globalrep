@@ -153,12 +153,9 @@ public class SecurityConfiguration {
             @Override
             public Mono<MatchResult> matches(ServerWebExchange exchange) {
                 return CsrfWebFilter.DEFAULT_CSRF_MATCHER.matches(exchange)
-                        .flatMap(matchResult -> {
-                            if (matchResult.isMatch()) {
-                                return loginPathMatcher.matches(exchange);
-                            }
-                            return Mono.just(matchResult);
-                        });
+                        .filter(MatchResult::isMatch)
+                        .flatMap(matchResult -> loginPathMatcher.matches(exchange))
+                        .switchIfEmpty(MatchResult.notMatch());
             }
         };
     }
