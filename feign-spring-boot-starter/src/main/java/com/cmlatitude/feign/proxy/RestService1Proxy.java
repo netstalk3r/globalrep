@@ -4,8 +4,8 @@ import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@FeignClient(name = "web-service-1")
-@RibbonClient(name = "web-service-1")
+@FeignClient(name = "service1")
+@RibbonClient(name = "service1")
 public interface RestService1Proxy {
 
     @RequestMapping("/insecure")
