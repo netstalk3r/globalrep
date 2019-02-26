@@ -76,7 +76,7 @@
         }
 
         function query() {
-            $( "#resultData" ).load( "/api/mediator/query", function( data, textStatus, jqXHR ) {
+            $( "#resultData" ).load( "/mediator/query", function( data, textStatus, jqXHR ) {
                 printResult(data, textStatus, jqXHR);
                 // xsrf(jqXHR);
             });
@@ -84,7 +84,7 @@
 
         function values() {
             var prId = $( "#processId" ).val();
-            $( "#resultData" ).load( "/api/mediator/values?id="+prId, function( data, textStatus, jqXHR ) {
+            $( "#resultData" ).load( "/mediator/values?id="+prId, function( data, textStatus, jqXHR ) {
                 printResult(data, textStatus, jqXHR);
                 // xsrf(jqXHR);
             });
@@ -94,7 +94,7 @@
             var token = $("#xsrf").html();
 
             $.ajax({
-                url: '/api/mediator/start',
+                url: '/mediator/start',
                 headers: {
                     'X-CSRF-TOKEN':token
                 },
