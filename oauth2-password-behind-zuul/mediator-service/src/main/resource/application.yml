@@ -1,6 +1,6 @@
 spring:
   application:
-    name: mediator-service
+    name: mediator
   activiti:
     process-definition-location-prefix: "classpath:/processes/**/"
 

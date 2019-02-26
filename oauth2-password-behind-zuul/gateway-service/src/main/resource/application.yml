@@ -24,20 +24,20 @@ zuul:
   routes:
     service1:
       path: /service1/**
-      serviceId: web-service-1
+      serviceId: service1
     service2:
       path: /service2/**
-      serviceId: web-service-2
+      serviceId: service2
     mediator:
       path: /mediator/**
-      serviceId: mediator-service
+      serviceId: mediator
 
 security:
   oauth2:
     sso:
       loginPath: /login
     client:
-      accessTokenUri: http://auth-service/oauth/token
+      accessTokenUri: http://uaa-service/oauth/token
       clientId: example_id
       clientSecret: example_secret
     resource:
